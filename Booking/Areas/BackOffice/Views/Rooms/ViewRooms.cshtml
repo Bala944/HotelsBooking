@@ -1,1 +1,62 @@
-﻿<h1>View Rooms</h1>
+﻿@model List<RoomsDTO>
+
+
+
+<!-- Add DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+
+<h1>View Rooms</h1>
+<style>
+    .table-actions {
+       /* position: absolute; */
+        top: 0;
+        right: 0;
+        padding: 10px;
+    }
+</style>
+
+<div class="table-actions">
+    <a href="/add-room" class="btn btn-primary">Add</a>
+</div>
+<table class="table" id="tblRoom">
+    <thead>
+        <tr>
+            <th>Action</th>
+            <th>Room Number</th>
+            <th>Room Type</th>
+            <th>Bed Type</th>
+            <th>Max Occupancy</th>
+            <th>Rate</th>
+            <th>Description</th>
+            <th>Room Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var room in Model)
+        {
+            <tr>
+                <td>
+                    <a href="EditRoom/@room.RoomId"><i class="fas fa-edit"></i></a>
+                    <a href="DeleteRoom/@room.RoomId"><i class="fas fa-trash-alt"></i></a>
+                </td>
+                <td>@room.RoomNumber</td>
+                <td>@room.RoomType</td>
+                <td>@room.BedType</td>
+                <td>@room.MaxOccupancy</td>
+                <td>@room.Rate</td>
+                <td>@room.Description</td>
+                <td>@room.RoomStatus</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<!-- Add jQuery library (required for DataTables) -->
+
+<!-- Add DataTables JavaScript -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $('#roomTable').DataTable();
+    });
+</script> 

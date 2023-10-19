@@ -1,4 +1,6 @@
 ﻿using Booking.Areas.BackOffice.Data.Interface;
+using Booking.Areas.BackOffice.Models.Input;
+using Booking.Areas.BackOffice.Models.Output;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Booking.Areas.BackOffice.Controllers
@@ -21,9 +23,21 @@ namespace Booking.Areas.BackOffice.Controllers
         /// To view the rooms
         /// </summary>
         /// <returns></returns>
-        public IActionResult ViewRooms()
+        [Route("~/rooms")]
+        public async Task<IActionResult> ViewRooms()
         {
-            return View();
+            List<RoomsDTO> roomsDTOs = new List<RoomsDTO>();
+
+            roomsDTOs= await _roomsRepository.GetRooms();
+
+            return View(roomsDTOs);
+        }
+        [Route("~/add-room")]
+        public async Task<IActionResult> AddRoom()
+        {
+            AddRoomDTO roomsDTOs = new AddRoomDTO();
+            roomsDTOs = await _roomsRepository.GetAddRoomDetails();
+            return View(roomsDTOs);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Booking.Areas.BackOffice.Data.Interface;
-using Booking.Areas.BackOffice.Models;
+using Booking.Areas.BackOffice.Models.Input;
+using Booking.Areas.BackOffice.Models.Output;
 using Booking.DBEngine;
 using System.Data;
 
@@ -29,7 +30,7 @@ namespace Booking.Areas.BackOffice.Data.Services
             {
                 using (_dbHandler.Connection)
                 {
-                    rooms = (await _dbHandler.QueryAsync<RoomsDTO>(_dbHandler.Connection, "[dbo].[FetchRooms]", CommandType.StoredProcedure, null)).ToList();
+                    rooms = (await _dbHandler.QueryAsync<RoomsDTO>(_dbHandler.Connection, "dbo.FetchRooms", CommandType.StoredProcedure, null)).ToList();
                 }
             }
             catch (Exception)
@@ -38,6 +39,33 @@ namespace Booking.Areas.BackOffice.Data.Services
             }
 
             return rooms;
+        }
+        /// <summary>
+        /// To get the rooms
+        /// </summary>
+        /// <returns></returns>
+        public async Task<AddRoomDTO> GetAddRoomDetails()
+        {
+            AddRoomDTO addRoomDetails = new AddRoomDTO();
+
+            try
+            {
+                using (_dbHandler.Connection)
+                {
+                    var multiResult = await _dbHandler.QueryMultipleAsync(_dbHandler.Connection, "dbo.FetchRoomAddData", CommandType.StoredProcedure, null);
+                    if (multiResult != null)
+                    {
+                        addRoomDetails.roomTypeModel = (await multiResult.ReadAsync<RoomTypeModel>()).ToList();
+                        addRoomDetails.bedTypeModel = (await multiResult.ReadAsync<BedTypeModel>()).ToList();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                //new ErrorLog().WriteLog(ex);
+            }
+
+            return addRoomDetails;
         }
     }
 }
