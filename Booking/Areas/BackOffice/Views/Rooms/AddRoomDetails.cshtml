@@ -1,0 +1,157 @@
+﻿@model AddRoomDTO
+
+@{
+	Layout = "_BackOfficeLayout";
+}
+<style>
+    /* Error message text color */
+    label.error {
+        color: red;
+    }
+
+    /* Input field with validation error styles */
+    input.error, select.error {
+        border: 1px solid red;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+
+
+
+<div class="content container-fluid">
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title mt-5">Add Room</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <form id="roomForm">
+                <div class="row formtype">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="roomNumber">Room Number:</label>
+                            <input type="text" class="form-control" id="roomNumber" name="roomNumber" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="roomType">Room Type:</label>
+                            <select id="roomType" name="roomType" class="form-control" required>
+                                @if (Model?.roomTypeModel != null)
+                                {
+                                    foreach (var roomType in Model?.roomTypeModel)
+                                    {
+                                        <option value="@roomType.RoomTypeId">@roomType.TypeName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>AC/NON-AC</label>
+                            <select class="form-control" id="sel2" name="sellist1">
+                                <option>Select</option>
+                                <option>AC</option>
+                                <option>NON-AC</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="bedType">Bed Type:</label>
+                            <select id="bedType" class="form-control" name="bedType" required>
+                                @if (Model != null && Model?.bedTypeModel != null)
+                                {
+                                    foreach (var bedType in Model?.bedTypeModel)
+                                    {
+                                        <option value="@bedType.BedTypeId">@bedType.TypeName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Charges For cancellation</label>
+                            <select class="form-control" id="cancellationType" name="cancellationType">
+                                <option>Select</option>
+                                <option>Free</option>
+                                <option>5% Before 24Hours</option>
+                                <option>No Cancellation Allow</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="maxOccupancy">Max Occupancy:</label>
+                            <input type="number" class="form-control" id="maxOccupancy" name="maxOccupancy" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Rent</label>
+                            <input type="number" class="form-control" id="rate" name="rate" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Image Upload</label>
+                            <div class="custom-file mb-3">
+                                <input type="file" class="custom-file-input" id="roomImages" name="roomImages">
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" rows="5" id="description" name="description"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <button type="button" id="saveButton" class="btn btn-primary ">Save</button>
+    <a class="btn btn-secondary" href="/view-room-details">Cancel</a>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#roomForm").validate({
+            errorElement: "label", // Use <label> for inline error messages
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent()); // Append error label to the input's parent container
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass("error"); // Add the 'error' class to the input
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass("error"); // Remove the 'error' class when the error is cleared
+            },
+            rules: {
+                // Your validation rules here
+            },
+            messages: {
+                // Your custom error messages here
+            }
+        });
+
+        $("#saveButton").on("click", function () {
+            if ($("#roomForm").valid()) {
+                // Form is valid; you can proceed with saving the data
+                // Your save logic here
+            }
+        });
+    });
+</script>
+

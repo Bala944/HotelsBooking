@@ -11,6 +11,7 @@
     <Folder Include="Areas\FrontOffice\Data\" />
     <Folder Include="Areas\FrontOffice\Models\" />
     <Folder Include="Areas\FrontOffice\Views\" />
+    <Folder Include="wwwroot\assets\img\profiles\" />
   </ItemGroup>
 
   <ItemGroup>

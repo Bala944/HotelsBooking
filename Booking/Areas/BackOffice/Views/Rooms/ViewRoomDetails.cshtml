@@ -1,0 +1,84 @@
+﻿@model List<RoomsDTO>
+@{
+    Layout = "_BackOfficeLayout";
+}
+<style>
+	
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="assets/plugins/datatables/datatables.min.css">
+
+	<div class="content container-fluid">
+		<div class="page-header">
+		<div class="row align-items-center section-background">
+				<div class="col">
+					<div class="mt-5">
+						<h4 class=" float-left mt-2">All Rooms</h4> <a href="/add-room-details" class="btn btn-primary float-right veiwbutton">Add Room</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="card card-table">
+					<div class="card-body booking_card">
+						<div class="table-responsive">
+							<table class="datatable table table-stripped table table-hover table-center mb-0">
+							<thead>
+								<tr>
+									<th>Action</th>
+									<th>Room Number</th>
+									<th>Room Type</th>
+									<th>Bed Type</th>
+									<th>Max Occupancy</th>
+									<th>Rate</th>
+									<th>Description</th>
+									<th>Room Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								@if (Model != null)
+								{
+									foreach (var room in Model)
+									{
+										<tr>
+											<td>
+												<a href="EditRoom/@room.RoomId"><i class="fas fa-edit"></i></a>
+												<a href="DeleteRoom/@room.RoomId"><i class="fas fa-trash-alt"></i></a>
+											</td>
+											<td>@room.RoomNumber</td>
+											<td>@room.RoomType</td>
+											<td>@room.BedType</td>
+											<td>@room.MaxOccupancy</td>
+											<td>@room.Rate</td>
+											<td>@room.Description</td>
+											<td>@room.RoomStatus</td>
+										</tr>
+									}
+								}
+							</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="delete_asset" class="modal fade delete-modal" role="dialog">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-body text-center">
+					<img src="assets/img/sent.png" alt="" width="50" height="46">
+					<h3 class="delete_class">Are you sure want to delete this Asset?</h3>
+					<div class="m-t-20">
+						<a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+						<button type="submit" class="btn btn-danger">Delete</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+<script src="assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="assets/plugins/datatables/datatables.min.js"></script>

@@ -19,25 +19,24 @@ namespace Booking.Areas.BackOffice.Controllers
             _roomsRepository = roomsRepository;
         }
 
-        /// <summary>
-        /// To view the rooms
-        /// </summary>
-        /// <returns></returns>
-        [Route("~/rooms")]
-        public async Task<IActionResult> ViewRooms()
+        [Route("~/add-room-details")]
+        public async Task<IActionResult> AddRoomDetails()
         {
-            List<RoomsDTO> roomsDTOs = new List<RoomsDTO>();
 
-            roomsDTOs= await _roomsRepository.GetRooms();
+			AddRoomDTO roomsDTOs = new AddRoomDTO();
+			//roomsDTOs = await _roomsRepository.GetAddRoomDetails();
+			return View(roomsDTOs);
+		}
 
-            return View(roomsDTOs);
-        }
-        [Route("~/add-room")]
-        public async Task<IActionResult> AddRoom()
+        [Route("~/view-room-details")]
+        public async Task<IActionResult> ViewRoomDetails()
         {
-            AddRoomDTO roomsDTOs = new AddRoomDTO();
-            roomsDTOs = await _roomsRepository.GetAddRoomDetails();
-            return View(roomsDTOs);
-        }
+
+			List<RoomsDTO> roomsDTOs = new List<RoomsDTO>();
+
+			//roomsDTOs = await _roomsRepository.GetRooms();
+
+			return View(roomsDTOs);
+		}
     }
 }
