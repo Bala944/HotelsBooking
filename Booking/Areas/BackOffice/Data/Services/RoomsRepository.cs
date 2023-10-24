@@ -41,6 +41,26 @@ namespace Booking.Areas.BackOffice.Data.Services
 
             return rooms;
         }
+        
+        public async  Task<RoomsDetailsDTO> GetRoomDetailsById(Int64 RoomId)
+        {
+            RoomsDetailsDTO rooms = new RoomsDetailsDTO();
+            var param = new DynamicParameters();
+            try
+            {
+                param.Add("RoomId", RoomId,DbType.Int64,ParameterDirection.Input);
+                using (_dbHandler.Connection)
+                {
+                    rooms = await _dbHandler.QuerySingleAsync<RoomsDetailsDTO>(_dbHandler.Connection, "dbo.FetchRooms", CommandType.StoredProcedure, param);
+                }
+            }
+            catch (Exception)
+            {
+                //new ErrorLog().WriteLog(ex);
+            }
+
+            return rooms;
+        }
 
         /// <summary>
         /// To get the rooms
@@ -76,14 +96,15 @@ namespace Booking.Areas.BackOffice.Data.Services
             var parameters = new DynamicParameters();
             try
             {
-                parameters.Add("@RoomId", roomsDetailsDTO.RoomId, DbType.Int64, ParameterDirection.Input);
-                parameters.Add("@RoomTypeId", roomsDetailsDTO.RoomTypeId, DbType.Int16, ParameterDirection.Input);
-                parameters.Add("@BedTypeId", roomsDetailsDTO.BedTypeId, DbType.Int16, ParameterDirection.Input);
-                parameters.Add("@Number", roomsDetailsDTO.RoomNumber, DbType.String, ParameterDirection.Input);
-                parameters.Add("@Price", roomsDetailsDTO.Price, DbType.Decimal, ParameterDirection.Input);
-                parameters.Add("@Description", roomsDetailsDTO.Description, DbType.String, ParameterDirection.Input);
-                parameters.Add("@Status", roomsDetailsDTO.Status, DbType.Int16, ParameterDirection.Input);
-                parameters.Add("@IsActive", roomsDetailsDTO.IsActive, DbType.Boolean, ParameterDirection.Input);
+                parameters.Add("RoomId", roomsDetailsDTO.RoomId, DbType.Int64, ParameterDirection.Input);
+                parameters.Add("RoomTypeId", roomsDetailsDTO.RoomTypeId, DbType.Int16, ParameterDirection.Input);
+                parameters.Add("BedTypeId", roomsDetailsDTO.BedTypeId, DbType.Int16, ParameterDirection.Input);
+                parameters.Add("Number", roomsDetailsDTO.RoomNumber, DbType.String, ParameterDirection.Input);
+                parameters.Add("Price", roomsDetailsDTO.Price, DbType.Decimal, ParameterDirection.Input);
+                parameters.Add("Description", roomsDetailsDTO.Description, DbType.String, ParameterDirection.Input);
+                parameters.Add("Status", roomsDetailsDTO.Status, DbType.Int16, ParameterDirection.Input);
+                parameters.Add("Status", roomsDetailsDTO.Images, DbType.Int16, ParameterDirection.Input);
+                parameters.Add("IsActive", roomsDetailsDTO.IsActive, DbType.Boolean, ParameterDirection.Input);
 
                 using (_dbHandler.Connection)
                 {
@@ -97,13 +118,14 @@ namespace Booking.Areas.BackOffice.Data.Services
 
             return result;
         }
-        public async Task<int> DeleteRoomDetails(int RoomId)
+
+        public async Task<int> DeleteRoomDetails(Int64 RoomId)
         {
             int result = 0;
             var parameters = new DynamicParameters();
             try
             {
-                parameters.Add("@RoomId", RoomId, DbType.Int64, ParameterDirection.Input);
+                parameters.Add("RoomId", RoomId, DbType.Int64, ParameterDirection.Input);
                
                 using (_dbHandler.Connection)
                 {

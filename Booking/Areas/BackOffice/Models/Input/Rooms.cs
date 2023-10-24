@@ -16,13 +16,14 @@
     public class RoomsDetailsDTO
     {
         public long RoomId { get; set; } = 0;
-        public required string RoomNumber { get; set; }
-        public required int BedTypeId { get; set; }
-        public required int RoomTypeId { get; set; }
+        public  string RoomNumber { get; set; }
+        public  int BedTypeId { get; set; }
+        public  int RoomTypeId { get; set; }
         public int CancelationCharge { get; set; }
         public int MaxOccupancy { get; set; }
         public decimal Price { get; set; }
         public string? Description { get; set; }
+        public string? Images { get; set; }
         public int? Status { get; set; }
         public int? IsActive { get;  set; }
        

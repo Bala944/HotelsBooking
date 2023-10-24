@@ -39,6 +39,16 @@ namespace Booking.Areas.BackOffice.Controllers
 			return View(roomsDTOs);
 		}
 
+        [Route("~/get-room-details-byId")]
+        public async Task<IActionResult> GetRoomDetailsById(Int64 RoomId)
+        {
+
+            RoomsDetailsDTO roomsDTOs = new RoomsDetailsDTO();
+            roomsDTOs = await _roomsRepository.GetRoomDetailsById(RoomId);
+
+            return View(roomsDTOs);
+        }
+
         [Route("~/save-room-details")]
         public async Task<IActionResult> SaveRoomDetails([FromBody] RoomsDetailsDTO roomsDetailsDTO)
         {
