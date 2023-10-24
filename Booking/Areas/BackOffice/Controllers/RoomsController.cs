@@ -24,7 +24,7 @@ namespace Booking.Areas.BackOffice.Controllers
         {
 
 			AddRoomDTO roomsDTOs = new AddRoomDTO();
-			//roomsDTOs = await _roomsRepository.GetAddRoomDetails();
+			roomsDTOs = await _roomsRepository.GetAddRoomDetails();
 			return View(roomsDTOs);
 		}
 
@@ -34,9 +34,27 @@ namespace Booking.Areas.BackOffice.Controllers
 
 			List<RoomsDTO> roomsDTOs = new List<RoomsDTO>();
 
-			//roomsDTOs = await _roomsRepository.GetRooms();
+			roomsDTOs = await _roomsRepository.GetRooms();
 
 			return View(roomsDTOs);
 		}
+
+        [Route("~/save-room-details")]
+        public async Task<IActionResult> SaveRoomDetails([FromBody] RoomsDetailsDTO roomsDetailsDTO)
+        {
+            //var result = await _roomsRepository.SaveRoomDetails(roomsDetailsDTO);
+            
+            return Ok(await _roomsRepository.SaveRoomDetails(roomsDetailsDTO));
+        }
+
+        [Route("~/delete-room-details")]
+        public async Task<IActionResult> DeleteRoomDetails([FromQuery] int RoomId)
+        {
+            //var result = await _roomsRepository.SaveRoomDetails(roomsDetailsDTO);
+
+            return Ok(await _roomsRepository.DeleteRoomDetails(RoomId));
+        }
+
+
     }
 }

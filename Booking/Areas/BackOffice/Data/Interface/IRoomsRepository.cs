@@ -5,7 +5,9 @@ namespace Booking.Areas.BackOffice.Data.Interface
 {
     public interface IRoomsRepository
     {
-        public Task<List<RoomsDTO>> GetRooms();
-        public Task<AddRoomDTO> GetAddRoomDetails();
+         Task<List<RoomsDTO>> GetRooms();
+         Task<AddRoomDTO> GetAddRoomDetails();
+         Task<int> SaveRoomDetails(RoomsDetailsDTO roomsDetailsDTO);
+         Task<int> DeleteRoomDetails(int RoomId);
     }
 }
