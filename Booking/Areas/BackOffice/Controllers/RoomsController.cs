@@ -2,6 +2,8 @@
 using Booking.Areas.BackOffice.Models.Input;
 using Booking.Areas.BackOffice.Models.Output;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace Booking.Areas.BackOffice.Controllers
 {
@@ -9,14 +11,15 @@ namespace Booking.Areas.BackOffice.Controllers
     public class RoomsController : Controller
     {
         public required IRoomsRepository _roomsRepository;
-
+        private readonly IHostingEnvironment _hostingEnvironment;
         /// <summary>
         /// Constructor to initialize the object
         /// </summary>
         /// <param name="roomsRepository"></param>
-        public RoomsController(IRoomsRepository roomsRepository)
+        public RoomsController(IRoomsRepository roomsRepository, IHostingEnvironment hostingEnvironment)
         {
             _roomsRepository = roomsRepository;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         [Route("~/add-room-details")]
@@ -42,8 +45,8 @@ namespace Booking.Areas.BackOffice.Controllers
         [Route("~/get-room-details-byId")]
         public async Task<IActionResult> GetRoomDetailsById(Int64 RoomId)
         {
-
             RoomsDetailsDTO roomsDTOs = new RoomsDetailsDTO();
+
             roomsDTOs = await _roomsRepository.GetRoomDetailsById(RoomId);
 
             return View(roomsDTOs);
@@ -52,8 +55,42 @@ namespace Booking.Areas.BackOffice.Controllers
         [Route("~/save-room-details")]
         public async Task<IActionResult> SaveRoomDetails([FromBody] RoomsDetailsDTO roomsDetailsDTO)
         {
+
+            if (roomsDetailsDTO.FileImages != null && roomsDetailsDTO.FileImages.Count > 0)
+            {
+                string UniqueFileName = string.Empty;
+                List<IFormFile> file = roomsDetailsDTO.FileImages;
+
+                string imagesPath = string.Concat(_hostingEnvironment.WebRootPath, "//Attachments//RoomImages");
+                var FileNames=string.Empty;
+
+                if (!Directory.Exists(imagesPath))
+                {
+                    Directory.CreateDirectory(imagesPath);
+                }
+
+                foreach (var uploadedFile in file)
+                {
+                    // Get the filename and extension of the uploaded file
+                    string fileName = Path.GetFileNameWithoutExtension(uploadedFile.FileName);
+                    string fileExtension = Path.GetExtension(uploadedFile.FileName);
+
+                    // Generate a unique filename
+                    string uniqueFileName = $"{fileName}_{DateTime.Now.ToString("MM_dd_yyyy_hh_mm_ss")}{fileExtension}";
+
+                    // Create a file stream to save the uploaded file to disk
+                    using (var fileStream = new FileStream(Path.Combine(imagesPath, uniqueFileName), FileMode.Create))
+                    {
+                        // Copy the uploaded file to the file stream
+                        uploadedFile.CopyTo(fileStream);
+                    }
+                    FileNames+=uniqueFileName+",";
+                }
+
+
+            }
             //var result = await _roomsRepository.SaveRoomDetails(roomsDetailsDTO);
-            
+
             return Ok(await _roomsRepository.SaveRoomDetails(roomsDetailsDTO));
         }
 
