@@ -1,0 +1,121 @@
+﻿<link href="~/assets/plugins/select2/css/select2.min.css" rel="stylesheet" />
+<script src="/assets/plugins/select2/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".select2").select2({
+            width: "100%",
+            // minimumResultsForSearch: -1,
+            placeholder: function () {
+                $(this).data('placeholder');
+            },
+            //allowClear: true,
+           // selectOnClose: true,
+            closeOnSelect: true
+        });
+
+        //// steal focus during close - only capture once and stop propagation
+        //$('select.select2').on('select2:closing', function (e) {
+        //    $(e.target).data("select2").$selection.one('focus focusin', function (e) {
+        //        e.stopPropagation();
+        //    });
+        //});
+
+        var context = $('.select2');
+
+        $(document).on('keydown.select2', function (e) {
+            if (e.which === 9) { // Tab
+                var highlighted = context
+                    .data('select2')
+                    .$dropdown
+                    .find('.select2-results__option--highlighted');
+                if (highlighted && highlighted.data('data')) {
+                    var id = highlighted.data('data').id;
+                    if (id !== undefined) {
+                        context.val(id).trigger('change');
+                    }
+                }
+            }
+        });
+
+
+        $(document).on('focus', '.select2-selection.select2-selection--single', function (e) {
+            $(this).closest(".select2-container").siblings('select:enabled').select2('open');
+        });
+        // Capture the 'keydown' event on the document
+        $(document).on('keydown', function (e) {
+            if (e.which === 9) { // Tab key pressed
+                // Check if there is an open Select2 dropdown
+                var openSelect2 = $('.select2-container--open');
+
+                if (openSelect2.length > 0) {
+                    // Close the open dropdown
+                    openSelect2.each(function () {
+                        $(this).prev('select').select2('close');
+                    });
+                }
+            }
+        });
+    });
+
+    $(".modal").on('shown.bs.modal', function () {
+        var id = $(this).attr('id');
+        $(".select2").select2({
+            width: "100%",
+            dropdownParent: $('#' + id),
+            placeholder: function () {
+                $(this).data('placeholder');
+            },
+            selectOnClose: true,
+            closeOnSelect: true
+        });
+    });
+    $(".modal").on('hidden.bs.modal', function () {
+        debugger
+        var id = $(this).attr('id');
+        $(".select2").select2({
+            width: "100%",
+            placeholder: function () {
+                $(this).data('placeholder');
+            },
+            selectOnClose: true,
+            closeOnSelect: true
+        });
+    })
+
+    function handleSelectAll(selector) {
+        $(selector).on('select2:select', function (e) {
+            var selectedValue = e.params.data.id;
+
+            if (selectedValue === 'all') {
+                e.preventDefault();
+
+                $(selector).val($(selector).find('option:not([value="all"])').map(function () {
+                    return $(this).val();
+                })).trigger('change');
+            } else {
+                // Deselect the "All" option if another option is selected
+                $(selector + ' option[value="all"]').prop('selected', false);
+                $(selector).trigger('change');
+            }
+        });
+
+        $(selector).on('select2:unselect', function (e) {
+            var unselectedValue = e.params.data.id;
+
+            if (unselectedValue === 'all') {
+                e.preventDefault();
+            } else {
+                // Deselect the "All" option when any other option is deselected
+                $(selector + ' option[value="all"]').prop('selected', false);
+                $(selector).trigger('change');
+            }
+        });
+
+        $(selector).on('select2:open', function (e) {
+            // Deselect the "All" option when the dropdown is opened but nothing is selected
+            if ($(selector).val() == null) {
+                $(selector + ' option[value="all"]').prop('selected', false);
+            }
+        });
+    }
+</script>

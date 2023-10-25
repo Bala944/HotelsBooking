@@ -1,0 +1,12 @@
+﻿<!-- BEGIN: Date Picker Refrences -->
+<link href="~/assets/plugins/datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<script src="~/assets/plugins/datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="~/assets/plugins/datepicker/js/moment.js"></script>
+<script src="~/assets/plugins/jquery.inputmask/js/jquery.inputmask.min.js"></script>
+<!-- END: Date Picker Refrences -->
+
+<script>
+    Inputmask("datetime", {
+        inputFormat: "dd/mm/yyyy "
+    }).mask(".date-mask");
+</script>
