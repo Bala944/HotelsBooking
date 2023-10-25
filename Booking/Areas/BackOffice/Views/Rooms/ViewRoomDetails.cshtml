@@ -3,10 +3,6 @@
     Layout = "_BackOfficeLayout";
 }
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
-<link rel="stylesheet" href="assets/plugins/datatables/datatables.min.css">
-
 <form id="frmRoomDetails" asp-area="BackOffice" asp-controller="Rooms" asp-action="AddRoomDetails">
     <input type="hidden" id="RoomId" name="RoomId" value="" />
 </form>
@@ -26,7 +22,7 @@
             <div class="card card-table">
                 <div class="card-body booking_card">
                     <div class="table-responsive">
-                        <table class="datatable table table-stripped table table-hover table-center mb-0">
+                        <table class="table table-bordered table-hover table-striped">
                             <thead>
                                 <tr>
                                     <th>Action</th>
@@ -83,13 +79,17 @@
     </div>
 </div>
 
+<partial name="_DataTableScriptPartial" />
 
-<script src="assets/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="assets/plugins/datatables/datatables.min.js"></script>
 <script>
+
+    $(document).ready(function () {
+        ApplyCommonGridStyle();
+    });
+
     function openEditMode(itemId) {
         // Set the value of the hidden input field
-        document.getElementById('RoomId').value = itemId;
+        $('#RoomId').val(itemId);
         // Submit the form
         $('#frmRoomDetails').submit();
     }
