@@ -1,0 +1,57 @@
+//BEGIN: Common Styles
+body {
+    font-family: $theme-font;
+    font-size: 1rem;
+    font-weight: 400;
+}
+a {
+    text-decoration: none;
+}
+ul,
+li {
+    list-style: none;
+}
+.section {
+    padding: 2rem 0;
+    .section-title {
+        font-weight: 700;
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+}
+.page-title {
+    background: linear-gradient(to bottom, rgb(198 193 193 / 0%), rgb(206 200 200 / 50%));
+    background-repeat: repeat;
+    background-size: 200px;
+    background-position: center;
+    background-color: #9ad8ff;
+    padding: 1rem 0;
+    h2 {
+        text-align: left;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0;
+    }
+}
+
+//Sub Panel Style
+.sub-panel {
+    box-shadow:
+        rgba(17, 17, 26, 0.05) 0px 1px 0px,
+        rgba(17, 17, 26, 0.1) 0px 0px 8px;
+    margin-bottom: 1rem;
+    .sub-panel-header {
+        border-bottom: 1px solid $theme-primary-color;
+        padding: 0.5rem 1rem;
+        h4 {
+            font-size: 1.2rem;
+            margin: 0;
+            color: $theme-primary-color;
+            font-weight: 700;
+        }
+    }
+    .sub-panel-body {
+        padding: 0.5rem 1rem;
+    }
+}
+//END: Common Styles

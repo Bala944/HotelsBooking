@@ -1,0 +1,61 @@
+//BEGIN: Rooms Section Style
+.rooms-panel {
+    box-shadow:
+        rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+        rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    .rooms-img {
+        height: 15rem;
+        display: flex;
+        align-items: center;
+        width: 12rem;
+        img {
+            max-height: 100%;
+        }
+    }
+    .room-title {
+        h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+    }
+    .room-discription {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        padding: 1rem 0;
+        width: calc(100% - 12rem);
+        padding-left: 1rem;
+        p {
+            margin: 0;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0;
+            li {
+                color: #037f16;
+                font-size: 0.8rem;
+                i {
+                    margin-right: 0.5rem;
+                }
+            }
+        }
+        .pricing-details {
+            p {
+                font-size: 0.8rem;
+            }
+            h5 {
+                font-size: 1.5rem;
+                font-weight: bold;
+                strike {
+                    font-size: 0.8rem;
+                    font-weight: normal;
+                }
+            }
+        }
+    }
+}
+//END: Rooms Section Style

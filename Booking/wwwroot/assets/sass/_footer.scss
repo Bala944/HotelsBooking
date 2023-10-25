@@ -1,0 +1,30 @@
+//BEGIN: Footer Style
+footer {
+    display: none;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+    background-color: $theme-primary-color;
+    position: absolute;
+    padding: 1rem 0;
+    color: $color-white;
+    font-size: 1rem;
+    p {
+        margin: 0;
+        color: #fff;
+        text-align: center;
+    }
+}
+//END: Footer Style
+@media (min-width: 320px) and (max-width: 575px) {
+    footer {
+        font-size: 0.8rem;
+    }
+}
+@media (min-width: 1200px) {
+    footer {
+        max-height: 50px;
+    }
+}
+
+//END: Footer Style

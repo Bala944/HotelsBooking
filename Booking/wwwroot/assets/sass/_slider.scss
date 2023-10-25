@@ -1,0 +1,148 @@
+//BEGIN: Slider Style
+.owl-carousel {
+    .item {
+        height: calc(100vh - 4.2rem);
+        position: relative;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cover {
+            padding: 75px 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+
+            .header-content {
+                position: relative;
+                padding: 56px;
+                overflow: hidden;
+
+                .line {
+                    content: "";
+                    display: inline-block;
+                    width: 100%;
+                    height: 100%;
+                    left: 0;
+                    top: 0;
+                    position: absolute;
+                    border: 9px solid #fff;
+                    -webkit-clip-path: polygon(0 0, 60% 0, 36% 100%, 0 100%);
+                    clip-path: polygon(0 0, 60% 0, 36% 100%, 0 100%);
+                }
+
+                h2 {
+                    font-weight: 300;
+                    font-size: 35px;
+                    color: #fff;
+                }
+
+                h1 {
+                    font-size: 56px;
+                    font-weight: 600;
+                    margin: 5px 0 20px;
+                    word-spacing: 3px;
+                    color: #fff;
+                }
+
+                h4 {
+                    font-size: 24px;
+                    font-weight: 300;
+                    line-height: 36px;
+                    color: #fff;
+                }
+            }
+        }
+
+        &.owl-item.active {
+            h1,
+            h2,
+            h4,
+            .line {
+                -webkit-animation-duration: 1s;
+                animation-duration: 1s;
+                -webkit-animation-fill-mode: both;
+                animation-fill-mode: both;
+                animation-delay: 0.3s;
+            }
+
+            h1 {
+                animation-name: fadeInDown;
+            }
+
+            h2 {
+                animation-name: fadeInDown;
+            }
+
+            h4 {
+                animation-name: fadeInUp;
+            }
+
+            .line {
+                animation-name: fadeInLeft;
+            }
+        }
+
+        .owl-nav {
+            .owl-prev,
+            .owl-next {
+                position: absolute;
+                top: 43%;
+                opacity: 0;
+                -webkit-transition: all 0.4s ease-out;
+                transition: all 0.4s ease-out;
+                background: rgba(0, 0, 0, 0.5) !important;
+                width: 40px;
+                cursor: pointer;
+                height: 40px;
+                position: absolute;
+                display: block;
+                z-index: 1000;
+                border-radius: 0;
+
+                span {
+                    font-size: 1.6875rem;
+                    color: #fff;
+                }
+
+                &:focus {
+                    outline: 0;
+                }
+
+                &:hover {
+                    background: #000 !important;
+                }
+            }
+
+            .owl-prev {
+                left: 15px;
+            }
+
+            .owl-next {
+                right: 15px;
+            }
+        }
+    }
+
+    &:hover {
+        .owl-prev {
+            left: 0px;
+            opacity: 1;
+        }
+
+        .owl-next {
+            right: 0px;
+            opacity: 1;
+        }
+    }
+}
+
+//END: Slider Style

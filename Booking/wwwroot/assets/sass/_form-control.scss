@@ -1,0 +1,25 @@
+//BEGIN: Form-control
+.form-group {
+    margin-bottom: 1rem;
+    label {
+        font-weight: 500;
+    }
+}
+.bottom-btn {
+    border-top: 1px solid $color-light-grey;
+    padding-top: 0.5rem;
+    text-align: center;
+    gap: 0.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    .btn-primary {
+        background-color: $color-save-btn-bg;
+        border-color: $color-save-btn-bg;
+        &:hover {
+            background-color: $color-save-btn-hover-bg;
+            border-color: $color-save-btn-hover-bg;
+        }
+    }
+}
+//END: Form Control
