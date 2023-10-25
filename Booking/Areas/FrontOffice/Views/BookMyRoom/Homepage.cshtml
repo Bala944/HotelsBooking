@@ -1,5 +1,7 @@
 ﻿@model BookMyRoomResultDTO
-
+@{
+    ViewData["Title"] = "Home";
+}
 <!-- BEGIN: Slider Section ======================================== -->
 <div class="owl-carousel owl-theme">
     <div class="item">
@@ -180,15 +182,13 @@
 <!-- END: Contact Section ============================== -->
 
 <!-- BEGIN: Page Refrence ========================= -->
-<!-- Menu refrence -->
-<script src="assets/plugins/menu/js/menu.js"></script>
 <!-- Owl Carosel Refrence ============================ -->
-<link href="assets/plugins/slider/css/owl.carousel.min.css" rel="stylesheet" />
-<link href="assets/plugins/slider/css/owl.theme.default.css" rel="stylesheet" />
-<link href="assets/plugins/slider/css/animate.min.css" rel="stylesheet" />
-<script src="assets/plugins/slider/js/owl.carousel.js"></script>
+<link href="~/assets/plugins/slider/css/owl.carousel.min.css" rel="stylesheet" />
+<link href="~/assets/plugins/slider/css/owl.theme.default.css" rel="stylesheet" />
+<link href="~/assets/plugins/slider/css/animate.min.css" rel="stylesheet" />
+<script src="~/assets/plugins/slider/js/owl.carousel.js"></script>
 <!-- END: Page Refrence ========================= -->
-<script src="assets/js/aara.theme.function.js"></script>
+
 <script>
     function openEditMode(itemId) {
         // Set the value of the hidden input field

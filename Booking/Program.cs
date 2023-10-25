@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 // Register Dependency Injection
 builder.Services.AddTransient<IDBHandler, DBHandler>();
 builder.Services.AddTransient<IRoomsRepository, RoomsRepository>();
