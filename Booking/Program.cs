@@ -19,6 +19,14 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy(Policies.RequireAdminClaim, Policies.RequireAdminClaimPolicy());
 });
 
+builder.Services.AddAuthentication("YourAuthenticationScheme")
+    .AddCookie("YourAuthenticationScheme", options =>
+    {
+        options.LoginPath = "/Login"; // Redirect to your custom login page
+		options.AccessDeniedPath="/Login/AccessDenied"; // Redirect to your custom access denied page
+        // Other authentication options
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
