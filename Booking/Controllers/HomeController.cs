@@ -14,14 +14,27 @@ namespace Booking.Controllers
         {
             _logger = logger;
         }
-
+        [Route("~/login")]
         public IActionResult Login()
         {
             return View();
         }
+        [Route("~/logout")]
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Login", "Home");
+
+        }
+
+		public async Task<IActionResult> Homepage()
+		{
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Homepage","BookMyRoom",new {Area="FrontOffice"});
+		}
 
 
-        public async Task<IActionResult> AuthUser(AuthDTO authDTO)
+		public async Task<IActionResult> AuthUser(AuthDTO authDTO)
         {
             if (!string.IsNullOrEmpty(authDTO.UserName) && !string.IsNullOrEmpty(authDTO.Password))
             {
@@ -36,7 +49,8 @@ namespace Booking.Controllers
                     var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
                     await HttpContext.SignInAsync(claimsPrincipal);
-                    return RedirectToAction("Homepage", "BookMyRoom", new { Area = "FrontOffice" });
+                    return RedirectToAction("ViewRoomDetails", "Rooms", new { Area = "BackOffice" });
+
                 }
             }
             return RedirectToAction("Login");

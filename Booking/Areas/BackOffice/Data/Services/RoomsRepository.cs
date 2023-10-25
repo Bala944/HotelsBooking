@@ -109,6 +109,7 @@ namespace Booking.Areas.BackOffice.Data.Services
                 parameters.Add("Images", roomsDetailsDTO.Images, DbType.String, ParameterDirection.Input);
                 parameters.Add("IsActive", roomsDetailsDTO.IsActive, DbType.Int16, ParameterDirection.Input);
                 parameters.Add("CancelationCharge", roomsDetailsDTO.CancelationCharge, DbType.Int16, ParameterDirection.Input);
+                parameters.Add("MaxOccupancy", roomsDetailsDTO.MaxOccupancy, DbType.Int16, ParameterDirection.Input);
 
                 using (_dbHandler.Connection)
                 {

@@ -20,12 +20,20 @@ namespace Booking.Areas.FrontOffice.Models.Input
 
     public class RoomFilterDTO
     {
-        public DateAndTime? CheckInDate { get; set; }
-        public DateAndTime? CheckOutDate { get; set; }
+        public string? CheckInDate { get; set; }
+        public string? CheckOutDate { get; set; }
         public int? Adults { get; set; }
         public int Children { get; set; }
         public int Rooms { get; set; }
         public bool IsViewMore { get; set; } =false;
+
+    }
+
+    public class SelectedRoomDTO
+    {
+        public Int64 RoomId { get; set; }
+        public string? CheckIn { get; set; }
+        public string? CheckOut { get; set; }
 
     }
 

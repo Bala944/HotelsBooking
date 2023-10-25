@@ -3,29 +3,3 @@
 <script src="~/assets/plugins/datatable/js/jquery.datatables.min.js"></script>
 <script src="~/assets/plugins/datatable/js/datatables.bootstrap.min.js"></script>
 <!-- END: Datatable Script Refrences -->
-
-<script>
-
-    function ApplyCommonGridStyle() {
-        var table = $('.table');
-        var oTable = table.DataTable({
-            responsive: true,
-            ordering: true,
-            "bLengthChange": true, //thought this line could hide the LengthMenu
-            "bInfo": true,
-            "columnDefs": [{
-                "orderable": false,
-                "targets": [0, 1],
-            }],
-            "order": [
-                [2, 'asc']
-            ],
-            "language": {
-                "emptyTable": "No data found"
-            }
-        });
-        $('#txtSeachGrid').on('keyup click', function () {
-            oTable.search($(this).val()).draw();
-        });
-    }
-</script>

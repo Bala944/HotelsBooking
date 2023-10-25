@@ -1,4 +1,5 @@
-﻿@model RoomsDetailsDTO
+﻿@using System.Globalization;
+@model RoomsDetailsDTO
 
 	<!-- BEGIN: Page Title Section ======================================== -->
 	<section class="page-title">
@@ -40,13 +41,9 @@
 				</article>
 
 				<div class="room-desc">
-					<p>Located in Yelagiri in the Tamil Nadu region, Aara-AHB Cottage01 provides accommodations with free private parking.</p>
-					<p>Fitted with a terrace, the units feature a flat-screen TV and a private bathroom with shower and free toiletries. Some units feature a seating area and/or a balcony.</p>
-					<p>Guests at the villa can enjoy a vegetarian breakfast.</p>
-					<p>Both a bicycle rental service and a car rental service are available at Aara-AHB Cottage01.</p>
-					<p>The nearest airport is Kempegowda International Airport, 108 miles from the accommodation.</p>
-				</div>
-				<div class="room-availability">
+				@Html.Raw(Model?.Description)
+					</div>
+				@* <div class="room-availability">
 					<h4>Availability</h4>
 					<ul>
 						<li>
@@ -112,11 +109,24 @@
 							</span>
 						</li>
 					</ul>
-				</div>
+				</div> *@
 				<div class="pricing-details-room">
-					<p>3 weeks</p>
-					<h5>₹ 258,000</h5>
-					<p>+₹ 46,440 taxes and charges</p>
+				@{
+					// Assuming ViewBag.CheckIn and ViewBag.CheckOut are in the format "dd/mm/yyyy"
+					DateTime checkInDate = DateTime.ParseExact(ViewBag.CheckIn, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+					DateTime checkOutDate = DateTime.ParseExact(ViewBag.CheckOut, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+					TimeSpan timeSpan = checkOutDate - checkInDate;
+					int days = timeSpan.Days;
+				}
+				@{
+					double totalprice =Convert.ToDouble((Model?.Rate * days ));
+					double tax = totalprice * 0.05;
+					tax = Math.Round(tax, 2);
+				}
+				<p>@days days</p>
+				<h5>₹ @totalprice</h5>
+				<p>+₹ @tax taxes and charges</p>
+
 				</div>
 				<ul>
 					<li><i class="fas fa-check"></i>Breakfast included in the price</li>

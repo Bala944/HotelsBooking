@@ -25,8 +25,8 @@ namespace Booking.Areas.FrontOffice.Data.Services
             var parameters = new DynamicParameters();
             try
             {
-                parameters.Add("CheckInDate", roomFilterDTO.CheckInDate, DbType.DateTime, ParameterDirection.Input);
-                parameters.Add("CheckOutDate", roomFilterDTO.CheckOutDate, DbType.DateTime, ParameterDirection.Input);
+                parameters.Add("CheckInDate", roomFilterDTO.CheckInDate, DbType.String, ParameterDirection.Input);
+                parameters.Add("CheckOutDate", roomFilterDTO.CheckOutDate, DbType.String, ParameterDirection.Input);
                 parameters.Add("Adults", roomFilterDTO.Adults, DbType.Int16, ParameterDirection.Input);
                 parameters.Add("Children", roomFilterDTO.Children, DbType.Int16, ParameterDirection.Input);
                 parameters.Add("Rooms", roomFilterDTO.Rooms, DbType.Int16, ParameterDirection.Input);
@@ -49,7 +49,7 @@ namespace Booking.Areas.FrontOffice.Data.Services
             var parameters = new DynamicParameters();
             try
             {
-                parameters.Add("RoomId", roomId, DbType.DateTime, ParameterDirection.Input);
+                parameters.Add("RoomId", roomId, DbType.Int64, ParameterDirection.Input);
                 using (_dbHandler.Connection)
                 {
                     roomsList = await _dbHandler.QuerySingleAsync<RoomsDetailsDTO>(_dbHandler.Connection, "dbo.GetFilteredRoomsDetailsById", CommandType.StoredProcedure, parameters);
@@ -62,5 +62,7 @@ namespace Booking.Areas.FrontOffice.Data.Services
 
             return roomsList;
         }
+
+       
     }
 }

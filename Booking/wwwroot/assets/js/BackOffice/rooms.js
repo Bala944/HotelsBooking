@@ -62,6 +62,7 @@ $('body').on('click', '.file__value--removeTask', function () {
 });
 
 function SaveRoomDetails() {
+    debugger
     // Check if the form is valid according to the validation rules
     if ($("#roomForm").valid()) {
         var FileImages = '';
@@ -84,27 +85,41 @@ function SaveRoomDetails() {
         RoomFormData.append("CancelationCharge", parseInt($("#cancellationType").val()));
         RoomFormData.append("MaxOccupancy", parseInt($("#maxOccupancy").val()));
         RoomFormData.append("Price", $("#rate").val());
-        RoomFormData.append("Description", $("#description").val());
+        RoomFormData.append("Description", editor1.getData(),);
         RoomFormData.append("Status", 1);
         RoomFormData.append("IsActive", 1);
         RoomFormData.append("Images", FileImages);
 
+
+        $.ajax({
+            type: "POST",
+            url: "/save-room-details", // Replace with your actual endpoint URL
+            data: RoomFormData,
+            processData: false,  // Prevent jQuery from processing the data
+            contentType: false,  // Set content type to false
+            success: function (response) {
+                debugger
+                Swal.fire({
+                    title: 'Room',
+                    text: 'Saved Successfully',
+                    icon: 'success',
+                     showConfirmButton: false,
+                });
+
+                setTimeout(function () {
+                    window.location.href = "/view-room-details";
+                }, 1000);
+            },
+            error: function (error) {
+                Swal.fire({
+                    title: 'Room',
+                    text: 'Something went wrong',
+                    icon: 'success',
+                    showConfirmButton: false,
+                });
+            }
+        });
     }
-    $.ajax({
-        type: "POST",
-        url: "/save-room-details", // Replace with your actual endpoint URL
-        data: RoomFormData,
-        processData: false,  // Prevent jQuery from processing the data
-        contentType: false,  // Set content type to false
-        success: function (response) {
-            debugger
-            window.location.href = "/view-room-details";
-        },
-        error: function (error) {
-            debugger
-            // Handle the error response here
-        }
-    });
 
 
 }
@@ -120,11 +135,10 @@ const GetRoomDetailsById = async (RoomId) => {
         $("#roomNumber").val(result.roomNumber);
         $("#roomType").val(result.roomTypeId).trigger("change");;
         $("#bedType").val(result.bedTypeId).trigger("change");
-        $("#cancellationType").val(result.cancelationCharge);
+        $("#cancellationType").val(result.cancelationCharge).trigger("change");
         $("#maxOccupancy").val(result.maxOccupancy);
         $("#rate").val(result.price);
-        $("#description").val(result.description);
-
+        editor1.setData(result.description);
         debugger
         if (result.images != '' && result.images != null) {
             var attachementpath1 = 'Attachments/RoomImages/';
@@ -146,23 +160,51 @@ const GetRoomDetailsById = async (RoomId) => {
     }
 }
 
+
+
 const DeleteRoom = async (RoomId) => {
+    debugger
+     Swal.fire({
+        title: 'Do you sure to delete this record?',
+        showDenyButton: true,
 
+        confirmButtonText: 'Yes',
+        denyButtonText: `No`,
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            DeleteRoomById(RoomId);
+            
+        } 
+    })
 
+}
+const DeleteRoomById = async (RoomId) => {
     var data = { "RoomId": RoomId }
     var result = await APIGetMethod('/delete-room-details', data);
     debugger
     if (result != null && result != "") {
         if (result == 200) {
-            alert("Room Deleted Successfully");
+            Swal.fire({
+                title: 'Room',
+                text: 'Deleted Successfully',
+                icon: 'success',
+                showConfirmButton: false,
+            });
             setTimeout(function () {
                 window.location.href = "/view-room-details";
             }, 1000);
 
         }
-        else
-            alert("Something went wrong");
-
+        else {
+            Swal.fire({
+                title: 'Room',
+                text: 'Something went wrong',
+                icon: 'success',
+                showConfirmButton: false,
+            });
+        }
+       
     }
 }
 

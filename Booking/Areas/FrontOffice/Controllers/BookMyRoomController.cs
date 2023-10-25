@@ -19,6 +19,10 @@ namespace Booking.Areas.FrontOffice.Controllers
         public IActionResult Homepage(RoomFilterDTO roomFilterDTO)
         {
             BookMyRoomResultDTO bookMyRoomResultDTO = new BookMyRoomResultDTO();
+            if (string.IsNullOrEmpty(roomFilterDTO.CheckInDate))
+                roomFilterDTO.CheckInDate = DateTime.Now.ToString("dd/MM/yyyy");
+            if (string.IsNullOrEmpty(roomFilterDTO.CheckOutDate))
+                roomFilterDTO.CheckOutDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
             if (roomFilterDTO.CheckInDate != null && roomFilterDTO.CheckOutDate != null)
             {
                 var rooms = _bookMyRoomRepository.GetRooms(roomFilterDTO);
@@ -32,10 +36,12 @@ namespace Booking.Areas.FrontOffice.Controllers
         }
 
         [Route("/room-details-page")]
-        public async Task<IActionResult> SingleRoomDetails(Int64 roomId)
+        public async Task<IActionResult> SingleRoomDetails(SelectedRoomDTO selectedRoomDTO)
         {
             RoomsDetailsDTO result = new RoomsDetailsDTO();
-            result = await _bookMyRoomRepository.GetRoomsById(roomId);
+            ViewBag.CheckIn = selectedRoomDTO.CheckIn;
+            ViewBag.CheckOut=selectedRoomDTO.CheckOut;
+            result = await _bookMyRoomRepository.GetRoomsById(selectedRoomDTO.RoomId);
             return View(result);
         }
     }

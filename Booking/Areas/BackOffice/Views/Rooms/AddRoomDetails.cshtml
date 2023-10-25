@@ -1,9 +1,9 @@
 ﻿@model AddRoomDTO
-
 @{
-    Layout = "_BackOfficeLayout";
+    ViewData["Title"] = "Rooms";
 }
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
 <div class="row align-items-center">
@@ -25,7 +25,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="roomType">Room Type:</label>
-                        <select id="roomType" name="roomType" class="form-control select2" required>
+                        <select id="roomType" name="roomType" class="form-select select2" required>
                             @if (Model?.roomTypeModel != null)
                             {
                                 foreach (var roomType in Model?.roomTypeModel)
@@ -50,7 +50,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="bedType">Bed Type:</label>
-                        <select id="bedType" class="form-control select2" name="bedType" required>
+                        <select id="bedType" class="form-select select2" name="bedType" required>
                             @if (Model != null && Model?.bedTypeModel != null)
                             {
                                 foreach (var bedType in Model?.bedTypeModel)
@@ -64,7 +64,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Charges For cancellation</label>
-                        <select class="form-control select2" id="cancellationType" name="cancellationType">
+                        <select class="form-select select2" id="cancellationType" name="cancellationType">
                             <option>Select</option>
                             <option value="1">Free</option>
                             <option value="2">5% Before 24Hours</option>
@@ -88,15 +88,15 @@
                     <div class="form-group">
                         <label>Image Upload</label>
                         <div class="custom-file mb-3">
-                            <input type="file" class="custom-file-input" id="roomImages" name="roomImages" onchange="UploadAttachments(this)">
-                            <label class="custom-file-label" for="customFile">Choose file</label>
+                            <input type="file" class="custom-file-input" id="roomImages" multiple name="roomImages" onchange="UploadAttachments(this)">
+                           @*  <label class="custom-file-label" for="customFile">Choose file</label> *@
                         </div>
                     </div>
                 </div>
                 <div class="col-md-8">
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea class="form-control" rows="5" id="description" name="description"></textarea>
+                        <textarea class="form-control" rows="3" id="description" name="description"></textarea>
                     </div>
                 </div>
 
@@ -112,11 +112,20 @@
 <partial name="_ValidationScriptsPartial" />
 <partial name="_SelectScriptPartial" />
 
-
+<script src="~/assets/js/ckeditor.js"></script>
 <script src="~/assets/js/backoffice/rooms.js"></script>
 <script src="~/assets/js/ajaxconnector.js"></script>
 <script>
+    var editor1;
     $(document).ready(function () {
+        ClassicEditor
+            .create(document.querySelector('#description'))
+            .then(editor => {
+                editor1 = editor;
+            })
+            .catch(error => {
+                console.error(error);
+            });
         page.init();
         if ('@ViewBag.RoomId' > 0) {
             GetRoomDetailsById('@ViewBag.RoomId');
