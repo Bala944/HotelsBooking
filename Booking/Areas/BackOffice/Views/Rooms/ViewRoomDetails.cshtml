@@ -6,6 +6,7 @@
 
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <link rel="stylesheet" href="assets/plugins/datatables/datatables.min.css">
 
 <div class="content-wrapper">
@@ -43,8 +44,8 @@
                                     {
                                         <tr>
                                             <td>
-                                                <a href="EditRoom/@room.RoomId"><i class="fas fa-edit"></i></a>
-                                                <a href="DeleteRoom/@room.RoomId"><i class="fas fa-trash-alt"></i></a>
+                                                <a href="add-room-details?RoomId=@room.RoomId"><i class="fas fa-edit"></i>Edit</a>
+                                                <a href="DeleteRoom/@room.RoomId"><i class="fas fa-trash-alt"></i>Delete</a>
                                             </td>
                                             <td>@room.RoomNumber</td>
                                             <td>@room.RoomType</td>

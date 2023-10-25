@@ -15,7 +15,7 @@
     }
 </style>
 
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
@@ -83,9 +83,9 @@
                             <label>Charges For cancellation</label>
                             <select class="form-control" id="cancellationType" name="cancellationType">
                                 <option>Select</option>
-                                <option>Free</option>
-                                <option>5% Before 24Hours</option>
-                                <option>No Cancellation Allow</option>
+                                <option value="1">Free</option>
+                                <option value="2">5% Before 24Hours</option>
+                                <option value="3">No Cancellation Allow</option>
                             </select>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                         <div class="form-group">
                             <label>Image Upload</label>
                             <div class="custom-file mb-3">
-                                <input type="file" class="custom-file-input" id="roomImages" name="roomImages">
+                                <input type="file" class="custom-file-input" id="roomImages" name="roomImages" onchange="UploadAttachments(this)">
                                 <label class="custom-file-label" for="customFile">Choose file</label>
                             </div>
                         </div>
@@ -121,12 +121,23 @@
             </form>
         </div>
     </div>
-    <button type="button" id="saveButton" class="btn btn-primary ">Save</button>
+    <input type="hidden" id="RoomId" value="@ViewBag.RoomId" />
+    <button type="button" onclick="SaveRoomDetails()" class="btn btn-primary ">Save</button>
     <a class="btn btn-secondary" href="/view-room-details">Cancel</a>
 </div>
 
+
+<script src="~/assets/js/backoffice/rooms.js"></script>
+<script src="~/assets/js/ajaxconnector.js"></script>
 <script>
     $(document).ready(function () {
+
+        if ('@ViewBag.RoomId' > 0) { 
+            GetRoomDetailsById('@ViewBag.RoomId');
+        }
+
+
+
         $("#roomForm").validate({
             errorElement: "label", // Use <label> for inline error messages
             errorPlacement: function (error, element) {

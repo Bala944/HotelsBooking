@@ -26,12 +26,13 @@ namespace Booking.Areas.BackOffice.Data.Services
         public async Task<List<RoomsDTO>> GetRooms()
         {
             List<RoomsDTO> rooms = new List<RoomsDTO>();
-
+            var parameters = new DynamicParameters();
             try
             {
+                 parameters.Add("ActionId", 1, DbType.Int64, ParameterDirection.Input);
                 using (_dbHandler.Connection)
                 {
-                    rooms = (await _dbHandler.QueryAsync<RoomsDTO>(_dbHandler.Connection, "dbo.FetchRooms", CommandType.StoredProcedure, null)).ToList();
+                    rooms = (await _dbHandler.QueryAsync<RoomsDTO>(_dbHandler.Connection, "[dbo].[ManageRoomDetails]", CommandType.StoredProcedure, parameters)).ToList();
                 }
             }
             catch (Exception)
@@ -45,13 +46,14 @@ namespace Booking.Areas.BackOffice.Data.Services
         public async  Task<RoomsDetailsDTO> GetRoomDetailsById(Int64 RoomId)
         {
             RoomsDetailsDTO rooms = new RoomsDetailsDTO();
-            var param = new DynamicParameters();
+            var parameters = new DynamicParameters();
             try
             {
-                param.Add("RoomId", RoomId,DbType.Int64,ParameterDirection.Input);
+                parameters.Add("ActionId", 3, DbType.Int64, ParameterDirection.Input);
+                parameters.Add("RoomId", RoomId,DbType.Int64,ParameterDirection.Input);
                 using (_dbHandler.Connection)
                 {
-                    rooms = await _dbHandler.QuerySingleAsync<RoomsDetailsDTO>(_dbHandler.Connection, "dbo.FetchRooms", CommandType.StoredProcedure, param);
+                    rooms = await _dbHandler.QuerySingleAsync<RoomsDetailsDTO>(_dbHandler.Connection, "dbo.ManageRoomDetails", CommandType.StoredProcedure, parameters);
                 }
             }
             catch (Exception)
@@ -96,6 +98,7 @@ namespace Booking.Areas.BackOffice.Data.Services
             var parameters = new DynamicParameters();
             try
             {
+                parameters.Add("ActionId", 2, DbType.Int64, ParameterDirection.Input);
                 parameters.Add("RoomId", roomsDetailsDTO.RoomId, DbType.Int64, ParameterDirection.Input);
                 parameters.Add("RoomTypeId", roomsDetailsDTO.RoomTypeId, DbType.Int16, ParameterDirection.Input);
                 parameters.Add("BedTypeId", roomsDetailsDTO.BedTypeId, DbType.Int16, ParameterDirection.Input);
@@ -103,12 +106,13 @@ namespace Booking.Areas.BackOffice.Data.Services
                 parameters.Add("Price", roomsDetailsDTO.Price, DbType.Decimal, ParameterDirection.Input);
                 parameters.Add("Description", roomsDetailsDTO.Description, DbType.String, ParameterDirection.Input);
                 parameters.Add("Status", roomsDetailsDTO.Status, DbType.Int16, ParameterDirection.Input);
-                parameters.Add("Status", roomsDetailsDTO.Images, DbType.Int16, ParameterDirection.Input);
-                parameters.Add("IsActive", roomsDetailsDTO.IsActive, DbType.Boolean, ParameterDirection.Input);
-
+                parameters.Add("Images", roomsDetailsDTO.Images, DbType.String, ParameterDirection.Input);
+                parameters.Add("IsActive", roomsDetailsDTO.IsActive, DbType.Int16, ParameterDirection.Input);
+                parameters.Add("CancelationCharge", roomsDetailsDTO.CancelationCharge, DbType.Int16 , ParameterDirection.Input);
+               
                 using (_dbHandler.Connection)
                 {
-                    result = await _dbHandler.ExecuteScalarAsync<int>(_dbHandler.Connection, "dbo.FetchRooms", CommandType.StoredProcedure, parameters);
+                    result = await _dbHandler.ExecuteScalarAsync<int>(_dbHandler.Connection, "[dbo].[ManageRoomDetails]", CommandType.StoredProcedure, parameters);
                 }
             }
             catch (Exception)

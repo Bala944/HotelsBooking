@@ -2,7 +2,6 @@
 using Booking.Areas.BackOffice.Models.Input;
 using Booking.Areas.BackOffice.Models.Output;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace Booking.Areas.BackOffice.Controllers
@@ -23,9 +22,9 @@ namespace Booking.Areas.BackOffice.Controllers
         }
 
         [Route("~/add-room-details")]
-        public async Task<IActionResult> AddRoomDetails()
+        public async Task<IActionResult> AddRoomDetails(string RoomId)
         {
-
+            ViewBag.RoomId = RoomId;
 			AddRoomDTO roomsDTOs = new AddRoomDTO();
 			roomsDTOs = await _roomsRepository.GetAddRoomDetails();
 			return View(roomsDTOs);
@@ -49,11 +48,11 @@ namespace Booking.Areas.BackOffice.Controllers
 
             roomsDTOs = await _roomsRepository.GetRoomDetailsById(RoomId);
 
-            return View(roomsDTOs);
+            return Ok(roomsDTOs);
         }
 
         [Route("~/save-room-details")]
-        public async Task<IActionResult> SaveRoomDetails([FromBody] RoomsDetailsDTO roomsDetailsDTO)
+        public async Task<IActionResult> SaveRoomDetails([FromForm] RoomsDetailsDTO roomsDetailsDTO)
         {
 
             if (roomsDetailsDTO.FileImages != null && roomsDetailsDTO.FileImages.Count > 0)
@@ -84,10 +83,15 @@ namespace Booking.Areas.BackOffice.Controllers
                         // Copy the uploaded file to the file stream
                         uploadedFile.CopyTo(fileStream);
                     }
-                    FileNames+=uniqueFileName+",";
+                    FileNames+=uniqueFileName+ "$";
                 }
 
+                if (!string.IsNullOrEmpty(FileNames) && FileNames.Length > 0)
+                {
+                    FileNames = FileNames.Substring(0, FileNames.Length - 1);
+                    roomsDetailsDTO.Images = !string.IsNullOrEmpty(roomsDetailsDTO.Images)? ("$"+ FileNames): FileNames;
 
+                }
             }
             //var result = await _roomsRepository.SaveRoomDetails(roomsDetailsDTO);
 
@@ -101,7 +105,6 @@ namespace Booking.Areas.BackOffice.Controllers
 
             return Ok(await _roomsRepository.DeleteRoomDetails(RoomId));
         }
-
 
     }
 }

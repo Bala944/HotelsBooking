@@ -4,19 +4,19 @@
     {
         public long RoomId { get; set; }
         public required string RoomNumber { get; set; }
-        public required string RoomType { get; set; }
-        public required string BedType { get; set; }
+        public  string? RoomType { get; set; }
+        public  string? BedType { get; set; }
         public string? CancelationCharge { get; set; }
         public int MaxOccupancy { get; set; }
         public decimal Rate { get; set; }
         public string? Description { get; set; }
-        public  int RoomStatus { get; set; }
+        public  string? RoomStatus { get; set; }
     }
 
     public class RoomsDetailsDTO
     {
         public long RoomId { get; set; } = 0;
-        public  string RoomNumber { get; set; }
+        public  string? RoomNumber { get; set; }
         public  int BedTypeId { get; set; }
         public  int RoomTypeId { get; set; }
         public int CancelationCharge { get; set; }

@@ -2,9 +2,16 @@
 
 namespace Booking.Areas.FrontOffice.Controllers
 {
+    [Area("FrontOffice")]
     public class BookMyRoomController : Controller
     {
-        public IActionResult Index()
+        [Route("/home-page")]
+        public IActionResult Homepage()
+        {
+            return View();
+        }
+
+        public IActionResult AvailableRooms()
         {
             return View();
         }
