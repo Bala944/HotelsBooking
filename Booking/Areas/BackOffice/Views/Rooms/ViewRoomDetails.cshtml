@@ -2,12 +2,14 @@
 @{
     Layout = "_BackOfficeLayout";
 }
-<style>
 
-</style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <link rel="stylesheet" href="assets/plugins/datatables/datatables.min.css">
+
+<form id="frmRoomDetails" asp-area="BackOffice" asp-controller="Rooms" asp-action="AddRoomDetails">
+    <input type="hidden" id="RoomId" name="RoomId" value="" />
+</form>
 
 <div class="content-wrapper">
     <div class="page-header">
@@ -44,8 +46,9 @@
                                     {
                                         <tr>
                                             <td>
+                                                <a class="edit-icon" onclick="openEditMode(@room.RoomId)"><i class="fas fa-edit"></i>Edit</a>
                                                 <a href="add-room-details?RoomId=@room.RoomId"><i class="fas fa-edit"></i>Edit</a>
-                                                <a href="DeleteRoom/@room.RoomId"><i class="fas fa-trash-alt"></i>Delete</a>
+                                                <a onclick="DeleteRoom(@room.RoomId)"><i class="fas fa-trash-alt"></i>Delete</a>
                                             </td>
                                             <td>@room.RoomNumber</td>
                                             <td>@room.RoomType</td>
@@ -83,3 +86,11 @@
 
 <script src="assets/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="assets/plugins/datatables/datatables.min.js"></script>
+<script>
+    function openEditMode(itemId) {
+        // Set the value of the hidden input field
+        document.getElementById('RoomId').value = itemId;
+        // Submit the form
+        $('#frmRoomDetails').submit();
+    }
+</script>

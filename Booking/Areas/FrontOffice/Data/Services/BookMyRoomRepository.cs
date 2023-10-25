@@ -32,7 +32,7 @@ namespace Booking.Areas.FrontOffice.Data.Services
                 parameters.Add("Rooms", roomFilterDTO.Rooms, DbType.Int16, ParameterDirection.Input);
                 using (_dbHandler.Connection)
                 {
-                    roomsList = (await _dbHandler.QueryAsync<RoomsDetailsDTO>(_dbHandler.Connection, "dbo.ManageRoomDetails", CommandType.StoredProcedure, parameters)).AsList();
+                    roomsList = (await _dbHandler.QueryAsync<RoomsDetailsDTO>(_dbHandler.Connection, "dbo.GetFilteredRoomsDetails", CommandType.StoredProcedure, parameters)).AsList();
                 }
             }
             catch (Exception)
@@ -52,7 +52,7 @@ namespace Booking.Areas.FrontOffice.Data.Services
                 parameters.Add("RoomId", roomId, DbType.DateTime, ParameterDirection.Input);
                 using (_dbHandler.Connection)
                 {
-                    roomsList = await _dbHandler.QuerySingleAsync<RoomsDetailsDTO>(_dbHandler.Connection, "dbo.ManageRoomDetails", CommandType.StoredProcedure, parameters);
+                    roomsList = await _dbHandler.QuerySingleAsync<RoomsDetailsDTO>(_dbHandler.Connection, "dbo.GetFilteredRoomsDetailsById", CommandType.StoredProcedure, parameters);
                 }
             }
             catch (Exception)

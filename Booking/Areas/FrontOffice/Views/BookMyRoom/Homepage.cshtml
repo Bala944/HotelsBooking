@@ -37,13 +37,13 @@
                     <div class="col">
                         <div class="form-group">
                             <label>Check-in Date</label>
-                            <input asp-for="roomFilterDTO.CheckInDate" type="text" class="form-control" placeholder="dd/mm/yyyy" />
+                            <input asp-for="roomFilterDTO.CheckInDate" name="CheckInDate" type="text" class="form-control" placeholder="dd/mm/yyyy" />
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group">
                             <label>Check-out Date</label>
-                            <input asp-for="roomFilterDTO.CheckOutDate" type="text" class="form-control" placeholder="dd/mm/yyyy" />
+                            <input asp-for="roomFilterDTO.CheckOutDate" name="CheckOutDate" type="text" class="form-control" placeholder="dd/mm/yyyy" />
                         </div>
                     </div>
                     <div class="col">
@@ -192,7 +192,7 @@
 <script>
     function openEditMode(itemId) {
         // Set the value of the hidden input field
-        document.getElementById('roomId').value = itemId;
+        $('#roomId').val(itemId);
         // Submit the form
         $('#frmSelectRoom').submit();
     }

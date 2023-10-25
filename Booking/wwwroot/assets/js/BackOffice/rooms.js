@@ -36,7 +36,7 @@ $('body').on('click', '.file__value--removeTask', function () {
     var id = atob($(this).attr('data-name'));
     var type = $(this).attr('data-type') || 0;
     debugger
-  
+
     // Define the filename you want to remove
     var filenameToRemove = id;
     // Iterate through the FormData keys
@@ -146,5 +146,24 @@ const GetRoomDetailsById = async (RoomId) => {
     }
 }
 
+const DeleteRoom = async (RoomId) => {
+
+
+    var data = { "RoomId": RoomId }
+    var result = await APIGetMethod('/delete-room-details', data);
+    debugger
+    if (result != null && result != "") {
+        if (result == 200) {
+            alert("Room Deleted Successfully");
+            setTimeout(function () {
+                window.location.href = "/view-room-details";
+            }, 1000);
+
+        }
+        else
+            alert("Something went wrong");
+
+    }
+}
 
 

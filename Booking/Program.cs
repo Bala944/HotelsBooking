@@ -3,6 +3,7 @@ using Booking.Areas.BackOffice.Data.Services;
 using Booking.Areas.FrontOffice.Data.Interface;
 using Booking.Areas.FrontOffice.Data.Services;
 using Booking.DBEngine;
+using Booking.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,10 @@ builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.AddTransient<IDBHandler, DBHandler>();
 builder.Services.AddTransient<IRoomsRepository, RoomsRepository>();
 builder.Services.AddTransient<IBookMyRoomRepository, BookMyRoomRepository>();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Policies.RequireAdminClaim, Policies.RequireAdminClaimPolicy());
+});
 
 var app = builder.Build();
 
@@ -32,8 +37,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "areas",
-            pattern: "{area:exists}/{controller=BookMyRoom}/{action=Homepage}/{id?}");
+	name: "areas",
+		  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
 	name: "default",

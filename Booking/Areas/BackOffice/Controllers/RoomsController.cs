@@ -1,12 +1,15 @@
 ﻿using Booking.Areas.BackOffice.Data.Interface;
 using Booking.Areas.BackOffice.Models.Input;
 using Booking.Areas.BackOffice.Models.Output;
+using Booking.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace Booking.Areas.BackOffice.Controllers
 {
     [Area("BackOffice")]
+    [Authorize(Policy = Policies.RequireAdminClaim)]
     public class RoomsController : Controller
     {
         public required IRoomsRepository _roomsRepository;
@@ -99,7 +102,7 @@ namespace Booking.Areas.BackOffice.Controllers
         }
 
         [Route("~/delete-room-details")]
-        public async Task<IActionResult> DeleteRoomDetails([FromQuery] int RoomId)
+        public async Task<IActionResult> DeleteRoomDetails([FromQuery] Int64 RoomId)
         {
             //var result = await _roomsRepository.SaveRoomDetails(roomsDetailsDTO);
 

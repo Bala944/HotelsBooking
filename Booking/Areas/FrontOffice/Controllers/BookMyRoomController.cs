@@ -19,11 +19,14 @@ namespace Booking.Areas.FrontOffice.Controllers
         public IActionResult Homepage(RoomFilterDTO roomFilterDTO)
         {
             BookMyRoomResultDTO bookMyRoomResultDTO = new BookMyRoomResultDTO();
-            //var rooms = _bookMyRoomRepository.GetRooms(roomFilterDTO);
-            //if (rooms != null)
-            //{
-            //    bookMyRoomResultDTO.listRoomsDetailsDTO = rooms.Result;
-            //}
+            if (roomFilterDTO.CheckInDate != null && roomFilterDTO.CheckOutDate != null)
+            {
+                var rooms = _bookMyRoomRepository.GetRooms(roomFilterDTO);
+                if (rooms != null)
+                {
+                    bookMyRoomResultDTO.listRoomsDetailsDTO = rooms.Result;
+                }
+            }
             bookMyRoomResultDTO.roomFilterDTO = roomFilterDTO;
             return View(bookMyRoomResultDTO);
         }
@@ -32,7 +35,7 @@ namespace Booking.Areas.FrontOffice.Controllers
         public async Task<IActionResult> SingleRoomDetails(Int64 roomId)
         {
             RoomsDetailsDTO result = new RoomsDetailsDTO();
-            //result = await _bookMyRoomRepository.GetRoomsById(roomId);
+            result = await _bookMyRoomRepository.GetRoomsById(roomId);
             return View(result);
         }
     }
