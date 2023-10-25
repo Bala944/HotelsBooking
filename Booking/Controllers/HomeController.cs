@@ -25,7 +25,7 @@ namespace Booking.Controllers
         {
             if (!string.IsNullOrEmpty(authDTO.UserName) && !string.IsNullOrEmpty(authDTO.Password))
             {
-                if (authDTO.UserName == "admin" && authDTO.Password == "admin")
+                if (authDTO.UserName == "admin@gmail.com" && authDTO.Password == "admin")
                 {
                     var claims = new List<Claim>
                     {
