@@ -1,0 +1,206 @@
+﻿@model RoomsDetailsDTO
+
+	<!-- BEGIN: Page Title Section ======================================== -->
+	<section class="page-title">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h2>View Room</h2>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- END: Page Title Section ========================================= -->
+	<!-- BEGIN: Search Section ========================================= -->
+	<!-- END: Search Section ========================================= -->
+	<!-- BEGIN: Featured Section ==================================== -->
+	<section class="section">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 vrd-section">
+					<h2>Treebo Trend Windsor Heights</h2>
+					<p><i class="fas fa-location-dot"></i> Nilavoor to pallakaniyur, 635853 Yelagiri.</p>
+				</div>
+				<article class='gallery'>
+				@if (Model != null && Model.Images != null)
+				{
+					string[] ImageData = Model.Images.Split('$');
+					if (ImageData.Length > 0)
+					{
+						foreach (var item in ImageData)
+						{
+							<a class="gallery-link" href="Attachments/RoomImages/@item">
+								<figure class="gallery-image">
+									<img height="1400" src="Attachments/RoomImages/@item" width="1600">
+								</figure>
+							</a>
+						}
+					}
+				}
+				</article>
+
+				<div class="room-desc">
+					<p>Located in Yelagiri in the Tamil Nadu region, Aara-AHB Cottage01 provides accommodations with free private parking.</p>
+					<p>Fitted with a terrace, the units feature a flat-screen TV and a private bathroom with shower and free toiletries. Some units feature a seating area and/or a balcony.</p>
+					<p>Guests at the villa can enjoy a vegetarian breakfast.</p>
+					<p>Both a bicycle rental service and a car rental service are available at Aara-AHB Cottage01.</p>
+					<p>The nearest airport is Kempegowda International Airport, 108 miles from the accommodation.</p>
+				</div>
+				<div class="room-availability">
+					<h4>Availability</h4>
+					<ul>
+						<li>
+							<strong>
+								Bedroom&nbsp;1:
+							</strong>
+							<span>
+								1 queen bed
+
+							</span>
+						</li>
+						<li>
+							<strong>
+								Bedroom&nbsp;2:
+							</strong>
+							<span>
+								1 queen bed
+
+							</span>
+						</li>
+						<li>
+							<strong>
+								Bedroom&nbsp;3:
+							</strong>
+							<span>
+								1 full bed
+
+							</span>
+						</li>
+						<li>
+							<strong>
+								Bedroom&nbsp;4:
+							</strong>
+							<span>
+								1 full bed
+
+							</span>
+						</li>
+						<li>
+							<strong>
+								Living room:
+							</strong>
+							<span>
+								1 sofa bed
+
+							</span>
+						</li>
+						<li>
+							<strong>
+								Living room:
+							</strong>
+							<span>
+								1 sofa bed
+
+							</span>
+						</li>
+						<li>
+							<strong>
+								Sleeps:
+							</strong>
+							<span>
+								10
+							</span>
+						</li>
+					</ul>
+				</div>
+				<div class="pricing-details-room">
+					<p>3 weeks</p>
+					<h5>₹ 258,000</h5>
+					<p>+₹ 46,440 taxes and charges</p>
+				</div>
+				<ul>
+					<li><i class="fas fa-check"></i>Breakfast included in the price</li>
+					<li><i class="fas fa-check"></i>@Model?.CancelationCharge</li>
+					<li><i class="fas fa-check"></i>No prepayment needed – pay at the property</li>
+				</ul>
+			</div>
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<a href="#" class="btn btn-info">Continue</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- END: Featured Section ==================================== -->
+
+	<!-- BEGIN: Page Refrence ========================= -->
+	<!-- Menu refrence -->
+	<script src="assets/plugins/menu/js/menu.js"></script>
+	<!-- Owl Carosel Refrence ============================ -->
+	<link href="assets/plugins/slider/css/owl.carousel.min.css" rel="stylesheet" />
+	<link href="assets/plugins/slider/css/owl.theme.default.css" rel="stylesheet" />
+	<link href="assets/plugins/slider/css/animate.min.css" rel="stylesheet" />
+	<script src="assets/plugins/slider/js/owl.carousel.js"></script>
+
+	<!-- Photo Gallery Refrence ================= -->
+	<link href="assets/plugins/gallery/css/magnific-popup.min.css" rel="stylesheet" />
+	<link href="assets/plugins/gallery/css/gallery.css" rel="stylesheet" />
+	<script src="assets/plugins/gallery/js/jquery.magnific-popup.min.js"></script>
+	<!-- END: Page Refrence ========================= -->
+	<script src="assets/js/aara.theme.function.js"></script>
+
+	<script>
+		var currentYear = new Date().getFullYear();
+
+		// Update the content of the 'currentYear' span
+		document.getElementById("currentYear").textContent = currentYear;
+		$('.owl-carousel').owlCarousel({
+			loop: true,
+			margin: 10,
+			dots: false,
+			nav: true,
+			mouseDrag: false,
+			autoplay: true,
+			animateOut: 'slideOutUp',
+			responsive: {
+				0: {
+					items: 1
+				},
+				600: {
+					items: 1
+				},
+				1000: {
+					items: 1
+				}
+			}
+		});
+		(function () {
+			$('.gallery-link').magnificPopup({
+				type: 'image',
+				closeOnContentClick: true,
+				closeBtnInside: false,
+				mainClass: 'mfp-with-zoom mfp-img-mobile',
+				image: {
+					verticalFit: true,
+					titleSrc: function (item) {
+						return item.el.find('figcaption').text() || item.el.attr('title');
+					}
+				},
+				zoom: {
+					enabled: true
+				},
+				// duration: 300
+				gallery: {
+					enabled: true,
+					navigateByImgClick: false,
+					tCounter: ''
+				},
+				disableOn: function () {
+					return $(window).width() > 640;
+				}
+			});
+
+		}).call(this);
+	</script>
+

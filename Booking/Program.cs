@@ -1,5 +1,7 @@
 using Booking.Areas.BackOffice.Data.Interface;
 using Booking.Areas.BackOffice.Data.Services;
+using Booking.Areas.FrontOffice.Data.Interface;
+using Booking.Areas.FrontOffice.Data.Services;
 using Booking.DBEngine;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,7 @@ builder.Services.AddControllersWithViews();
 // Register Dependency Injection
 builder.Services.AddTransient<IDBHandler, DBHandler>();
 builder.Services.AddTransient<IRoomsRepository, RoomsRepository>();
+builder.Services.AddTransient<IBookMyRoomRepository, BookMyRoomRepository>();
 
 var app = builder.Build();
 
@@ -30,7 +33,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "areas",
-            pattern: "{area:exists}/{controller=Home}/{action=Login}/{id?}");
+            pattern: "{area:exists}/{controller=BookMyRoom}/{action=Homepage}/{id?}");
 
 app.MapControllerRoute(
 	name: "default",
