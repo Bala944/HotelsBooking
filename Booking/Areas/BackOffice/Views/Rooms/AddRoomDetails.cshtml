@@ -43,7 +43,7 @@
                         <select id="bedType" class="form-select select2" name="bedType" required>
                             @if (Model != null && Model?.bedTypeModel != null)
                             {
-                                <option>Select</option>
+                                <option value="">Select</option> 
                                 foreach (var bedType in Model?.bedTypeModel)
                                 {
                                     <option value="@bedType.BedTypeId">@bedType.TypeName</option>
@@ -56,7 +56,7 @@
                     <div class="form-group">
                         <label>Charges For cancellation<span class="required-star">*</span></label>
                         <select class="form-select select2" id="cancellationType" name="cancellationType">
-                            <option>Select</option>
+                            <option value="">Select</option>
                             <option value="1">Free</option>
                             <option value="2">5% Before 24Hours</option>
                             <option value="3">No Cancellation Allow</option>
@@ -67,7 +67,7 @@
                     <div class="form-group">
                         <label>Payment<span class="required-star">*</span></label>
                         <select class="form-select select2" id="payment" name="payment">
-                            <option>Select</option>
+                            <option value="">Select</option>
                             <option value="1">No prepayment needed – pay at the property</option>
                             <option value="2">50% prepayment needed</option>
                             <option value="3">Full payment needed </option>

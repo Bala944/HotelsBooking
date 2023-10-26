@@ -137,7 +137,7 @@ const GetRoomDetailsById = async (RoomId) => {
         $("#roomType").val(result.roomTypeId).trigger("change");;
         $("#bedType").val(result.bedTypeId).trigger("change");
         $("#cancellationType").val(result.cancelationCharge).trigger("change");
-        $("#payment").val(result.Payment).trigger("change");
+        $("#payment").val(result.payment).trigger("change");
         $("#maxOccupancy").val(result.maxOccupancy);
         $("#rate").val(result.price);
         editor1.setData(result.description);
