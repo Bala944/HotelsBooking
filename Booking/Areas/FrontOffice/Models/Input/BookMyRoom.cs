@@ -24,17 +24,28 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public string? CheckInDate { get; set; }
         public string? CheckOutDate { get; set; }
         public int? Adults { get; set; }
-        public int Children { get; set; }
-        public int Rooms { get; set; }
+        public int? Children { get; set; }
+        public int? Rooms { get; set; }
         public bool IsViewMore { get; set; } =false;
+        public string? Params { get; set; } =string.Empty;
+
+    }
+    public class BookingQueryDTO
+    {
+        public string? CheckInDate { get; set; }
+        public string? CheckOutDate { get; set; }
+        public int? Adults { get; set; }
+        public int? Children { get; set; }
+        public int? Rooms { get; set; }
+        public  Int64 SelectedRoomId { get; set; }
 
     }
 
     public class SelectedRoomDTO
     {
         public Int64 RoomId { get; set; }
-        public string? CheckIn { get; set; }
-        public string? CheckOut { get; set; }
+        public bool IsViewMore { get; set; } = false;
+        public string? Params { get; set; }
 
     }
 

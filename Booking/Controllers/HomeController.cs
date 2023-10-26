@@ -1,7 +1,6 @@
 ﻿using Booking.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using System.Security.Claims;
 
 namespace Booking.Controllers
@@ -14,6 +13,13 @@ namespace Booking.Controllers
         {
             _logger = logger;
         }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+
         [Route("~/login")]
         public IActionResult Login()
         {

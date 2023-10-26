@@ -1,6 +1,6 @@
-﻿@model AddRoomDTO
+﻿@using Booking.Areas.FrontOffice.Models.Input;
+@model AddRoomDTO
 @{
-
     ViewData["Title"] = "Rooms";
 }
 
@@ -37,7 +37,6 @@
                         </select>
                     </div>
                 </div>
-               
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="bedType">Bed Type<span class="required-star">*</span></label>
@@ -102,7 +101,6 @@
                         <textarea class="form-control" rows="3" id="description" name="description"></textarea>
                     </div>
                 </div>
-
             </div>
         </form>
     </div>

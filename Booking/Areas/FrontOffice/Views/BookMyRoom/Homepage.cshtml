@@ -1,7 +1,17 @@
 ﻿@using System.Globalization;
+@using Booking.Models;
+@using Newtonsoft.Json;
 @model BookMyRoomResultDTO
 @{
     ViewData["Title"] = "Home";
+
+    BookingQueryDTO bookingQueryDTO = new BookingQueryDTO();
+    bookingQueryDTO.CheckInDate = @Model?.roomFilterDTO?.CheckInDate;
+    bookingQueryDTO.CheckOutDate = @Model?.roomFilterDTO?.CheckOutDate;
+    bookingQueryDTO.Adults = @Model?.roomFilterDTO?.Adults;
+    bookingQueryDTO.Children = @Model?.roomFilterDTO?.Children;
+    bookingQueryDTO.Rooms = @Model?.roomFilterDTO?.Rooms;
+    string bookingQuery = JsonConvert.SerializeObject(bookingQueryDTO);
 }
 <!-- BEGIN: Slider Section ======================================== -->
 <div class="owl-carousel owl-theme">
@@ -22,10 +32,10 @@
 
 <form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="SingleRoomDetails">
     <input type="hidden" id="roomId" name="roomId" value="" />
-    <input type="hidden" id="roomId" name="CheckIn" value="@Model?.roomFilterDTO?.CheckInDate" />
-    <input type="hidden" id="roomId" name="CheckOut" value="@Model?.roomFilterDTO?.CheckOutDate" />
+    <input type="hidden" id="Params" name="Params" value="@Model?.roomFilterDTO?.Params" />
 </form>
-<form id="frmviewRoom"  asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ViewMoreRooms">
+
+<form id="frmviewRoom" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ViewMoreRooms">
     <input type="hidden" id="roomId" name="CheckIn" value="@Model?.roomFilterDTO?.CheckInDate" />
     <input type="hidden" id="roomId" name="CheckOut" value="@Model?.roomFilterDTO?.CheckOutDate" />
 </form>
@@ -39,7 +49,7 @@
                     <h2>Search</h2>
                 </div>
             </div>
-            <form id="frmRoomFilter" method="get"  asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="Homepage">
+            <form id="frmRoomFilter" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="Homepage">
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
@@ -50,7 +60,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label>Check-out Date</label>
-                            <input asp-for="roomFilterDTO.CheckOutDate"  id="CheckOutDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
+                            <input asp-for="roomFilterDTO.CheckOutDate" id="CheckOutDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
                         </div>
                     </div>
                     <div class="col">
@@ -114,12 +124,12 @@
                 <h2 class="section-title text-center">Featured</h2>
             </div>
 
-            @if (Model!=null && Model.listRoomsDetailsDTO != null && Model.listRoomsDetailsDTO.Count > 0)
+            @if (Model != null && Model.listRoomsDetailsDTO != null && Model.listRoomsDetailsDTO.Count > 0)
             {
                 foreach (var item in Model.listRoomsDetailsDTO)
                 {
                     string image = string.Empty;
-                    @if (item != null && item.Images != null && item.Images !="")
+                    @if (item != null && item.Images != null && item.Images != "")
                     {
                         string[] ImageData = item.Images.Split('$');
                         if (ImageData.Length > 0)
@@ -140,7 +150,7 @@
                                 </div>
                                 <div class="">
                                     <p><b>@item.RoomType</b></p>
-                                     @item.BedType
+                                    @item.BedType
                                 </div>
                                 <ul>
                                     <li><i class="fas fa-check"></i>@item?.CancelationCharge</li>
@@ -148,7 +158,7 @@
                                 </ul>
                                 <div class="pricing-details">
                                     <p>1 day 2 adults</p>
-                                    @if(item?.Discount>0)
+                                    @if (item?.Discount > 0)
                                     {
                                         <h5><strike>@item?.Rate</strike> ₹ 1,500</h5>
                                     }
@@ -179,7 +189,7 @@
                     <a onclick="ViewMoreRoom()" class="btn btn-primary">View More</a>
                 </div>
             }
-            
+
         </div>
     </div>
 </section>
@@ -215,20 +225,24 @@
 
 <script>
     $(document).ready(function () {
-       // page.init();
-       
+        // page.init();
+
         ApplyCommonGridStyle();
     });
 </script>
 
 <script>
+    @{
+        ViewData["Title"] = "Home";
 
-    function openEditMode(itemId) {
-        // Set the value of the hidden input field
-        $('#roomId').val(itemId);
-        // Submit the form
-        $('#frmSelectRoom').submit();
     }
+        function openEditMode(itemId) {
+            // Set the value of the hidden input field
+            $('#roomId').val(itemId);
+
+                // Submit the form
+                $('#frmSelectRoom').submit();
+        }
     function ViewMoreRoom() {
         $('#frmviewRoom').submit();
     }
