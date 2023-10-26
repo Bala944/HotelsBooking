@@ -84,6 +84,7 @@ function SaveRoomDetails() {
         RoomFormData.append("BedTypeId", $("#bedType").val());
         RoomFormData.append("CancelationCharge", parseInt($("#cancellationType").val()));
         RoomFormData.append("MaxOccupancy", parseInt($("#maxOccupancy").val()));
+        RoomFormData.append("MaxChild", parseInt($("#maxChild").val()));
         RoomFormData.append("Price", $("#rate").val());
         RoomFormData.append("Description", editor1.getData(),);
         RoomFormData.append("Payment", parseInt($("#payment").val()));
@@ -139,6 +140,7 @@ const GetRoomDetailsById = async (RoomId) => {
         $("#cancellationType").val(result.cancelationCharge).trigger("change");
         $("#payment").val(result.payment).trigger("change");
         $("#maxOccupancy").val(result.maxOccupancy);
+        $("#maxChild").val(result.maxChild);
         $("#rate").val(result.price);
         editor1.setData(result.description);
         debugger
@@ -261,6 +263,9 @@ var page = function () {
                         required: true
                     },
                     maxOccupancy: {
+                        required: true
+                    },
+                    maxChild: {
                         required: true
                     },
                     rate: {

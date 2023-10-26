@@ -58,7 +58,6 @@
     };
 }();
 
-
 const ConfirmAndPay = () => {
     if ($('#frmCustomerDetails').valid()) {
         $('#frmCustomerDetails').submit();

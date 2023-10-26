@@ -22,6 +22,7 @@
         public  int RoomTypeId { get; set; }
         public int CancelationCharge { get; set; }
         public int MaxOccupancy { get; set; }
+        public int MaxChild { get; set; }
         public decimal Price { get; set; }
         public string? Description { get; set; }
         public string? Images { get; set; }

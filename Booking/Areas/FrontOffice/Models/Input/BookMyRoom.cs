@@ -10,6 +10,7 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public string? BedType { get; set; }
         public string? CancelationCharge { get; set; }
         public int MaxOccupancy { get; set; }
+        public int MaxChild { get; set; }
         public decimal Rate { get; set; }
         public string? Description { get; set; }
         public string? RoomStatus { get; set; }
