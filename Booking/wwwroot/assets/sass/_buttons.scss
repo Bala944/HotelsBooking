@@ -1,0 +1,86 @@
+//BEGIN: Buttons Style
+.bottom-btn {
+    border-top: 1px solid $color-light-grey;
+    padding-top: 0.5rem;
+    text-align: center;
+    gap: 0.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    .btn-primary {
+        background-color: $color-save-btn-bg;
+        border-color: $color-save-btn-bg;
+        &:hover {
+            background-color: $color-save-btn-hover-bg;
+            border-color: $color-save-btn-hover-bg;
+        }
+    }
+}
+.add-btn-section {
+    margin-block: 1rem;
+    text-align: left;
+    &.view-more {
+        margin-top: 1rem;
+        text-align: right;
+    }
+    .btn-info {
+        background-color: $color-add-btn-bg;
+        border-color: $color-add-btn-bg;
+        color: $color-white;
+        border-radius: 5rem;
+
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: $color-add-btn-hover-bg;
+            border-color: $color-add-btn-hover-bg;
+            color: $color-white;
+        }
+    }
+}
+.btn-red {
+    background-color: $color-red;
+    color: $color-white;
+    &:hover {
+        background-color: $color-red-light;
+        color: $color-white;
+    }
+}
+.btn-secondary {
+    background-color: $color-cancel-btn-bg;
+    border-color: $color-cancel-btn-bg;
+    color: $color-theme;
+    &:hover {
+        background-color: $color-cancel-btn-hover-bg;
+        border-color: $color-cancel-btn-hover-bg;
+        color: $color-theme;
+    }
+}
+.btn-group {
+    .dropdown-role {
+        padding: 0.225rem 0.75rem !important;
+        border: none;
+    }
+}
+.custom-file {
+    .btn-info {
+        background-color: $color-theme;
+        border-color: $color-theme;
+        color: $color-white;
+        line-height: 100%;
+        padding: 0.5rem 1rem;
+    }
+}
+//END: Buttons Style
+.btn-disabled {
+    cursor: not-allowed;
+    .btn,
+    input,
+    label,
+    a {
+        pointer-events: none;
+    }
+    input {
+        background-color: #eee;
+    }
+}

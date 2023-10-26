@@ -5,16 +5,9 @@
 }
 
 
-
-<div class="row align-items-center">
-    <div class="col">
-        <h3 class="page-title mt-2">Add Room</h3>
-    </div>
-</div>
-
-<div class="row">
+<div class="row mt-3">
     <div class="col-lg-12">
-        <form id="roomForm">
+        <form id="roomForm" >
             <div class="row formtype">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -101,10 +94,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="form-group">
                         <label for="description">Description</label>
                         <textarea class="form-control" rows="3" id="description" name="description"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="bottom-btn">
+                        <button type="button" onclick="SaveRoomDetails()" class="btn btn-primary ">Save</button>
+                        <a class="btn btn-secondary" href="/view-room-details">Cancel</a>
                     </div>
                 </div>
             </div>
@@ -113,8 +114,7 @@
 </div>
 <input type="hidden" id="RoomId" value="@ViewBag.RoomId" />
 
-<button type="button" onclick="SaveRoomDetails()" class="btn btn-primary ">Save</button>
-<a class="btn btn-secondary" href="/view-room-details">Cancel</a>
+
 
 
 <partial name="_ValidationScriptsPartial" />

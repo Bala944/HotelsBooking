@@ -1,0 +1,134 @@
+//BEGIN: Datatable styles
+.table-bordered > :not(caption) > * > * {
+    border-width: 1px 1px;
+}
+.table {
+    border-top-color: $color-table-border-color !important;
+    border-bottom-color: $color-table-border-color !important;
+    &.table-bordered {
+        tr {
+            td,
+            th {
+                padding: 0.3rem 0.5rem;
+                //font-family: $font-opensans;
+                border-color: $color-table-border-color;
+            }
+        }
+        thead,
+        tfoot {
+            tr {
+                th {
+                    background-color: $color-table-header-bg;
+                    vertical-align: middle;
+                    color: $color-white;
+                }
+            }
+        }
+        tbody {
+            tr {
+                &:nth-child(2n + 2) {
+                    background-color: $color-table-alter-row-color;
+                }
+                td {
+                    .form-check-input {
+                        border-color: #90949b;
+                    }
+                    a:not(.grid-action a) {
+                        color: #0866c3;
+                    }
+                }
+            }
+        }
+    }
+}
+.thead-bg-color {
+    td {
+        background-color: $color-white;
+        vertical-align: middle;
+        color: #000;
+        &:hover {
+            color: #000 !important;
+            background-color: $color-white !important;
+        }
+    }
+    &:hover {
+        color: #000;
+        background-color: $color-white !important;
+        td {
+            color: #000 !important;
+            background-color: $color-white !important;
+        }
+    }
+    &:nth-child:is(odd, even):hover {
+        background-color: #fff !important;
+        color: #000 !important;
+        td {
+            background-color: #fff !important;
+            color: #000 !important;
+        }
+    }
+}
+.previous.disabled,
+.next.disabled {
+    opacity: 0.6;
+}
+.table-scrollable {
+    overflow-x: auto;
+}
+.dataTables_wrapper .dataTables_paginate a.paginate_button {
+    background-color: #9b9b9b;
+    border-color: #9b9b9b;
+    margin: 0 3px 3px;
+    color: #fff !important;
+    border-radius: 3px;
+    padding: 0.375rem 0.65rem !important;
+    &:hover {
+        background: $color-theme !important;
+        border-color: $color-theme !important;
+        color: #fff !important;
+    }
+}
+.dataTables_wrapper .dataTables_paginate a.paginate_button.current {
+    background-color: $color-theme !important;
+    border-color: $color-theme !important;
+    color: #fff !important;
+    &:hover {
+        color: #fff !important;
+    }
+}
+table.dataTable thead > tr > th.sorting:before,
+table.dataTable thead > tr > th.sorting::after {
+    font-size: 1.5rem !important;
+}
+.grid-action {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    a,
+    .btn {
+        cursor: pointer;
+        white-space: nowrap;
+        &:disabled,
+        .disabled {
+            cursor: not-allowed !important;
+        }
+        i {
+            font-size: 1rem !important;
+        }
+    }
+}
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 0.5rem;
+}
+.disabled {
+    cursor: not-allowed !important;
+    opacity: 0.5;
+}
+
+//END: Datatable STyles
+@media (min-width: 320px) and (max-width: 575px) {
+    table.table-bordered thead tr th,
+    table.table-bordered tbody tr td {
+        font-size: 0.8rem;
+    }
+}

@@ -129,7 +129,20 @@ namespace Booking.Areas.FrontOffice.Controllers
         {
             return View();
         }
-
-        
+        [Route("/about-us")]
+        public IActionResult AboutUs()
+        {
+            return View();
+        }
+        [Route("/contact-us")]
+        public IActionResult ContactUs()
+        {
+            return View();
+        }
+        [Route("/services")]
+        public IActionResult Services()
+        {
+            return View();
+        }
     }
 }

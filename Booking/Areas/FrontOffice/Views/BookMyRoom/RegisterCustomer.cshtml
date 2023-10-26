@@ -2,91 +2,70 @@
     ViewData["Title"] = "Rooms";
     // Layout = null;
 }
-
-<div class="container-fluid content">
+<!-- BEGIN: Page Title Section ======================================== -->
+<section class="page-title">
     <div class="container">
         <div class="row">
-            <div class="col-6 ">
-                <div class="page-main-panel">
-                    <div class="main-panel-header">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <form id="frmCustomerDetails">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="FirstName">First Name:</label>
-                                                <input type="text" class="form-control" onkeyup="AllowCharectersOnly(this.id)" id="FirstName" name="FirstName" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="LastName">Last Name:</label>
-                                                <input type="text" class="form-control" onkeyup="AllowCharectersOnly(this.id)" id="LastName" name="LastName" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="EmailAddress">Email Address:</label>
-                                                <input type="text" class="form-control" id="EmailAddress" name="EmailAddress" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="MobileNumber">Mobile Number:</label>
-                                                <input type="text" class="form-control" onkeyup="AllowNumbersOnlyPhone(this.id)" id="MobileNumber" name="EmailAddress" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-md-12">
+                <h2>Customer Information</h2>
             </div>
-            <div class="col-6 ">
-                <div class="page-main-panel">
-                    <div class="main-panel-header">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <form id="frmCustomerDetails">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="FirstName">First Name:</label>
-                                                <input type="text" class="form-control" onkeyup="AllowCharectersOnly(this.id)" id="FirstName" name="FirstName" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="LastName">Last Name:</label>
-                                                <input type="text" class="form-control" onkeyup="AllowCharectersOnly(this.id)" id="LastName" name="LastName" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="EmailAddress">Email Address:</label>
-                                                <input type="text" class="form-control" id="EmailAddress" name="EmailAddress" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="MobileNumber">Mobile Number:</label>
-                                                <input type="text" class="form-control" onkeyup="AllowNumbersOnlyPhone(this.id)" id="MobileNumber" name="EmailAddress" required>
-                                            </div>
-                                        </div>
+        </div>
+    </div>
+</section>
+<!-- END: Page Title Section ========================================= -->
+<section id="featued-sec" class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="sub-panel">
+                    <div class="sub-panel-header">
+                        <h4>Basic Info</h4>
+                    </div>
+                    <div class="sub-panel-body">
+                        <form id="frmCustomerDetails">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="FirstName">First Name:</label>
+                                        <input type="text" class="form-control" onkeyup="AllowCharectersOnly(this.id)" id="FirstName" name="FirstName" required>
                                     </div>
-                                </form>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="LastName">Last Name:</label>
+                                        <input type="text" class="form-control" onkeyup="AllowCharectersOnly(this.id)" id="LastName" name="LastName" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="EmailAddress">Email Address:</label>
+                                        <input type="text" class="form-control" id="EmailAddress" name="EmailAddress" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="MobileNumber">Mobile Number:</label>
+                                        <input type="text" class="form-control" onkeyup="AllowNumbersOnlyPhone(this.id)" id="MobileNumber" name="EmailAddress" required>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="bottom-btn">                                   
+                                        <a onclick="ConfirmAndPay()" class="btn btn-primary ">Confirm and Pay</a>
+                                        <a class="btn btn-secondary" href="/view-room-details">Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<a onclick="ConfirmAndPay()" class="btn btn-primary ">Confirm and Pay</a>
-<a class="btn btn-secondary" href="/view-room-details">Cancel</a>
+</section>
+
+
 
 <partial name="_ValidationScriptsPartial" />
 <script src="~/assets/plugins/sweetalert/sweetalert.js"></script>

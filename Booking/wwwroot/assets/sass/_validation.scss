@@ -1,0 +1,93 @@
+$validation-color: #f20;
+$validation-control-border-color: #fcd1cb;
+//BEGIN: Validation
+.has-error.d-flex {
+    .help-block-error {
+        color: $validation-color;
+        font-size: 0.8rem;
+        display: block;
+        width: 100%;
+        order: 3;
+    }
+}
+.has-error:not(.d-flex) {
+    display: flex;
+    flex-direction: column;
+    .form-control {
+        border-color: $validation-control-border-color;
+    }
+    // label{
+    //     color: $validation-color;
+    // }
+    .help-block-error {
+        color: $validation-color;
+        font-size: 0.8rem;
+        display: block;
+        width: 100%;
+        order: 3;
+    }
+    .select-error,
+    .select-validation {
+        display: flex;
+        flex-direction: column;
+        .help-block-error {
+            order: 2;
+        }
+        .select2-container .select2-selection--single {
+            border-color: $validation-control-border-color !important;
+        }
+    }
+    .el-input-number {
+        margin-bottom: 1rem;
+        .help-block-error {
+            position: absolute;
+            margin-top: -0.6rem;
+        }
+    }
+    .form-check-inline {
+        position: relative;
+        span.help-block {
+            position: absolute;
+            top: 1.5rem;
+            min-width: 10rem;
+            left: 0;
+        }
+    }
+}
+.cke-vaildation {
+    .ckeditor {
+        display: flex;
+        flex-direction: column;
+        .help-block {
+            order: 4;
+            color: $validation-color;
+            font-size: 0.8rem;
+        }
+    }
+}
+label.error {
+    color: $validation-color;
+    font-size: 0.8rem !important;
+    display: block;
+    width: 100%;
+    font-weight: normal;
+}
+.choose-blue-bar {
+    &.has-error {
+        position: relative;
+        span.help-block {
+            position: absolute;
+            margin-top: 0.5rem;
+        }
+    }
+}
+.select-validation {
+    display: flex;
+    flex-direction: column;
+    .help-block-error {
+        order: 3;
+        color: $validation-color;
+        font-size: 0.8rem !important;
+    }
+}
+//END: Validation

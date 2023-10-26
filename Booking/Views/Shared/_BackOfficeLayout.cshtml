@@ -16,7 +16,7 @@
     <!-- Fontawesome 6.4.2 -->
     <link href="~/assets/plugins/fontawesome/css/all.min.css" rel="stylesheet" />
     <!-- Aara Cottages theme 1.0.0-->
-    <link href="~/assets/css/aaracottages.theme.min.css" rel="stylesheet" />
+    <link href="~/assets/css/aaracottages.theme.min.css" rel="stylesheet" asp-append-version="true" />
     <!-- END: Aara Cottages Theme refrences =============================-->
 </head>
 <body>
@@ -46,21 +46,24 @@
         </div>
     </header>
     <!-- END : Header Section ====================================== -->
-    <div class="container-fluid content">
+    <!-- BEGIN: Page Title Section ======================================== -->
+    <section class="page-title">
         <div class="container">
             <div class="row">
-                <div class="col-12 ">
-                    <div class="page-main-panel">
-                        <div class="main-panel-header">
-                            @RenderBody()
-                        </div>
-                    </div>
+                <div class="col-md-12">
+                    <h2>@ViewData["Title"]</h2>
                 </div>
             </div>
         </div>
+    </section>
+    <!-- END: Page Title Section ========================================= -->
+    <div class="container page-content">
+        <div class="row">
+            <div class="col-md-12">
+                @RenderBody()
+            </div>
+        </div>
     </div>
-
-
     <!-- BEGIN: Footer Section =================================== -->
     <footer>
         <div class="container">

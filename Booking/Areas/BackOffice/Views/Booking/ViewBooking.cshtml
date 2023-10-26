@@ -1,36 +1,29 @@
 ﻿@{
     Layout = "_BackOfficeLayout";
+    ViewData["Title"] = "Booking";
 }
-<h4 class=" float-left mt-2">Bookings</h4>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card card-table">
-                <div class="card-body booking_card">
-                    <div class="table-responsive">
-                        <table class="table table-stripped table table-hover table-center mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Booking ID</th>
-                                    <th>Name</th>
-                                    <th>Room Type</th>
-                                    <th>Total Numbers</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>CheckIn Date</th>
-                                   <th>CheckOut Date</th>
-                                    <th>Email ID</th>
-                                    <th>Ph.Number</th>
-                                    <th>Status</th>
-                                    <th class="text-right">Actions</th>
-                                </tr>
-                            </thead>
-                           
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+<div class="col-md-12 mt-3">
+    <table class="table table-stripped table-bordered table-hover table-center mb-0">
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>Name</th>
+                <th>Room Type</th>
+                <th>Total Numbers</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>CheckIn Date</th>
+                <th>CheckOut Date</th>
+                <th>Email ID</th>
+                <th>Ph.Number</th>
+                <th>Status</th>
+                <th class="text-right">Actions</th>
+            </tr>
+        </thead>
+
+    </table>
+</div>
 
 
 <partial name="_DataTableScriptPartial" />
