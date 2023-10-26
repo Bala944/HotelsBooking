@@ -11,6 +11,7 @@
         public decimal Rate { get; set; }
         public string? Description { get; set; }
         public  string? RoomStatus { get; set; }
+        public int payment { get; set; }
     }
 
     public class RoomsDetailsDTO
@@ -27,6 +28,7 @@
         public List<IFormFile>? FileImages { get; set; }
         public int? Status { get; set; }
         public int? IsActive { get;  set; }
+        public int? Payment { get;  set; }
        
     }
     public class RoomTypeModel

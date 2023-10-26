@@ -3,7 +3,6 @@
     ViewData["Title"] = "Rooms";
 }
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
 <div class="row align-items-center">
@@ -18,16 +17,17 @@
             <div class="row formtype">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="roomNumber">Room Number:</label>
+                        <label for="roomNumber">Room Number<span class="required-star">*</span></label>
                         <input type="text" class="form-control" id="roomNumber" name="roomNumber" required>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="roomType">Room Type:</label>
+                        <label for="roomType">Room Type<span class="required-star">*</span></label>
                         <select id="roomType" name="roomType" class="form-select select2" required>
                             @if (Model?.roomTypeModel != null)
                             {
+                                <option>Select</option>
                                 foreach (var roomType in Model?.roomTypeModel)
                                 {
                                     <option value="@roomType.RoomTypeId">@roomType.TypeName</option>
@@ -36,23 +36,14 @@
                         </select>
                     </div>
                 </div>
-                @*   <div class="col-md-4">
-                <div class="form-group">
-                <label>AC/NON-AC</label>
-                <select class="form-control" id="sel2" name="sellist1">
-                <option>Select</option>
-                <option>AC</option>
-                <option>NON-AC</option>
-                </select>
-                </div>
-                </div> *@
-
+               
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="bedType">Bed Type:</label>
+                        <label for="bedType">Bed Type<span class="required-star">*</span></label>
                         <select id="bedType" class="form-select select2" name="bedType" required>
                             @if (Model != null && Model?.bedTypeModel != null)
                             {
+                                <option>Select</option>
                                 foreach (var bedType in Model?.bedTypeModel)
                                 {
                                     <option value="@bedType.BedTypeId">@bedType.TypeName</option>
@@ -63,7 +54,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Charges For cancellation</label>
+                        <label>Charges For cancellation<span class="required-star">*</span></label>
                         <select class="form-select select2" id="cancellationType" name="cancellationType">
                             <option>Select</option>
                             <option value="1">Free</option>
@@ -74,13 +65,24 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="maxOccupancy">Max Occupancy:</label>
+                        <label>Payment<span class="required-star">*</span></label>
+                        <select class="form-select select2" id="payment" name="payment">
+                            <option>Select</option>
+                            <option value="1">No prepayment needed – pay at the property</option>
+                            <option value="2">50% prepayment needed</option>
+                            <option value="3">Full payment needed </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="maxOccupancy">Max Occupancy<span class="required-star">*</span></label>
                         <input type="number" class="form-control" id="maxOccupancy" name="maxOccupancy" required>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Rent</label>
+                        <label>Rent<span class="required-star">*</span></label>
                         <input type="number" class="form-control" id="rate" name="rate" required>
                     </div>
                 </div>
@@ -105,6 +107,7 @@
     </div>
 </div>
 <input type="hidden" id="RoomId" value="@ViewBag.RoomId" />
+
 <button type="button" onclick="SaveRoomDetails()" class="btn btn-primary ">Save</button>
 <a class="btn btn-secondary" href="/view-room-details">Cancel</a>
 
@@ -112,6 +115,7 @@
 <partial name="_ValidationScriptsPartial" />
 <partial name="_SelectScriptPartial" />
 
+<script src="~/assets/plugins/sweetalert/sweetalert.js"></script>
 <script src="~/assets/js/ckeditor.js"></script>
 <script src="~/assets/js/backoffice/rooms.js"></script>
 <script src="~/assets/js/ajaxconnector.js"></script>

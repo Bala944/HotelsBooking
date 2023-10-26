@@ -129,14 +129,14 @@
 
 				</div>
 				<ul>
-					<li><i class="fas fa-check"></i>Breakfast included in the price</li>
+					@* <li><i class="fas fa-check"></i>Breakfast included in the price</li> *@
 					<li><i class="fas fa-check"></i>@Model?.CancelationCharge</li>
-					<li><i class="fas fa-check"></i>No prepayment needed – pay at the property</li>
+				<li><i class="fas fa-check"></i>@Model?.Payment</li>
 				</ul>
 			</div>
 			<div class="row">
 				<div class="col-md-12 text-center">
-					<a href="#" class="btn btn-info">Continue</a>
+				<a href="/register" class="btn btn-info">Continue</a>
 				</div>
 			</div>
 		</div>

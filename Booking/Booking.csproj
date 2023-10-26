@@ -7,11 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Areas\FrontOffice\Views\BookMyRoom\RegisterCustomer.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Areas\FrontOffice\Views\Shared\" />
     <Folder Include="wwwroot\assets\img\profiles\" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Areas\FrontOffice\Views\BookMyRoom\RegisterCustomer.cshtml" />
     <None Include="wwwroot\assets\fonts\feathericon.svg" />
     <None Include="wwwroot\assets\fonts\MaterialIcons-Regular.woff2" />
     <None Include="wwwroot\assets\js\ajaxconnector.js" />
@@ -49,6 +54,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Booking.DBEngine\Booking.DBEngine.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\FrontOffice\Views\BookMyRoom\RegisterCustomer.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Areas\FrontOffice\Views\BookMyRoom\RegisterCustomer.cshtml" />
   </ItemGroup>
 
 </Project>

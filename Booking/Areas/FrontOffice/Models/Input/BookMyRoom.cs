@@ -16,6 +16,7 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public decimal? Discount { get; set; } = 0;
         public string? Tax { get; set; } = string.Empty;
         public string? Images { get; set; } = string.Empty;
+        public string? Payment { get; set; } = string.Empty;
     }
 
     public class RoomFilterDTO
@@ -37,6 +38,21 @@ namespace Booking.Areas.FrontOffice.Models.Input
 
     }
 
+    public class RoomRegisterDTO
+    {
+        public Int64 RoomId { get; set; }
+        public string? TotalPrice { get; set; }
+
+    }
+
+    public class CustomerAndBookingDetails
+    {
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? EmailAddress { get; set; }
+        public string? MobileNumber { get; set; }
+
+    }
 
 
 

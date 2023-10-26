@@ -139,28 +139,28 @@
                                      @item.BedType
                                 </div>
                                 <ul>
-                                    <li><i class="fas fa-check"></i>@item.CancelationCharge</li>
-                                    <li><i class="fas fa-check"></i>No prepayment needed – pay at the property</li>
+                                    <li><i class="fas fa-check"></i>@item?.CancelationCharge</li>
+                                    <li><i class="fas fa-check"></i>@item?.Payment</li>
                                 </ul>
                                 <div class="pricing-details">
                                     <p>1 day 2 adults</p>
-                                    @if(item.Discount>0)
+                                    @if(item?.Discount>0)
                                     {
                                         <h5><strike>₹ 2,000</strike> ₹ 1,500</h5>
                                     }
                                     else
                                     {
-                                        <h5>@item.Rate</h5>
+                                        <h5>@item?.Rate</h5>
                                     }
                                     @{
                                         // Assuming ViewBag.CheckIn and ViewBag.CheckOut are in the format "dd/mm/yyyy"
-                                        DateTime checkInDate = DateTime.ParseExact(Model?.roomFilterDTO?.CheckInDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                                        DateTime checkOutDate = DateTime.ParseExact(Model?.roomFilterDTO?.CheckOutDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                                        TimeSpan timeSpan = checkOutDate - checkInDate;
-                                        int days = timeSpan.Days;
+                                        DateTime? checkInDate = DateTime.ParseExact(Model?.roomFilterDTO?.CheckInDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                        DateTime? checkOutDate = DateTime.ParseExact(Model?.roomFilterDTO?.CheckOutDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                        TimeSpan? timeSpan = checkOutDate - checkInDate;
+                                        int? days = timeSpan?.Days;
                                     }
                                     @{
-                                        double totalprice = Convert.ToDouble((item.Rate * days));
+                                        double totalprice = Convert.ToDouble((item?.Rate * days));
                                         double tax = totalprice * 0.05;
                                         tax = Math.Round(tax, 2);
                                     }
@@ -206,6 +206,7 @@
 </section>
 <!-- END: Contact Section ============================== -->
 <partial name="_DatepickerPartial" />
+
 <script>
     $(document).ready(function () {
        // page.init();
@@ -216,13 +217,13 @@
 
 
 <script>
+
     function openEditMode(itemId) {
         // Set the value of the hidden input field
         $('#roomId').val(itemId);
         // Submit the form
         $('#frmSelectRoom').submit();
     }
-     
 
     // Initialize the CheckInDate datepicker
     $('#CheckInDate').datepicker({

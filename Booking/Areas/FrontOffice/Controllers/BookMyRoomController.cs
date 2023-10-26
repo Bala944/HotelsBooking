@@ -44,5 +44,18 @@ namespace Booking.Areas.FrontOffice.Controllers
             result = await _bookMyRoomRepository.GetRoomsById(selectedRoomDTO.RoomId);
             return View(result);
         }
+
+
+        [Route("/register")]
+        public async Task<IActionResult> RegisterCustomerDetails(RoomRegisterDTO roomRegisterDTO)
+        {
+           return View();
+        }
+
+        [Route("/confirmBooking")]
+        public async Task<IActionResult> ConfirmBooking(CustomerAndBookingDetails customerAndBookingDetails)
+        {
+            return View();
+        }
     }
 }

@@ -3,73 +3,56 @@
     ViewData["Title"] = "Rooms";
 
 }
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 <form id="frmRoomDetails" asp-area="BackOffice" asp-controller="Rooms" asp-action="AddRoomDetails">
     <input type="hidden" id="RoomId" name="RoomId" value="" />
 </form>
 
+<h4 class=" float-left mt-2">Rooms</h4>
+<div class="add-btn-section">
+    <a href="/add-room-details" class="btn btn-primary float-right">Add Room</a>
+</div>
 
-        <h4 class=" float-left mt-2">Rooms</h4>
-        <div class="add-btn-section">
-                <a href="/add-room-details" class="btn btn-primary float-right">Add Room</a>
-        </div>
-
-       
-    <div class="row mt-2">
-        <div class="col-sm-12">
-            <div class="card card-table">
-                <div class="card-body booking_card">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Action</th>
-                                    <th>Room Number</th>
-                                    <th>Room Type</th>
-                                    <th>Bed Type</th>
-                                    <th>Max Occupancy</th>
-                                    <th>Rate</th>
-                                    <th>Description</th>
-                                    <th>Room Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model != null)
+<div class="row mt-2">
+    <div class="col-sm-12">
+        <div class="card card-table">
+            <div class="card-body booking_card">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Action</th>
+                                <th>Room Number</th>
+                                <th>Room Type</th>
+                                <th>Bed Type</th>
+                                <th>Max Occupancy</th>
+                                <th>Rate</th>
+                                <th>Description</th>
+                                <th>Room Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var room in Model)
                                 {
-                                    foreach (var room in Model)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <a class="edit-icon" onclick="openEditMode(@room.RoomId)"><i class="fas fa-edit"></i></a>
+                                    <tr>
+                                        <td>
+                                            <a class="edit-icon" onclick="openEditMode(@room.RoomId)"><i class="fas fa-edit"></i></a>
                                             <a onclick="DeleteRoom(@room.RoomId)"><i class="fas fa-trash-alt"></i></a>
-                                            </td>
-                                            <td>@room.RoomNumber</td>
-                                            <td>@room.RoomType</td>
-                                            <td>@room.BedType</td>
-                                            <td>@room.MaxOccupancy</td>
-                                            <td>@room.Rate</td>
-                                            <td>@Html.Raw(room.Description)</td>
-                                            <td>@room.RoomStatus</td>
-                                        </tr>
-                                    }
+                                        </td>
+                                        <td>@room.RoomNumber</td>
+                                        <td>@room.RoomType</td>
+                                        <td>@room.BedType</td>
+                                        <td>@room.MaxOccupancy</td>
+                                        <td>@room.Rate</td>
+                                        <td>@Html.Raw(room.Description)</td>
+                                        <td>@room.RoomStatus</td>
+                                    </tr>
                                 }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-<div id="delete_asset" class="modal fade delete-modal" role="dialog">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <img src="assets/img/sent.png" alt="" width="50" height="46">
-                <h3 class="delete_class">Are you sure want to delete this Asset?</h3>
-                <div class="m-t-20">
-                    <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -77,6 +60,7 @@
 </div>
 
 <partial name="_DataTableScriptPartial" />
+<script src="~/assets/plugins/sweetalert/sweetalert.js"></script>
 <script src="~/assets/js/ajaxconnector.js"></script>
 <script src="~/assets/js/backoffice/rooms.js"></script>
 <script>
