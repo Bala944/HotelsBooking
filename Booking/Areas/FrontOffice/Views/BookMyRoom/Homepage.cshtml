@@ -146,7 +146,7 @@
                                     <p>1 day 2 adults</p>
                                     @if(item?.Discount>0)
                                     {
-                                        <h5><strike>₹ 2,000</strike> ₹ 1,500</h5>
+                                        <h5><strike>@item?.Rate</strike> ₹ 1,500</h5>
                                     }
                                     else
                                     {
@@ -210,7 +210,7 @@
 <script>
     $(document).ready(function () {
        // page.init();
-        Datepicker();
+       
         ApplyCommonGridStyle();
     });
 </script>
@@ -248,14 +248,17 @@
         $('#CheckOutDate').datepicker('setStartDate', selectedDate);
 
     });
-
+    // Calculate tomorrow's date
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
     $('#CheckOutDate').datepicker({
         orientation: "left",
         autoclose: true,
         format: 'dd/mm/yyyy',
         todayBtn: false,
         todayHighlight: true,
-    }).datepicker("setDate", "0");
+        startDate: tomorrow,
+    }).datepicker("setDate", tomorrow);
 
    
     
