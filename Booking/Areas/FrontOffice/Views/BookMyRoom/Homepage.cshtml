@@ -25,6 +25,10 @@
     <input type="hidden" id="roomId" name="CheckIn" value="@Model?.roomFilterDTO?.CheckInDate" />
     <input type="hidden" id="roomId" name="CheckOut" value="@Model?.roomFilterDTO?.CheckOutDate" />
 </form>
+<form id="frmviewRoom"  asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ViewMoreRooms">
+    <input type="hidden" id="roomId" name="CheckIn" value="@Model?.roomFilterDTO?.CheckInDate" />
+    <input type="hidden" id="roomId" name="CheckOut" value="@Model?.roomFilterDTO?.CheckOutDate" />
+</form>
 
 <!-- BEGIN: Search Section ========================================= -->
 <section id="search-sec">
@@ -170,10 +174,12 @@
                         </div>
                     </div>
                 }
+
+                <div class="col-md-12 text-center">
+                    <a onclick="ViewMoreRoom()" class="btn btn-primary">View More</a>
+                </div>
             }
-            <div class="col-md-12 text-center">
-                <a href="view-more-rooms.html" class="btn btn-primary">View More</a>
-            </div>
+            
         </div>
     </div>
 </section>
@@ -215,7 +221,6 @@
     });
 </script>
 
-
 <script>
 
     function openEditMode(itemId) {
@@ -223,6 +228,9 @@
         $('#roomId').val(itemId);
         // Submit the form
         $('#frmSelectRoom').submit();
+    }
+    function ViewMoreRoom() {
+        $('#frmviewRoom').submit();
     }
 
     // Initialize the CheckInDate datepicker
@@ -260,6 +268,4 @@
         startDate: tomorrow,
     }).datepicker("setDate", tomorrow);
 
-   
-    
 </script>

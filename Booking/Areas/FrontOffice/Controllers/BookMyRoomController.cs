@@ -2,6 +2,7 @@
 using Booking.Areas.FrontOffice.Models.Input;
 using Booking.Areas.FrontOffice.Models.Output;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Booking.Areas.FrontOffice.Controllers
 {
@@ -49,13 +50,33 @@ namespace Booking.Areas.FrontOffice.Controllers
         [Route("/register")]
         public async Task<IActionResult> RegisterCustomerDetails(RoomRegisterDTO roomRegisterDTO)
         {
-           return View();
+           return View("RegisterCustomer");
         }
 
         [Route("/confirmBooking")]
         public async Task<IActionResult> ConfirmBooking(CustomerAndBookingDetails customerAndBookingDetails)
         {
             return View();
+        }
+
+        [Route("/view-room")]
+        public IActionResult ViewMoreRooms(RoomFilterDTO roomFilterDTO)
+        {
+            BookMyRoomResultDTO bookMyRoomResultDTO = new BookMyRoomResultDTO();
+            if (string.IsNullOrEmpty(roomFilterDTO.CheckInDate))
+                roomFilterDTO.CheckInDate = DateTime.Now.ToString("dd/MM/yyyy");
+            if (string.IsNullOrEmpty(roomFilterDTO.CheckOutDate))
+                roomFilterDTO.CheckOutDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
+            if (roomFilterDTO.CheckInDate != null && roomFilterDTO.CheckOutDate != null)
+            {
+                var rooms = _bookMyRoomRepository.GetRooms(roomFilterDTO);
+                if (rooms != null)
+                {
+                    bookMyRoomResultDTO.listRoomsDetailsDTO = rooms.Result;
+                }
+            }
+            bookMyRoomResultDTO.roomFilterDTO = roomFilterDTO;
+            return View(bookMyRoomResultDTO);
         }
     }
 }

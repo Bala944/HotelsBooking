@@ -1,0 +1,148 @@
+﻿@using System.Globalization;
+@model BookMyRoomResultDTO
+@{
+    ViewData["Title"] = "Home";
+}
+
+<form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="SingleRoomDetails">
+    <input type="hidden" id="roomId" name="roomId" value="" />
+    <input type="hidden" id="roomId" name="CheckIn" value="@Model?.roomFilterDTO?.CheckInDate" />
+    <input type="hidden" id="roomId" name="CheckOut" value="@Model?.roomFilterDTO?.CheckOutDate" />
+</form>
+<form id="frmviewRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ViewMoreRooms">
+    <input type="hidden" id="roomId" name="CheckIn" value="@Model?.roomFilterDTO?.CheckInDate" />
+    <input type="hidden" id="roomId" name="CheckOut" value="@Model?.roomFilterDTO?.CheckOutDate" />
+</form>
+
+<!-- BEGIN: Featured Section ==================================== -->
+<section id="featued-sec" class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="section-title text-center">Available Rooms</h2>
+            </div>
+
+            @if (Model != null && Model.listRoomsDetailsDTO != null && Model.listRoomsDetailsDTO.Count > 0)
+            {
+                foreach (var item in Model.listRoomsDetailsDTO)
+                {
+                    string image = string.Empty;
+                    @if (item != null && item.Images != null && item.Images != "")
+                    {
+                        string[] ImageData = item.Images.Split('$');
+                        if (ImageData.Length > 0)
+                        {
+
+                            image = ImageData[0];
+
+                        }
+                    }
+                    <div class="col-md-6">
+                        <div class="rooms-panel">
+                            <div class="rooms-img">
+                                <img src="@(string.IsNullOrEmpty(image) ? "assets/images/rooms/room1.jpg" : "Attachments/RoomImages/" + image)" alt="Room" class="img-fluid" />
+                            </div>
+                            <div class="room-discription">
+                                <div class="room-title">
+                                    <h4><a href="javascript:void(0);" onclick="openEditMode(@item.RoomId)">Treebo Trend Windsor Heights</a></h4>
+                                </div>
+                                <div class="">
+                                    <p><b>@item.RoomType</b></p>
+                                    @item.BedType
+                                </div>
+                                <ul>
+                                    <li><i class="fas fa-check"></i>@item?.CancelationCharge</li>
+                                    <li><i class="fas fa-check"></i>@item?.Payment</li>
+                                </ul>
+                                <div class="pricing-details">
+                                    <p>1 day 2 adults</p>
+                                    @if (item?.Discount > 0)
+                                    {
+                                        <h5><strike>@item?.Rate</strike> ₹ 1,500</h5>
+                                    }
+                                    else
+                                    {
+                                        <h5>@item?.Rate</h5>
+                                    }
+                                    @{
+                                        // Assuming ViewBag.CheckIn and ViewBag.CheckOut are in the format "dd/mm/yyyy"
+                                        DateTime? checkInDate = DateTime.ParseExact(Model?.roomFilterDTO?.CheckInDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                        DateTime? checkOutDate = DateTime.ParseExact(Model?.roomFilterDTO?.CheckOutDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                        TimeSpan? timeSpan = checkOutDate - checkInDate;
+                                        int? days = timeSpan?.Days;
+                                    }
+                                    @{
+                                        double totalprice = Convert.ToDouble((item?.Rate * days));
+                                        double tax = totalprice * 0.05;
+                                        tax = Math.Round(tax, 2);
+                                    }
+                                    <p>+ ₹ @tax taxes and charges</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+<!-- END: Featured Section ==================================== -->
+
+<partial name="_DatepickerPartial" />
+
+<script>
+    $(document).ready(function () {
+        // page.init();
+
+        ApplyCommonGridStyle();
+    });
+</script>
+
+<script>
+
+    function openEditMode(itemId) {
+        // Set the value of the hidden input field
+        $('#roomId').val(itemId);
+        // Submit the form
+        $('#frmSelectRoom').submit();
+    }
+    function ViewMoreRoom() {
+        $('#frmviewRoom').submit();
+    }
+
+    // Initialize the CheckInDate datepicker
+    $('#CheckInDate').datepicker({
+        orientation: "left",
+        autoclose: true,
+        format: 'dd/mm/yyyy',
+        startDate: new Date(),
+        todayBtn: false,
+        todayHighlight: true,
+    }).datepicker("setDate", "0").on('changeDate', function (ev) {
+        // When the CheckInDate changes, update the start date of CheckOutDate
+        var selectedDate = new Date(ev.date);
+        var selectedCheckOutDate = $('#CheckOutDate').datepicker('getDate');
+        var selectedDate = new Date(ev.date);
+        selectedDate.setDate(selectedDate.getDate() + 1); // Add one day
+
+        // Check if the selected CheckOutDate is lower than CheckInDate
+        if (selectedCheckOutDate < selectedDate) {
+            // If it's lower, set CheckOutDate to CheckInDate
+            $('#CheckOutDate').datepicker('setDate', selectedDate);
+        }
+        $('#CheckOutDate').datepicker('setStartDate', selectedDate);
+
+    });
+    // Calculate tomorrow's date
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    $('#CheckOutDate').datepicker({
+        orientation: "left",
+        autoclose: true,
+        format: 'dd/mm/yyyy',
+        todayBtn: false,
+        todayHighlight: true,
+        startDate: tomorrow,
+    }).datepicker("setDate", tomorrow);
+
+</script>
