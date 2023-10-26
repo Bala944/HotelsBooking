@@ -3,6 +3,8 @@ body {
     font-family: $theme-font;
     font-size: 1rem;
     font-weight: 400;
+    position: relative;
+    min-height: 100vh;
 }
 a {
     text-decoration: none;
