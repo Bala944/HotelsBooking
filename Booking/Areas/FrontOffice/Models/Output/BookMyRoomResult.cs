@@ -13,4 +13,5 @@ namespace Booking.Areas.FrontOffice.Models.Output
         public RoomsDetailsDTO? roomDetails { get; set; }
         public BookingQueryDTO? bookingQueryData { get; set; }
     }
+
 }

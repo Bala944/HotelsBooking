@@ -4,9 +4,6 @@ using Booking.Areas.FrontOffice.Models.Output;
 using Booking.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Security.Cryptography.Xml;
 
 namespace Booking.Areas.FrontOffice.Controllers
 {
@@ -20,6 +17,12 @@ namespace Booking.Areas.FrontOffice.Controllers
             _bookMyRoomRepository = bookMyRoomRepository;
         }
 
+
+        /// <summary>
+        /// Step 1 - View the Home Page With Date Filter 
+        /// </summary>
+        /// <param name="roomFilterDTO"></param>
+        /// <returns></returns>
         [Route("/home-page")]
         public IActionResult Homepage(RoomFilterDTO roomFilterDTO)
         {
@@ -44,17 +47,84 @@ namespace Booking.Areas.FrontOffice.Controllers
                 bookingQueryDTO.Adults = bookMyRoomResultDTO.roomFilterDTO.Adults;
                 bookingQueryDTO.Children = bookMyRoomResultDTO.roomFilterDTO.Children;
                 bookingQueryDTO.Rooms = bookMyRoomResultDTO.roomFilterDTO.Rooms;
-                string json = JsonConvert.SerializeObject(bookingQueryDTO); // Corrected method name
+                string json = JsonConvert.SerializeObject(bookingQueryDTO);
                 string paramsEncrypted = EncryptionHelper.Encrypt(json);
 
                 bookMyRoomResultDTO.roomFilterDTO.Params = paramsEncrypted;
-                return RedirectToAction("ViewMoreRooms", new { Params = paramsEncrypted });
+                if (roomFilterDTO.IsViewMore)
+                {
+                    return RedirectToAction("ViewMoreRooms", bookMyRoomResultDTO.roomFilterDTO);
+                }
             }
 
             return View(bookMyRoomResultDTO);
 
         }
 
+        /// <summary>
+        /// Step 2 - View all the available room to choose and book
+        /// </summary>
+        /// <param name="selectedRoomDTO"></param>
+        /// <returns></returns>
+        [Route("/view-room")]
+        public IActionResult ViewMoreRooms(RoomFilterDTO roomFilterDTO)
+        {
+            BookMyRoomResultDTO bookMyRoomResultDTO = new BookMyRoomResultDTO();
+            BookingQueryDTO bookingQueryDTO1 = new BookingQueryDTO();
+            if (!string.IsNullOrEmpty(roomFilterDTO.Params ))
+            {
+
+                try
+                {
+                    string decryptedData = EncryptionHelper.Decrypt(roomFilterDTO.Params);
+                    bookingQueryDTO1 = JsonConvert.DeserializeObject<BookingQueryDTO>(decryptedData);
+
+                    roomFilterDTO.CheckInDate = bookingQueryDTO1.CheckInDate;
+                    roomFilterDTO.CheckOutDate = bookingQueryDTO1.CheckOutDate;
+                    roomFilterDTO.Adults = bookingQueryDTO1.Adults;
+                    roomFilterDTO.Children = bookingQueryDTO1.Children;
+
+                }
+                catch (JsonException ex)
+                {
+                    Console.WriteLine("Error parsing JSON: " + ex.Message);
+                }
+            }
+
+                if (string.IsNullOrEmpty(roomFilterDTO.CheckInDate))
+                    roomFilterDTO.CheckInDate = DateTime.Now.ToString("dd/MM/yyyy");
+                if (string.IsNullOrEmpty(roomFilterDTO.CheckOutDate))
+                    roomFilterDTO.CheckOutDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
+                if (roomFilterDTO.CheckInDate != null && roomFilterDTO.CheckOutDate != null)
+                {
+                    var rooms = _bookMyRoomRepository.GetRooms(roomFilterDTO);
+                    if (rooms != null)
+                    {
+                        bookMyRoomResultDTO.listRoomsDetailsDTO = rooms.Result;
+                    }
+
+                    bookMyRoomResultDTO.roomFilterDTO = roomFilterDTO;
+
+                    BookingQueryDTO bookingQueryDTO = new BookingQueryDTO();
+                    bookingQueryDTO.CheckInDate = bookMyRoomResultDTO.roomFilterDTO.CheckInDate;
+                    bookingQueryDTO.CheckOutDate = bookMyRoomResultDTO.roomFilterDTO.CheckOutDate;
+                    bookingQueryDTO.Adults = bookMyRoomResultDTO.roomFilterDTO.Adults;
+                    bookingQueryDTO.Children = bookMyRoomResultDTO.roomFilterDTO.Children;
+                    bookingQueryDTO.Rooms = bookMyRoomResultDTO.roomFilterDTO.Rooms;
+                    string json = JsonConvert.SerializeObject(bookingQueryDTO);
+                    string paramsEncrypted = EncryptionHelper.Encrypt(json);
+
+                    bookMyRoomResultDTO.roomFilterDTO.Params = paramsEncrypted;
+                    ViewBag.BParams = paramsEncrypted;
+                }
+            return View(bookMyRoomResultDTO);
+        }
+
+        /// <summary>
+        /// To view the Room Details
+        /// </summary>
+        /// <param name="selectedRoomDTO"></param>
+        /// <returns></returns>
         [Route("/room-details-page")]
         public async Task<IActionResult> SingleRoomDetails(SelectedRoomDTO selectedRoomDTO)
         {
@@ -82,96 +152,133 @@ namespace Booking.Areas.FrontOffice.Controllers
             return View(roomDetails);
         }
 
-        [Route("/view-room")]
-        public IActionResult ViewMoreRooms(SelectedRoomDTO selectedRoomDTO)
+        /// <summary>
+        /// To make encrypt data for booKing 
+        /// </summary>
+        /// <param name="finalBookingDetails"></param>
+        /// <returns></returns>
+        [Route("/process-data")]
+        [HttpPost]
+        public IActionResult ProcessData([FromBody] FinalBookingDetailsDTO finalBookingDetails)
         {
-            BookMyRoomResultDTO bookMyRoomResultDTO = new BookMyRoomResultDTO();
-            if (selectedRoomDTO.Params != null)
-            {
-                try
-                {
-                    string decryptedData = EncryptionHelper.Decrypt(selectedRoomDTO.Params);
-                    BookingQueryDTO bookingQueryDTO = JsonConvert.DeserializeObject<BookingQueryDTO>(decryptedData);
+            // Return the view with the processed data
+            string json = JsonConvert.SerializeObject(finalBookingDetails); // Corrected method name
+            string paramsEncrypted = EncryptionHelper.Encrypt(json);
 
-                    //if (string.IsNullOrEmpty(bookingQueryDTO.CheckInDate))
-                    //    bookingQueryDTO.CheckInDate = DateTime.Now.ToString("dd/MM/yyyy");
-                    //if (string.IsNullOrEmpty(bookingQueryDTO.CheckOutDate))
-                    //    bookingQueryDTO.CheckOutDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
-
-                    if (bookingQueryDTO.CheckInDate != null && bookingQueryDTO.CheckOutDate != null)
-                    {
-                        RoomFilterDTO roomFilterDTO = new RoomFilterDTO();
-                        roomFilterDTO.CheckInDate = bookingQueryDTO.CheckInDate;
-                        roomFilterDTO.CheckOutDate = bookingQueryDTO.CheckOutDate;
-                        roomFilterDTO.Adults = bookingQueryDTO.Adults;
-                        roomFilterDTO.Children = bookingQueryDTO.Children;
-                        roomFilterDTO.Rooms = bookingQueryDTO.Rooms;
-                        var rooms = _bookMyRoomRepository.GetRooms(roomFilterDTO);
-                        if (rooms != null)
-                        {
-                            bookMyRoomResultDTO.listRoomsDetailsDTO = rooms.Result;
-                        }
-                        bookMyRoomResultDTO.roomFilterDTO = roomFilterDTO;
-
-                    }
-                }
-                catch (JsonException ex)
-                {
-                    Console.WriteLine("Error parsing JSON: " + ex.Message);
-                }
-            }
-
-            return View(bookMyRoomResultDTO);
+            return Ok(paramsEncrypted);
         }
 
+        /// <summary>
+        /// Step 3 - View the Registration page and Allow user to Pay
+        /// </summary>
+        /// <param name="Params"></param>
+        /// <param name="FilterParams"></param>
+        /// <returns></returns>
         [Route("/register")]
-        public async Task<IActionResult> RegisterCustomerDetails(SelectedRoomDTO selectedRoomDTO)
+        public IActionResult RegisterCustomerDetails(string FParams, string FilterParams)
         {
-            SingleRoomDetails roomDetails = new SingleRoomDetails();
-            RoomsDetailsDTO result = new RoomsDetailsDTO();
-            BookingQueryDTO bookingQueryDTO = new BookingQueryDTO();
-            if (selectedRoomDTO.Params != null)
+            BookingRegistrationDTO result = new BookingRegistrationDTO();
+
+            try
             {
-                try
+                if (!string.IsNullOrEmpty(Params))
                 {
-                    string decryptedData = EncryptionHelper.Decrypt(selectedRoomDTO.Params);
+                    string decryptedData = EncryptionHelper.Decrypt(Params);
                     if (!string.IsNullOrEmpty(decryptedData))
                     {
-                        bookingQueryDTO = JsonConvert.DeserializeObject<BookingQueryDTO>(decryptedData);
+                        result.finalBookingDetails = JsonConvert.DeserializeObject<FinalBookingDetailsDTO>(decryptedData)?.finalBookingDetails;
                     }
-
                 }
-                catch (JsonException ex)
+
+                if (!string.IsNullOrEmpty(FilterParams))
                 {
-                    Console.WriteLine("Error parsing JSON: " + ex.Message);
+                    string decryptedData2 = EncryptionHelper.Decrypt(FilterParams);
+                    if (!string.IsNullOrEmpty(decryptedData2))
+                    {
+                        result.bookingQueryDTO = JsonConvert.DeserializeObject<BookingQueryDTO>(decryptedData2);
+                    }
                 }
             }
+            catch (JsonException ex)
+            {
+                Console.WriteLine("Error parsing JSON: " + ex.Message);
+            }
 
-            ViewBag.BParams = selectedRoomDTO.Params;
-            roomDetails.bookingQueryData = bookingQueryDTO;
-            roomDetails.roomDetails = await _bookMyRoomRepository.GetRoomsById(bookingQueryDTO.SelectedRoomId);
-            return View("RegisterCustomer", roomDetails);
+            ViewBag.BParams = Params;
+            ViewBag.FParams = FilterParams;
+            return View("RegisterCustomer", result);
         }
 
+        /// <summary>
+        /// Confirm Booking
+        /// </summary>
+        /// <param name="customerAndBookingDetails"></param>
+        /// <returns></returns>
         [Route("/confirmBooking")]
         public async Task<IActionResult> ConfirmBooking(CustomerAndBookingDetails customerAndBookingDetails)
         {
+
+            try
+            {
+                if (customerAndBookingDetails != null)
+                {
+                    string decryptedData = EncryptionHelper.Decrypt(customerAndBookingDetails.BookingParams);
+
+                    if (!string.IsNullOrEmpty(decryptedData))
+                    {
+                        FinalBookingDetailsDTO bookingDetailsDTO = new FinalBookingDetailsDTO
+                        {
+                            finalBookingDetails = JsonConvert.DeserializeObject<FinalBookingDetailsDTO>(decryptedData).finalBookingDetails
+                        };
+
+                        if (bookingDetailsDTO != null && bookingDetailsDTO.finalBookingDetails.Count > 0 && customerAndBookingDetails != null)
+                        {
+                            RegistrationDetails registrationDetails = new RegistrationDetails
+                            {
+                                CheckIn = customerAndBookingDetails.CheckIn,
+                                CheckOut = customerAndBookingDetails.CheckOut,
+                                FirstName = customerAndBookingDetails.FirstName,
+                                LastName = customerAndBookingDetails.LastName,
+                                MobileNumber = customerAndBookingDetails.MobileNumber,
+                                EmailAddress = customerAndBookingDetails.EmailAddress,
+                                TotalAmount = (decimal)bookingDetailsDTO.finalBookingDetails.Sum(bd => bd.Amount),
+                                RoomId = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.RoomId)),
+                                Count = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.Count)),
+                                Amount = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.Amount))
+                            };
+
+                            var result = await _bookMyRoomRepository.ConfirmBooking(registrationDetails);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
             return View();
         }
+
+
         [Route("/about-us")]
         public IActionResult AboutUs()
         {
             return View();
         }
+
         [Route("/contact-us")]
         public IActionResult ContactUs()
         {
             return View();
         }
+
         [Route("/services")]
         public IActionResult Services()
         {
             return View();
         }
+
+
     }
 }

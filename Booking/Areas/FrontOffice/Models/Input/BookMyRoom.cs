@@ -50,6 +50,7 @@ namespace Booking.Areas.FrontOffice.Models.Input
 
     }
 
+
     public class RoomRegisterDTO
     {
         public Int64 RoomId { get; set; }
@@ -59,13 +60,51 @@ namespace Booking.Areas.FrontOffice.Models.Input
 
     public class CustomerAndBookingDetails
     {
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? EmailAddress { get; set; }
-        public string? MobileNumber { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public required string EmailAddress { get; set; }
+        public required string MobileNumber { get; set; }
+        public required string CheckIn { get; set; }
+        public required string CheckOut { get; set; }
+        public required string BookingParams { get; set; }
 
     }
 
+   
 
+        public class FinalBookingDetailsDTO
+    {
+        public required List<FinalBookingDetails> finalBookingDetails { get; set; }
+    }
+
+    public class BookingRegistrationDTO
+    {
+        public List<FinalBookingDetails>? finalBookingDetails { get; set; }
+        public BookingQueryDTO? bookingQueryDTO { get; set; }
+    }
+    public class FinalBookingDetails
+    {
+        public Int64? RoomId { get; set; }
+        public Int64? Count { get; set; }
+        public decimal? Amount { get; set; }
+        public string? Name { get; set; }
+
+    }
+
+    public class RegistrationDetails
+    {
+        public required string FirstName { get; set; }
+        public required  string LastName { get; set; }
+        public required string EmailAddress { get; set; }
+        public required string MobileNumber { get; set; }
+        public required string RoomId { get; set; }
+        public required string Count { get; set; }
+        public required string Amount { get; set; }
+        public required decimal TotalAmount { get; set; }
+        public required string CheckIn { get; set; }
+        public required string? CheckOut { get; set; }
+
+
+    }
 
 }

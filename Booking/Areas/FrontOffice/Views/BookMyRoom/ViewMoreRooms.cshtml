@@ -55,13 +55,87 @@
 </style>
 <form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="SingleRoomDetails">
     <input type="hidden" id="roomId" name="roomId" value="" />
-    <input type="hidden" id="roomId" name="CheckIn" value="@Model?.roomFilterDTO?.CheckInDate" />
-    <input type="hidden" id="roomId" name="CheckOut" value="@Model?.roomFilterDTO?.CheckOutDate" />
+    <input type="hidden" id="Params" name="Params" value="@ViewBag.BParams" />
 </form>
-<form id="frmviewRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ViewMoreRooms">
-    <input type="hidden" id="roomId" name="CheckIn" value="@Model?.roomFilterDTO?.CheckInDate" />
-    <input type="hidden" id="roomId" name="CheckOut" value="@Model?.roomFilterDTO?.CheckOutDate" />
+<form id="frmRegisterRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="RegisterCustomerDetails">
+    <input type="hidden" id="FParams" name="FParams" value="" />
+    <input type="hidden" id="FilterParams" name="FilterParams" value="@ViewBag.BParams" />
 </form>
+
+<!-- BEGIN: Search Section ========================================= -->
+<section id="search-sec">
+    <div class="container-fluid search-panel">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Search</h2>
+                </div>
+            </div>
+            <form id="frmRoomFilter" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ViewMoreRooms">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Check-in Date</label>
+                            <input asp-for="roomFilterDTO.CheckInDate" id="CheckInDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Check-out Date</label>
+                            <input asp-for="roomFilterDTO.CheckOutDate" id="CheckOutDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Adults</label>
+                            <select class="form-select" asp-for="roomFilterDTO.Adults">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Children</label>
+                            <select class="form-select" asp-for="roomFilterDTO.Children">
+                                <option>(Select)</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col" style="display:none">
+                        <div class="form-group">
+                            <label>Rooms</label>
+                            <select class="form-select" asp-for="roomFilterDTO.Rooms">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="d-block">&nbsp;</label>
+                            <a class="btn btn-primary" onclick="$('#frmRoomFilter').submit();">Check Availability</a>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</section>
+<!-- END: Search Section ========================================= -->
 
 <!-- BEGIN: Featured Section ==================================== -->
 <section id="featued-sec" class="section">
@@ -168,11 +242,7 @@
 <!-- END: Featured Section ==================================== -->
 
 <partial name="_DatepickerPartial" />
-
-<script>
-    $(document).ready(function () {
-    });
-</script>
+<script src="~/assets/js/ajaxconnector.js"></script>
 
 <script>
 
@@ -235,8 +305,9 @@
             if (selectedValue > 0) {
                 SelectedRooms.push({
                     "Name": dataAttrValue,
-                    "Value": selectedValue,
-                        "Amount": dataamount
+                    "Count": selectedValue,
+                    "Amount": dataamount,
+                        "RoomId": selectedValue
                 });
             }
         });
@@ -253,12 +324,12 @@
             // Create a div element
             var div = '<div class="hotel-list"><div class="hotel-info">'+
                 '<h4>' + dataEntry.Name +'</h4></div><div class="room-info" ><div class="room-count">'+
-                    'Rooms: ' + dataEntry.Value + '</div><div class="amount" >Amount:' + (dataEntry.Amount * dataEntry.Value) + '</div></div></div>';
+                'Rooms: ' + dataEntry.Count + '</div><div class="amount" >Amount:' + (dataEntry.Amount * dataEntry.Count) + '</div></div></div>';
             // Append the div to the bookingInfo div
             $("#bookingInfo").append(div);
         }
         if (SelectedRooms.length>0) {
-            var btndesign='<button class="proceed-button"> Proceed </button>'
+            var btndesign='<button class="proceed-button" onclick="ProceedNext()" > Proceed </button>'
             $("#bookingInfo").append(btndesign);
         }
         else{
@@ -266,4 +337,17 @@
             $("#bookingInfo").append(norecorddesign);
         }
     }
+    const ProceedNext = async()=>
+    {
+        var data={
+            finalBookingDetails:SelectedRooms
+        }
+        var result =await APIPostMethod('/process-data', data)
+
+        if (result != null) { 
+            $('#FParams').val(result);
+            $('#frmRegisterRoom').submit();
+        }
+    }
+
 </script>

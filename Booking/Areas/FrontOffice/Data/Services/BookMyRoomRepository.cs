@@ -1,8 +1,8 @@
 ﻿using Booking.Areas.FrontOffice.Data.Interface;
 using Booking.Areas.FrontOffice.Models.Input;
 using Booking.DBEngine;
+using Booking.Models;
 using Dapper;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Booking.Areas.FrontOffice.Data.Services
@@ -18,7 +18,7 @@ namespace Booking.Areas.FrontOffice.Data.Services
         {
             _dbHandler = dbHandler;
         }
-      
+
         public async Task<List<RoomsDetailsDTO>> GetRooms(RoomFilterDTO roomFilterDTO)
         {
             List<RoomsDetailsDTO> roomsList = new List<RoomsDetailsDTO>();
@@ -42,7 +42,7 @@ namespace Booking.Areas.FrontOffice.Data.Services
 
             return roomsList;
         }
-        
+
         public async Task<RoomsDetailsDTO> GetRoomsById(Int64 roomId)
         {
             RoomsDetailsDTO roomsList = new RoomsDetailsDTO();
@@ -63,6 +63,42 @@ namespace Booking.Areas.FrontOffice.Data.Services
             return roomsList;
         }
 
-       
+        /// <summary>
+        /// Confirm Booking 
+        /// </summary>
+        /// <param name="registrationDetails"></param>
+        /// <returns></returns>
+        public async Task<long> ConfirmBooking(RegistrationDetails registrationDetails)
+        {
+            var parameters = new DynamicParameters();
+            long result = 0;
+            try
+            {
+                if (registrationDetails != null)
+                {
+                    parameters.Add("CheckIn", ConversionHelper.ToSQLlDatetime(registrationDetails?.CheckIn), DbType.DateTime, ParameterDirection.Input);
+                    parameters.Add("CheckOut", ConversionHelper.ToSQLlDatetime(registrationDetails?.CheckOut), DbType.DateTime, ParameterDirection.Input);
+                    parameters.Add("FirstName", registrationDetails?.FirstName, DbType.String, ParameterDirection.Input);
+                    parameters.Add("LastName", registrationDetails?.LastName, DbType.String, ParameterDirection.Input);
+                    parameters.Add("Email", registrationDetails?.EmailAddress, DbType.String, ParameterDirection.Input);
+                    parameters.Add("MobileNumber", registrationDetails?.MobileNumber, DbType.String, ParameterDirection.Input);
+                    parameters.Add("TotalAmount", registrationDetails?.TotalAmount, DbType.Decimal, ParameterDirection.Input);
+                    parameters.Add("RoomIds", registrationDetails?.RoomId, DbType.String, ParameterDirection.Input);
+                    parameters.Add("Counts", registrationDetails?.Count, DbType.String, ParameterDirection.Input);
+                    parameters.Add("Amounts", registrationDetails?.Amount, DbType.String, ParameterDirection.Input);
+
+                    using (_dbHandler.Connection)
+                    {
+                        result = await _dbHandler.ExecuteScalarAsync<long>(_dbHandler.Connection, "dbo.InsertBookingDetails", CommandType.StoredProcedure, parameters);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return result;
+        }
     }
 }

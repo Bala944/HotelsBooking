@@ -12,7 +12,7 @@
     </div>
 </section>
 
-<form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="RegisterCustomerDetails">
+<form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ViewMoreRooms">
     <input type="hidden" id="Params" name="Params" value="@ViewBag.BParams" />
 </form>
 <!-- END: Page Title Section ========================================= -->
@@ -81,7 +81,7 @@
         </div>
         <div class="row">
             <div class="col-md-12 text-center">
-                <a onclick='$("#frmSelectRoom").submit()' class='btn btn-info'>Continue to book</a>
+                <a onclick='$("#frmSelectRoom").submit()' class='btn btn-info'>Go BAck</a>
 
             </div>
         </div>
