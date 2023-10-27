@@ -1,216 +1,161 @@
 ﻿@using System.Globalization;
-@model RoomsDetailsDTO
+@model SingleRoomDetails;
 
-	<!-- BEGIN: Page Title Section ======================================== -->
-	<section class="page-title">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					<h2>View Room</h2>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- END: Page Title Section ========================================= -->
-	<!-- BEGIN: Search Section ========================================= -->
-	<!-- END: Search Section ========================================= -->
-	<!-- BEGIN: Featured Section ==================================== -->
-	<section class="section">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12 vrd-section">
-					<h2>Treebo Trend Windsor Heights</h2>
-					<p><i class="fas fa-location-dot"></i> Nilavoor to pallakaniyur, 635853 Yelagiri.</p>
-				</div>
-				<article class='gallery'>
-				@if (Model != null && Model.Images != null)
-				{
-					string[] ImageData = Model.Images.Split('$');
-					if (ImageData.Length > 0)
-					{
-						foreach (var item in ImageData)
-						{
-							<a class="gallery-link" href="Attachments/RoomImages/@item">
-								<figure class="gallery-image">
-									<img height="1400" src="Attachments/RoomImages/@item" width="1600">
-								</figure>
-							</a>
-						}
-					}
-				}
-				</article>
+<!-- BEGIN: Page Title Section ======================================== -->
+<section class="page-title">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>View Room</h2>
+            </div>
+        </div>
+    </div>
+</section>
 
-				<div class="room-desc">
-				@Html.Raw(Model?.Description)
-					</div>
-				@* <div class="room-availability">
-					<h4>Availability</h4>
-					<ul>
-						<li>
-							<strong>
-								Bedroom&nbsp;1:
-							</strong>
-							<span>
-								1 queen bed
+<form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="RegisterCustomerDetails">
+    <input type="hidden" id="Params" name="Params" value="@ViewBag.BParams" />
+</form>
+<!-- END: Page Title Section ========================================= -->
+<!-- BEGIN: Search Section ========================================= -->
+<!-- END: Search Section ========================================= -->
+<!-- BEGIN: Featured Section ==================================== -->
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 vrd-section">
+                <h2>Treebo Trend Windsor Heights</h2>
+                <p><i class="fas fa-location-dot"></i> Nilavoor to pallakaniyur, 635853 Yelagiri.</p>
+            </div>
+            <article class='gallery'>
+                @if (Model != null && Model.roomDetails != null && Model.roomDetails.Images != null)
+                {
+                    string[] ImageData = Model.roomDetails.Images.Split('$');
+                    if (ImageData.Length > 0)
+                    {
+                        foreach (var item in ImageData)
+                        {
+                            <a class="gallery-link" href="Attachments/RoomImages/@item">
+                                <figure class="gallery-image">
+                                    <img height="1400" src="Attachments/RoomImages/@item" width="1600">
+                                </figure>
+                            </a>
+                        }
+                    }
+                }
+            </article>
 
-							</span>
-						</li>
-						<li>
-							<strong>
-								Bedroom&nbsp;2:
-							</strong>
-							<span>
-								1 queen bed
+            <div class="room-desc">
+                @Html.Raw(Model?.roomDetails?.Description)
+            </div>
 
-							</span>
-						</li>
-						<li>
-							<strong>
-								Bedroom&nbsp;3:
-							</strong>
-							<span>
-								1 full bed
+            <div class="pricing-details-room">
+                @{
+                    // Assuming ViewBag.CheckIn and ViewBag.CheckOut are in the format "dd/mm/yyyy"
+                    DateTime? checkInDate = DateTime.ParseExact(Model?.bookingQueryData?.CheckInDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    DateTime? checkOutDate = DateTime.ParseExact(Model?.bookingQueryData?.CheckOutDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    TimeSpan? timeSpan = checkOutDate - checkInDate;
+                    int? days = timeSpan?.Days;
 
-							</span>
-						</li>
-						<li>
-							<strong>
-								Bedroom&nbsp;4:
-							</strong>
-							<span>
-								1 full bed
+                    double TotalPrice = Convert.ToDouble((Model?.roomDetails ? .Rate * days));
+                    double tax = TotalPrice * 0.05;
+                    tax = Math.Round(tax, 2);
 
-							</span>
-						</li>
-						<li>
-							<strong>
-								Living room:
-							</strong>
-							<span>
-								1 sofa bed
+                }
+                <p>@days days @(Model?.roomDetails?.MaxOccupancy > 0 ? Model?.roomDetails.MaxOccupancy + "adults" : "")   @(Model?.roomDetails?.MaxChild > 0 ? Model?.roomDetails.MaxChild + "child" : "")</p>
+                
+                <h5>₹ @TotalPrice</h5>
+                <p>+₹ @tax taxes and charges</p>
 
-							</span>
-						</li>
-						<li>
-							<strong>
-								Living room:
-							</strong>
-							<span>
-								1 sofa bed
+            </div>
+            <ul>
+                @* <li><i class="fas fa-check"></i>Breakfast included in the price</li> *@
+                @if (@Model?.roomDetails?.CancelationCharge != "")
+                {
+                    <li><i class="fas fa-check"></i>@Model?.roomDetails?.CancelationCharge</li>
+                }
+                @if (Model?.roomDetails?.Payment != "")
+                {
+                    <li><i class="fas fa-check"></i>@Model?.roomDetails?.Payment</li>
+                }
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <a onclick='$("#frmSelectRoom").submit()' class='btn btn-info'>Continue to book</a>
 
-							</span>
-						</li>
-						<li>
-							<strong>
-								Sleeps:
-							</strong>
-							<span>
-								10
-							</span>
-						</li>
-					</ul>
-				</div> *@
-				<div class="pricing-details-room">
-				@{
-					// Assuming ViewBag.CheckIn and ViewBag.CheckOut are in the format "dd/mm/yyyy"
-					DateTime checkInDate = DateTime.ParseExact(ViewBag.CheckIn, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-					DateTime checkOutDate = DateTime.ParseExact(ViewBag.CheckOut, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-					TimeSpan timeSpan = checkOutDate - checkInDate;
-					int days = timeSpan.Days;
-				}
-				@{
-					double totalprice =Convert.ToDouble((Model?.Rate * days ));
-					double tax = totalprice * 0.05;
-					tax = Math.Round(tax, 2);
-				}
-				<p>@days days</p>
-				<h5>₹ @totalprice</h5>
-				<p>+₹ @tax taxes and charges</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-				</div>
-				<ul>
-					@* <li><i class="fas fa-check"></i>Breakfast included in the price</li> *@
-					<li><i class="fas fa-check"></i>@Model?.CancelationCharge</li>
-				<li><i class="fas fa-check"></i>@Model?.Payment</li>
-				</ul>
-			</div>
-			<div class="row">
-				<div class="col-md-12 text-center">
-				<a href="/register" class="btn btn-info">Continue</a>
-				</div>
-			</div>
-		</div>
-	</section>
+<!-- END: Featured Section ==================================== -->
+<!-- BEGIN: Page Refrence ========================= -->
+<!-- Menu refrence -->
+<script src="assets/plugins/menu/js/menu.js"></script>
+<!-- Owl Carosel Refrence ============================ -->
+<link href="assets/plugins/slider/css/owl.carousel.min.css" rel="stylesheet" />
+<link href="assets/plugins/slider/css/owl.theme.default.css" rel="stylesheet" />
+<link href="assets/plugins/slider/css/animate.min.css" rel="stylesheet" />
+<script src="assets/plugins/slider/js/owl.carousel.js"></script>
 
-	<!-- END: Featured Section ==================================== -->
+<!-- Photo Gallery Refrence ================= -->
+<link href="assets/plugins/gallery/css/magnific-popup.min.css" rel="stylesheet" />
+<link href="assets/plugins/gallery/css/gallery.css" rel="stylesheet" />
+<script src="assets/plugins/gallery/js/jquery.magnific-popup.min.js"></script>
+<!-- END: Page Refrence ========================= -->
+<script src="assets/js/aara.theme.function.js"></script>
 
-	<!-- BEGIN: Page Refrence ========================= -->
-	<!-- Menu refrence -->
-	<script src="assets/plugins/menu/js/menu.js"></script>
-	<!-- Owl Carosel Refrence ============================ -->
-	<link href="assets/plugins/slider/css/owl.carousel.min.css" rel="stylesheet" />
-	<link href="assets/plugins/slider/css/owl.theme.default.css" rel="stylesheet" />
-	<link href="assets/plugins/slider/css/animate.min.css" rel="stylesheet" />
-	<script src="assets/plugins/slider/js/owl.carousel.js"></script>
+<script>
+    var currentYear = new Date().getFullYear();
 
-	<!-- Photo Gallery Refrence ================= -->
-	<link href="assets/plugins/gallery/css/magnific-popup.min.css" rel="stylesheet" />
-	<link href="assets/plugins/gallery/css/gallery.css" rel="stylesheet" />
-	<script src="assets/plugins/gallery/js/jquery.magnific-popup.min.js"></script>
-	<!-- END: Page Refrence ========================= -->
-	<script src="assets/js/aara.theme.function.js"></script>
+    // Update the content of the 'currentYear' span
+    document.getElementById("currentYear").textContent = currentYear;
+    $('.owl-carousel').owlCarousel({
+        loop: true,
+        margin: 10,
+        dots: false,
+        nav: true,
+        mouseDrag: false,
+        autoplay: true,
+        animateOut: 'slideOutUp',
+        responsive: {
+            0: {
+                items: 1
+            },
+            600: {
+                items: 1
+            },
+            1000: {
+                items: 1
+            }
+        }
+    });
+    (function () {
+        $('.gallery-link').magnificPopup({
+            type: 'image',
+            closeOnContentClick: true,
+            closeBtnInside: false,
+            mainClass: 'mfp-with-zoom mfp-img-mobile',
+            image: {
+                verticalFit: true,
+                titleSrc: function (item) {
+                    return item.el.find('figcaption').text() || item.el.attr('title');
+                }
+            },
+            zoom: {
+                enabled: true
+            },
+            // duration: 300
+            gallery: {
+                enabled: true,
+                navigateByImgClick: false,
+                tCounter: ''
+            },
+            disableOn: function () {
+                return $(window).width() > 640;
+            }
+        });
 
-	<script>
-		var currentYear = new Date().getFullYear();
-
-		// Update the content of the 'currentYear' span
-		document.getElementById("currentYear").textContent = currentYear;
-		$('.owl-carousel').owlCarousel({
-			loop: true,
-			margin: 10,
-			dots: false,
-			nav: true,
-			mouseDrag: false,
-			autoplay: true,
-			animateOut: 'slideOutUp',
-			responsive: {
-				0: {
-					items: 1
-				},
-				600: {
-					items: 1
-				},
-				1000: {
-					items: 1
-				}
-			}
-		});
-		(function () {
-			$('.gallery-link').magnificPopup({
-				type: 'image',
-				closeOnContentClick: true,
-				closeBtnInside: false,
-				mainClass: 'mfp-with-zoom mfp-img-mobile',
-				image: {
-					verticalFit: true,
-					titleSrc: function (item) {
-						return item.el.find('figcaption').text() || item.el.attr('title');
-					}
-				},
-				zoom: {
-					enabled: true
-				},
-				// duration: 300
-				gallery: {
-					enabled: true,
-					navigateByImgClick: false,
-					tCounter: ''
-				},
-				disableOn: function () {
-					return $(window).width() > 640;
-				}
-			});
-
-		}).call(this);
-	</script>
+    }).call(this);
+</script>
 

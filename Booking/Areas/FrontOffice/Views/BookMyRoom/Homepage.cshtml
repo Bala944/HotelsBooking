@@ -36,8 +36,7 @@
 </form>
 
 <form id="frmviewRoom" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ViewMoreRooms">
-    <input type="hidden" id="roomId" name="CheckIn" value="@Model?.roomFilterDTO?.CheckInDate" />
-    <input type="hidden" id="roomId" name="CheckOut" value="@Model?.roomFilterDTO?.CheckOutDate" />
+    <input type="hidden" id="Params" name="Params" value="@Model?.roomFilterDTO?.Params" />
 </form>
 
 <!-- BEGIN: Search Section ========================================= -->
@@ -67,7 +66,6 @@
                         <div class="form-group">
                             <label>Adults</label>
                             <select class="form-select" asp-for="roomFilterDTO.Adults">
-                                <option>(Select)</option>
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>
@@ -89,11 +87,10 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col" style="display:none">
                         <div class="form-group">
                             <label>Rooms</label>
                             <select class="form-select" asp-for="roomFilterDTO.Rooms">
-                                <option>(Select)</option>
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>
@@ -105,7 +102,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label class="d-block">&nbsp;</label>
-                            <a class="btn btn-primary" onclick="$('#frmRoomFilter').submit();">Search</a>
+                            <a class="btn btn-primary" onclick="$('#frmRoomFilter').submit();">Check Availability</a>
 
                         </div>
                     </div>
@@ -120,12 +117,14 @@
 <section id="featued-sec" class="section">
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <h2 class="section-title text-center">Featured</h2>
-            </div>
+
 
             @if (Model != null && Model.listRoomsDetailsDTO != null && Model.listRoomsDetailsDTO.Count > 0)
             {
+                <div class="col-md-12">
+                    <h2 class="section-title text-center">Available Rooms</h2>
+                </div>
+
                 foreach (var item in Model.listRoomsDetailsDTO)
                 {
                     string image = string.Empty;
@@ -146,15 +145,21 @@
                             </div>
                             <div class="room-discription">
                                 <div class="room-title">
-                                    <h4><a href="javascript:void(0);" onclick="openEditMode(@item.RoomId)">Treebo Trend Windsor Heights</a></h4>
+                                    <h4><a href="javascript:void(0);" onclick="openEditMode(@item.RoomId)">@item.RoomNumber</a></h4>
                                 </div>
                                 <div class="">
                                     <p><b>@item.RoomType</b></p>
                                     @item.BedType
                                 </div>
                                 <ul>
-                                    <li><i class="fas fa-check"></i>@item?.CancelationCharge</li>
-                                    <li><i class="fas fa-check"></i>@item?.Payment</li>
+                                    @if (@item?.CancelationCharge != "")
+                                    {
+                                        <li><i class="fas fa-check"></i>@item?.CancelationCharge</li>
+                                    }
+                                    @if (@item?.Payment != "")
+                                    {
+                                        <li><i class="fas fa-check"></i>@item?.Payment</li>
+                                    }
                                 </ul>
                                 <div class="pricing-details">
                                     @{
@@ -163,6 +168,11 @@
                                         DateTime? checkOutDate = DateTime.ParseExact(Model?.roomFilterDTO?.CheckOutDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                                         TimeSpan? timeSpan = checkOutDate - checkInDate;
                                         int? days = timeSpan?.Days;
+
+                                        double TotalPrice = Convert.ToDouble((item?.Rate * days));
+                                        double tax = TotalPrice * 0.05;
+                                        tax = Math.Round(tax, 2);
+                                        
                                     }
                                     <p>@days days @(item?.MaxOccupancy > 0 ? item.MaxOccupancy + "adults" : "")   @(item?.MaxChild > 0 ? item.MaxChild + "child" : "")</p>
                                     @if (item?.Discount > 0)
@@ -171,14 +181,9 @@
                                     }
                                     else
                                     {
-                                        <h5>@item?.Rate</h5>
+                                        <h5>@TotalPrice</h5>
                                     }
 
-                                    @{
-                                        double totalprice = Convert.ToDouble((item?.Rate * days));
-                                        double tax = totalprice * 0.05;
-                                        tax = Math.Round(tax, 2);
-                                    }
                                     <p>+ ₹ @tax taxes and charges</p>
                                 </div>
                             </div>
@@ -188,6 +193,12 @@
 
                 <div class="col-md-12 text-center">
                     <a onclick="ViewMoreRoom()" class="btn btn-primary">View More</a>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-12">
+                    <h2 class="section-title text-center">No Rooms Available For Selected Date.</h2>
                 </div>
             }
 
@@ -247,40 +258,50 @@
     function ViewMoreRoom() {
         $('#frmviewRoom').submit();
     }
+   
+        // Initialize the CheckInDate datepicker
+        $('#CheckInDate').datepicker({
+            orientation: "left",
+            autoclose: true,
+            format: 'dd/mm/yyyy',
+            startDate: new Date(),
+            todayBtn: false,
+            todayHighlight: true,
+        }).datepicker("setDate", "0").on('changeDate', function (ev) {
+            // When the CheckInDate changes, update the start date of CheckOutDate
+            var selectedDate = new Date(ev.date);
+            var selectedCheckOutDate = $('#CheckOutDate').datepicker('getDate');
+            var selectedDate = new Date(ev.date);
+            selectedDate.setDate(selectedDate.getDate() + 1); // Add one day
 
-    // Initialize the CheckInDate datepicker
-    $('#CheckInDate').datepicker({
-        orientation: "left",
-        autoclose: true,
-        format: 'dd/mm/yyyy',
-        startDate: new Date(),
-        todayBtn: false,
-        todayHighlight: true,
-    }).datepicker("setDate", "0").on('changeDate', function (ev) {
-        // When the CheckInDate changes, update the start date of CheckOutDate
-        var selectedDate = new Date(ev.date);
-        var selectedCheckOutDate = $('#CheckOutDate').datepicker('getDate');
-        var selectedDate = new Date(ev.date);
-        selectedDate.setDate(selectedDate.getDate() + 1); // Add one day
+            // Check if the selected CheckOutDate is lower than CheckInDate
+            if (selectedCheckOutDate < selectedDate) {
+                // If it's lower, set CheckOutDate to CheckInDate
+                $('#CheckOutDate').datepicker('setDate', selectedDate);
+            }
+            $('#CheckOutDate').datepicker('setStartDate', selectedDate);
 
-        // Check if the selected CheckOutDate is lower than CheckInDate
-        if (selectedCheckOutDate < selectedDate) {
-            // If it's lower, set CheckOutDate to CheckInDate
-            $('#CheckOutDate').datepicker('setDate', selectedDate);
-        }
-        $('#CheckOutDate').datepicker('setStartDate', selectedDate);
-
-    });
-    // Calculate tomorrow's date
-    var tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    $('#CheckOutDate').datepicker({
-        orientation: "left",
-        autoclose: true,
-        format: 'dd/mm/yyyy',
-        todayBtn: false,
-        todayHighlight: true,
-        startDate: tomorrow,
-    }).datepicker("setDate", tomorrow);
-
+        });
+        // Calculate tomorrow's date
+        var tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        $('#CheckOutDate').datepicker({
+            orientation: "left",
+            autoclose: true,
+            format: 'dd/mm/yyyy',
+            todayBtn: false,
+            todayHighlight: true,
+            startDate: tomorrow,
+        }).datepicker("setDate", tomorrow);
+    
+    if (@Model?.roomFilterDTO?.CheckInDate != "") {
+        debugger
+        var date = new Date(@Model?.roomFilterDTO?.CheckInDate)
+        $('#CheckInDate').datepicker('setDate', date).trigger('change');
+    }
+    if (@Model?.roomFilterDTO?.CheckOutDate!="") {
+        debugger
+       
+        $('#CheckOutDate').datepicker('setDate', '@(Model?.roomFilterDTO?.CheckOutDate)');
+    }
 </script>

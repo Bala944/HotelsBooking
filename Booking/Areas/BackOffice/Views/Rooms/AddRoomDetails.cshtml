@@ -11,7 +11,7 @@
             <div class="row formtype">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="roomNumber">Room Number<span class="required-star">*</span></label>
+                        <label for="roomNumber">Name<span class="required-star">*</span></label>
                         <input type="text" class="form-control" id="roomNumber" name="roomNumber" required>
                     </div>
                 </div>
@@ -58,12 +58,18 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
+                        <label for="Quantity">Quantity<span class="required-star">*</span></label>
+                        <input type="number" class="form-control" id="Quantity" name="Quantity" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
                         <label>Payment<span class="required-star">*</span></label>
                         <select class="form-select select2" id="payment" name="payment">
                             <option value="">Select</option>
                             <option value="1">No prepayment needed – pay at the property</option>
                             <option value="2">50% prepayment needed</option>
-                            <option value="3">Full payment needed </option>
+                            <option value="3">Full payment needed</option>
                         </select>
                     </div>
                 </div>

@@ -1,6 +1,10 @@
-﻿@{
+﻿@using System.Globalization;
+@model SingleRoomDetails;
+@{
     ViewData["Title"] = "Rooms";
     // Layout = null;
+    string image = string.Empty;
+
 }
 <!-- BEGIN: Page Title Section ======================================== -->
 <section class="page-title">
@@ -22,47 +26,118 @@
                         <h4>Basic Info</h4>
                     </div>
                     <div class="sub-panel-body">
-                        <form id="frmCustomerDetails">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="FirstName">First Name:</label>
-                                        <input type="text" class="form-control" onkeyup="AllowCharectersOnly(this.id)" id="FirstName" name="FirstName" required>
+                        <div class="col-md-6">
+                            <div class="col-md-12">
+                                <h2 class="section-title text-center">Booking Details</h2>
+                            </div>
+                           
+
+                            @if (Model != null && Model.roomDetails != null && Model.roomDetails.Images != null)
+                            {
+
+                                string[] ImageData = Model.roomDetails.Images.Split('$');
+                                if (ImageData.Length > 0)
+                                {
+                                    image = ImageData[0];
+                                }
+                            }
+
+                            <div class="col-md-6">
+                                <div class="rooms-panel">
+                                    <div class="rooms-img">
+                                        <img src="@(string.IsNullOrEmpty(image) ? "assets/images/rooms/room1.jpg" : "Attachments/RoomImages/" + image)" alt="Room" class="img-fluid" />
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="LastName">Last Name:</label>
-                                        <input type="text" class="form-control" onkeyup="AllowCharectersOnly(this.id)" id="LastName" name="LastName" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="EmailAddress">Email Address:</label>
-                                        <input type="text" class="form-control" id="EmailAddress" name="EmailAddress" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="MobileNumber">Mobile Number:</label>
-                                        <input type="text" class="form-control" onkeyup="AllowNumbersOnlyPhone(this.id)" id="MobileNumber" name="EmailAddress" required>
+                                    <div class="room-discription">
+                                        <div class="room-title">
+                                            <h4>@Model.roomDetails.RoomNumber</h4>
+                                        </div>
+                                        <div class="">
+                                            <p><b>@Model.roomDetails.RoomType</b></p>
+                                            @Model.roomDetails.BedType
+                                        </div>
+                                        <ul>
+                                            @if (Model.roomDetails?.CancelationCharge != "")
+                                            {
+                                                <li><i class="fas fa-check"></i>@Model.roomDetails?.CancelationCharge</li>
+                                            }
+                                            @if (@Model.roomDetails?.Payment != "")
+                                            {
+                                                <li><i class="fas fa-check"></i>@Model.roomDetails?.Payment</li>
+                                            }
+                                        </ul>
+                                        <div class="pricing-details">
+                                            @{
+                                                // Assuming ViewBag.CheckIn and ViewBag.CheckOut are in the format "dd/mm/yyyy"
+                                                DateTime? checkInDate = DateTime.ParseExact(@Model?.bookingQueryData?.CheckInDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                                DateTime? checkOutDate = DateTime.ParseExact(@Model?.bookingQueryData?.CheckOutDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                                TimeSpan? timeSpan = checkOutDate - checkInDate;
+                                                int? days = timeSpan?.Days;
+
+                                                double TotalPrice = Convert.ToDouble((@Model.roomDetails?.Rate * days));
+                                                double tax = TotalPrice * 0.05;
+                                                tax = Math.Round(tax, 2);
+
+                                            }
+                                            <p>@days days @(Model.roomDetails?.MaxOccupancy > 0 ? @Model.roomDetails?.MaxOccupancy + "adults" : "")   @(Model.roomDetails?.MaxChild > 0 ? Model.roomDetails?.MaxChild + "child" : "")</p>
+                                            @if (Model.roomDetails?.Discount > 0)
+                                            {
+                                                <h5><strike>@Model.roomDetails?.Rate</strike> ₹ @Model.roomDetails?.Discount</h5>
+                                            }
+                                            else
+                                            {
+                                                <h5>@TotalPrice</h5>
+                                            }
+
+                                            <p>+ ₹ @tax taxes and charges</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="bottom-btn">                                   
-                                        <a onclick="ConfirmAndPay()" class="btn btn-primary ">Confirm and Pay</a>
-                                        <a class="btn btn-secondary" href="/view-room-details">Cancel</a>
+                            
+                            <div class="col-md-6">
+                                <form id="frmCustomerDetails">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="FirstName">First Name:</label>
+                                                <input type="text" class="form-control" onkeyup="AllowCharectersOnly(this.id)" id="FirstName" name="FirstName" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="LastName">Last Name:</label>
+                                                <input type="text" class="form-control" onkeyup="AllowCharectersOnly(this.id)" id="LastName" name="LastName" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="EmailAddress">Email Address:</label>
+                                                <input type="text" class="form-control" id="EmailAddress" name="EmailAddress" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="MobileNumber">Mobile Number:</label>
+                                                <input type="text" class="form-control" onkeyup="AllowNumbersOnlyPhone(this.id)" id="MobileNumber" name="EmailAddress" required>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="bottom-btn">
+                                                <a onclick="ConfirmAndPay()" class="btn btn-primary ">Confirm and Pay</a>
+                                                <a class="btn btn-secondary" href="/view-room-details">Cancel</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
-    </div>
 </section>
 
 

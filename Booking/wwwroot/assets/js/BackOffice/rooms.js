@@ -88,6 +88,7 @@ function SaveRoomDetails() {
         RoomFormData.append("Price", $("#rate").val());
         RoomFormData.append("Description", editor1.getData(),);
         RoomFormData.append("Payment", parseInt($("#payment").val()));
+        RoomFormData.append("Quantity", parseInt($("#Quantity").val()));
         RoomFormData.append("Status", 1);
         RoomFormData.append("IsActive", 1);
         RoomFormData.append("Images", FileImages);
@@ -140,6 +141,7 @@ const GetRoomDetailsById = async (RoomId) => {
         $("#cancellationType").val(result.cancelationCharge).trigger("change");
         $("#payment").val(result.payment).trigger("change");
         $("#maxOccupancy").val(result.maxOccupancy);
+        $("#Quantity").val(result.quantity);
         $("#maxChild").val(result.maxChild);
         $("#rate").val(result.price);
         editor1.setData(result.description);
@@ -272,6 +274,9 @@ var page = function () {
                         required: true
                     },
                     payment: {
+                        required: true
+                    },
+                    Quantity: {
                         required: true
                     },
                 },
