@@ -97,6 +97,7 @@ namespace Booking.Areas.FrontOffice.Controllers
                     //    bookingQueryDTO.CheckInDate = DateTime.Now.ToString("dd/MM/yyyy");
                     //if (string.IsNullOrEmpty(bookingQueryDTO.CheckOutDate))
                     //    bookingQueryDTO.CheckOutDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
+                   
                     if (bookingQueryDTO.CheckInDate != null && bookingQueryDTO.CheckOutDate != null)
                     {
                         RoomFilterDTO roomFilterDTO = new RoomFilterDTO();
