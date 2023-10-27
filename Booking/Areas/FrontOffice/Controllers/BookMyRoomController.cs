@@ -50,9 +50,9 @@ namespace Booking.Areas.FrontOffice.Controllers
                 bookMyRoomResultDTO.roomFilterDTO.Params = paramsEncrypted;
                 return RedirectToAction("ViewMoreRooms", new { Params = paramsEncrypted });
             }
-            
+
             return View(bookMyRoomResultDTO);
-           
+
         }
 
         [Route("/room-details-page")]
@@ -60,13 +60,13 @@ namespace Booking.Areas.FrontOffice.Controllers
         {
             SingleRoomDetails roomDetails = new SingleRoomDetails();
             RoomsDetailsDTO result = new RoomsDetailsDTO();
-            BookingQueryDTO bookingQueryDTO= new BookingQueryDTO();
+            BookingQueryDTO bookingQueryDTO = new BookingQueryDTO();
             if (selectedRoomDTO.Params != null)
             {
                 try
                 {
                     string decryptedData = EncryptionHelper.Decrypt(selectedRoomDTO.Params);
-                     bookingQueryDTO = JsonConvert.DeserializeObject<BookingQueryDTO>(decryptedData);
+                    bookingQueryDTO = JsonConvert.DeserializeObject<BookingQueryDTO>(decryptedData);
 
                     bookingQueryDTO.SelectedRoomId = selectedRoomDTO.RoomId;
                 }
@@ -76,7 +76,7 @@ namespace Booking.Areas.FrontOffice.Controllers
                 }
             }
 
-            ViewBag.BParams= selectedRoomDTO.Params;
+            ViewBag.BParams = selectedRoomDTO.Params;
             roomDetails.bookingQueryData = bookingQueryDTO;
             roomDetails.roomDetails = await _bookMyRoomRepository.GetRoomsById(selectedRoomDTO.RoomId);
             return View(roomDetails);
@@ -97,7 +97,7 @@ namespace Booking.Areas.FrontOffice.Controllers
                     //    bookingQueryDTO.CheckInDate = DateTime.Now.ToString("dd/MM/yyyy");
                     //if (string.IsNullOrEmpty(bookingQueryDTO.CheckOutDate))
                     //    bookingQueryDTO.CheckOutDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
-                   
+
                     if (bookingQueryDTO.CheckInDate != null && bookingQueryDTO.CheckOutDate != null)
                     {
                         RoomFilterDTO roomFilterDTO = new RoomFilterDTO();
@@ -120,7 +120,7 @@ namespace Booking.Areas.FrontOffice.Controllers
                     Console.WriteLine("Error parsing JSON: " + ex.Message);
                 }
             }
-            
+
             return View(bookMyRoomResultDTO);
         }
 
@@ -135,7 +135,10 @@ namespace Booking.Areas.FrontOffice.Controllers
                 try
                 {
                     string decryptedData = EncryptionHelper.Decrypt(selectedRoomDTO.Params);
-                    bookingQueryDTO = JsonConvert.DeserializeObject<BookingQueryDTO>(decryptedData);
+                    if (!string.IsNullOrEmpty(decryptedData))
+                    {
+                        bookingQueryDTO = JsonConvert.DeserializeObject<BookingQueryDTO>(decryptedData);
+                    }
 
                 }
                 catch (JsonException ex)
