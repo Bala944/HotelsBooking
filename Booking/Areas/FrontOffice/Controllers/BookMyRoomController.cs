@@ -115,7 +115,7 @@ namespace Booking.Areas.FrontOffice.Controllers
                     string paramsEncrypted = EncryptionHelper.Encrypt(json);
 
                     bookMyRoomResultDTO.roomFilterDTO.Params = paramsEncrypted;
-                    ViewBag.BParams = paramsEncrypted;
+                    ViewBag.FParams = paramsEncrypted;
                 }
             return View(bookMyRoomResultDTO);
         }
@@ -175,15 +175,15 @@ namespace Booking.Areas.FrontOffice.Controllers
         /// <param name="FilterParams"></param>
         /// <returns></returns>
         [Route("/register")]
-        public IActionResult RegisterCustomerDetails(string FParams, string FilterParams)
+        public IActionResult RegisterCustomerDetails(string BParams, string FilterParams)
         {
             BookingRegistrationDTO result = new BookingRegistrationDTO();
 
             try
             {
-                if (!string.IsNullOrEmpty(Params))
+                if (!string.IsNullOrEmpty(BParams))
                 {
-                    string decryptedData = EncryptionHelper.Decrypt(Params);
+                    string decryptedData = EncryptionHelper.Decrypt(BParams);
                     if (!string.IsNullOrEmpty(decryptedData))
                     {
                         result.finalBookingDetails = JsonConvert.DeserializeObject<FinalBookingDetailsDTO>(decryptedData)?.finalBookingDetails;
@@ -204,7 +204,7 @@ namespace Booking.Areas.FrontOffice.Controllers
                 Console.WriteLine("Error parsing JSON: " + ex.Message);
             }
 
-            ViewBag.BParams = Params;
+            ViewBag.BParams = BParams;
             ViewBag.FParams = FilterParams;
             return View("RegisterCustomer", result);
         }

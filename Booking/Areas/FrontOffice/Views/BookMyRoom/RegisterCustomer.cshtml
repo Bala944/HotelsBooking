@@ -15,93 +15,97 @@
         </div>
     </div>
 </section>
+
+<form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ViewMoreRooms">
+    <input type="hidden" id="Params" name="Params" value="@ViewBag.FParams" />
+</form>
 <!-- END: Page Title Section ========================================= -->
 <section id="featued-sec" class="section">
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <div class="sub-panel">
-                    <div class="sub-panel-header">
-                        <h4>Basic Info</h4>
-                    </div>
-                    <div class="sub-panel-body">
-                        <div class="col-md-6">
-                            <div class="col-md-12">
-                                <h2 class="section-title text-center">Booking Details</h2>
-                            </div>
-                            @if (Model != null)
+
+            <div class="sub-panel">
+                <div class="sub-panel-header">
+                    <h4>Booking Info</h4>
+                </div>
+                <div class="sub-panel-body">
+                    <div class="col-md-6">
+                       @*  <div class="col-md-12">
+                            <h2 class="section-title text-center">Booking Details</h2>
+                        </div> *@
+                        @if (Model != null)
+                        {
+                            if (Model?.finalBookingDetails != null && Model?.finalBookingDetails.Count > 0)
                             {
-                                if (Model?.finalBookingDetails != null && Model?.finalBookingDetails.Count > 0)
+                                @foreach (var item in Model?.finalBookingDetails)
                                 {
-                                    @foreach (var item in Model?.finalBookingDetails)
-                                    {
-                                        <div class="col-md-6">
-                                            <div class="rooms-panel">
-                                                <div class="room-discription">
-                                                    <div class="room-title">
-                                                        <h4>@item.Name</h4>
-                                                    </div>
-                                                    <div class="">
-                                                        <h3><b>@item.Amount</b> </h3> <h3> @item.Count</h3>
-                                                    </div>
-
+                                    <div class="col-md-12">
+                                        <div class="rooms-panel">
+                                            <div class="room-discription">
+                                                <div class="room-title">
+                                                    <h4>@item.Name</h4>
                                                 </div>
+                                                <div class="">
+                                                    <h3><b>₹ @item.Amount</b> </h3> <h3>Quantity @item.Count</h3>
+                                                </div>
+
                                             </div>
                                         </div>
-                                    }
+                                    </div>
                                 }
-                                <h4>Check In <b>@Model?.bookingQueryDTO?.CheckInDate</b></h4>
-                                <h4>Check Out <b>@Model?.bookingQueryDTO?.CheckOutDate</b></h4>
                             }
-                            <div class="col-md-6">
-                                <form id="frmCustomerDetails" method="post" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ConfirmBooking">
+                            <h4>Check In <b>@Model?.bookingQueryDTO?.CheckInDate</b></h4>
+                            <h4>Check Out <b>@Model?.bookingQueryDTO?.CheckOutDate</b></h4>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <form id="frmCustomerDetails" method="post" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ConfirmBooking">
 
-                                    <input type="hidden" id="BookingParams" name="BookingParams" value="@ViewBag.BParams" />
-                                    <input type="hidden" id="CheckIn" name="CheckIn" value="@Model?.bookingQueryDTO?.CheckInDate" />
-                                    <input type="hidden" id="CheckOut" name="CheckOut" value="@Model?.bookingQueryDTO?.CheckOutDate" />
+                            <input type="hidden" id="BookingParams" name="BookingParams" value="@ViewBag.BParams" />
+                            <input type="hidden" id="CheckIn" name="CheckIn" value="@Model?.bookingQueryDTO?.CheckInDate" />
+                            <input type="hidden" id="CheckOut" name="CheckOut" value="@Model?.bookingQueryDTO?.CheckOutDate" />
 
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="FirstName">First Name:</label>
-                                                <input type="text" class="form-control" onkeyup="AllowCharactersOnly(this.id)" id="FirstName" name="FirstName" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="LastName">Last Name:</label>
-                                                <input type="text" class="form-control" onkeyup="AllowCharactersOnly(this.id)" id="LastName" name="LastName" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="EmailAddress">Email Address:</label>
-                                                <input type="text" class="form-control" id="EmailAddress" name="EmailAddress" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="MobileNumber">Mobile Number:</label>
-                                                <input type="text" class="form-control" onkeyup="AllowNumbersOnlyPhone(this.id)" id="MobileNumber" name="MobileNumber" required>
-                                            </div>
-                                        </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="FirstName">First Name:</label>
+                                        <input type="text" class="form-control" onkeyup="AllowCharactersOnly(this.id)" id="FirstName" name="FirstName" required>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="bottom-btn">
-                                                <a onclick="ConfirmAndPay()" class="btn btn-primary ">Confirm and Pay</a>
-                                                <a class="btn btn-secondary" href="/view-room?params=@ViewBag.FParams">Cancel</a>
-                                            </div>
-                                        </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="LastName">Last Name:</label>
+                                        <input type="text" class="form-control" onkeyup="AllowCharactersOnly(this.id)" id="LastName" name="LastName" required>
                                     </div>
-                                </form>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="EmailAddress">Email Address:</label>
+                                        <input type="text" class="form-control" id="EmailAddress" name="EmailAddress" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="MobileNumber">Mobile Number:</label>
+                                        <input type="text" class="form-control" onkeyup="AllowNumbersOnlyPhone(this.id)" id="MobileNumber" name="MobileNumber" required>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="bottom-btn">
+                                        <a onclick="ConfirmAndPay()" class="btn btn-primary ">Confirm and Pay</a>
+                                        <a class="btn btn-secondary" onclick='$("#frmSelectRoom").submit()' >Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-
             </div>
         </div>
+
+    </div>
 </section>
 
 

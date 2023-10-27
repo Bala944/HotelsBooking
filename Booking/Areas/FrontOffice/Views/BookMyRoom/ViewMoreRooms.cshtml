@@ -55,11 +55,11 @@
 </style>
 <form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="SingleRoomDetails">
     <input type="hidden" id="roomId" name="roomId" value="" />
-    <input type="hidden" id="Params" name="Params" value="@ViewBag.BParams" />
+    <input type="hidden" id="Params" name="Params" value="@ViewBag.FParams" />
 </form>
 <form id="frmRegisterRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="RegisterCustomerDetails">
-    <input type="hidden" id="FParams" name="FParams" value="" />
-    <input type="hidden" id="FilterParams" name="FilterParams" value="@ViewBag.BParams" />
+    <input type="hidden" id="BParams" name="BParams" value="" />
+    <input type="hidden" id="FilterParams" name="FilterParams" value="@ViewBag.FParams" />
 </form>
 
 <!-- BEGIN: Search Section ========================================= -->
@@ -345,7 +345,7 @@
         var result =await APIPostMethod('/process-data', data)
 
         if (result != null) { 
-            $('#FParams').val(result);
+            $('#BParams').val(result);
             $('#frmRegisterRoom').submit();
         }
     }
