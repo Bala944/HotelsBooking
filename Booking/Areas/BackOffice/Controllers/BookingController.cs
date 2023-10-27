@@ -1,4 +1,6 @@
-﻿using Booking.Models;
+﻿using Booking.Areas.BackOffice.Data.Interface;
+using Booking.Areas.BackOffice.Models.Output;
+using Booking.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,15 +10,19 @@ namespace Booking.Areas.BackOffice.Controllers
     [Authorize(Policy = Policies.RequireAdminClaim)]
     public class BookingController : Controller
 	{
-		public BookingController() 
+		private IBookingRepository _bookingRepository;
+		public BookingController(IBookingRepository bookingRepository) 
 		{
+			_bookingRepository = bookingRepository;
 
-		}
+        }
 
         [Route("~/view-Booking")]
-        public IActionResult ViewBooking()
+        public async Task<IActionResult> ViewBooking()
 		{
-			return View();
+            List<BookingDTO> bookings = new List<BookingDTO>();
+            bookings = await _bookingRepository.GetBookings();
+			return View(bookings);
 		}
 	}
 }

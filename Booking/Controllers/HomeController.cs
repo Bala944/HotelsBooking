@@ -21,8 +21,9 @@ namespace Booking.Controllers
 
 
         [Route("~/login")]
-        public IActionResult Login()
+        public IActionResult Login(string message="")
         {
+            ViewBag.Message= message;
             return View();
         }
         [Route("~/logout")]
@@ -58,8 +59,17 @@ namespace Booking.Controllers
                     return RedirectToAction("ViewRoomDetails", "Rooms", new { Area = "BackOffice" });
 
                 }
+                else
+                {
+                    return RedirectToAction("Login", new { message = "Invalid Credentials" });
+
+                }
             }
-            return RedirectToAction("Login");
+            else
+            {
+                return RedirectToAction("Login", new { message = "Invalid Credentials" });
+            }
+            
         }
 
 

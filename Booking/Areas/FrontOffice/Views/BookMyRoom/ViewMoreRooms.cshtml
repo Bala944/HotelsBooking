@@ -136,7 +136,6 @@
     </div>
 </section>
 <!-- END: Search Section ========================================= -->
-
 <!-- BEGIN: Featured Section ==================================== -->
 <section id="featued-sec" class="section">
     <div class="container">
@@ -210,7 +209,7 @@
 
                                         <p>+ ₹ @tax taxes and charges</p>
                                     </div>
-                                    <select class="select2 roomselection" data-attr="@item.RoomNumber" data-amount="@TotalPrice">
+                                    <select class="select2 roomselection" data-attr="@item.RoomNumber" data-amount="@TotalPrice" data-roomid="@item.RoomId">
                                         <option value="">select</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -223,7 +222,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="rooms-panel" id="bookingInfo">
-                       <h4 class=""  >No Room Selected </h4>
+                        <h4 class="">No Room Selected </h4>
                     </div>
                 </div>
 
@@ -252,6 +251,7 @@
         // Submit the form
         $('#frmSelectRoom').submit();
     }
+
     function ViewMoreRoom() {
         $('#frmviewRoom').submit();
     }
@@ -301,13 +301,14 @@
             var selectedValue = parseInt(selectedOption.val());
             var dataAttrValue = selectElement.data("attr");
             var dataamount = parseFloat(selectElement.data("amount"));
+            var roomId = parseFloat(selectElement.data("roomid"));
 
             if (selectedValue > 0) {
                 SelectedRooms.push({
                     "Name": dataAttrValue,
                     "Count": selectedValue,
                     "Amount": dataamount,
-                        "RoomId": selectedValue
+                    "RoomId": roomId
                 });
             }
         });
@@ -322,32 +323,37 @@
         for (var i = 0; i < SelectedRooms.length; i++) {
             var dataEntry = SelectedRooms[i];
             // Create a div element
-            var div = '<div class="hotel-list"><div class="hotel-info">'+
-                '<h4>' + dataEntry.Name +'</h4></div><div class="room-info" ><div class="room-count">'+
+            var div = '<div class="hotel-list"><div class="hotel-info">' +
+                '<h4>' + dataEntry.Name + '</h4></div><div class="room-info" ><div class="room-count">' +
                 'Rooms: ' + dataEntry.Count + '</div><div class="amount" >Amount:' + (dataEntry.Amount * dataEntry.Count) + '</div></div></div>';
             // Append the div to the bookingInfo div
             $("#bookingInfo").append(div);
         }
-        if (SelectedRooms.length>0) {
-            var btndesign='<button class="proceed-button" onclick="ProceedNext()" > Proceed </button>'
+        if (SelectedRooms.length > 0) {
+            var btndesign = '<button class="proceed-button" onclick="ProceedNext()" > Proceed </button>'
             $("#bookingInfo").append(btndesign);
         }
-        else{
+        else {
             var norecorddesign = '<h4 class=""  >No Room Selected </h4>';
             $("#bookingInfo").append(norecorddesign);
         }
     }
-    const ProceedNext = async()=>
-    {
-        var data={
-            finalBookingDetails:SelectedRooms
-        }
-        var result =await APIPostMethod('/process-data', data)
 
-        if (result != null) { 
+    const ProceedNext = async () => {
+        var data = {
+            finalBookingDetails: SelectedRooms
+        }
+        var result = await APIPostMethod('/process-data', data)
+
+        if (result != null) {
             $('#BParams').val(result);
             $('#frmRegisterRoom').submit();
         }
     }
-
+    if (@Model?.roomFilterDTO?.CheckInDate != "") {
+        $('#CheckInDate').datepicker('setDate', '@Model?.roomFilterDTO?.CheckInDate').trigger('change');
+    }
+    if (@Model?.roomFilterDTO?.CheckOutDate!= "") {
+        $('#CheckOutDate').datepicker('setDate', '@(Model?.roomFilterDTO?.CheckOutDate)');
+    }
 </script>

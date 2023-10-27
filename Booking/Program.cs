@@ -10,10 +10,23 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
+
 // Register Dependency Injection
 builder.Services.AddTransient<IDBHandler, DBHandler>();
 builder.Services.AddTransient<IRoomsRepository, RoomsRepository>();
 builder.Services.AddTransient<IBookMyRoomRepository, BookMyRoomRepository>();
+builder.Services.AddTransient<IBookingRepository, BookingRepository>();
+
+
+
+
+
+
+
+
+
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy(Policies.RequireAdminClaim, Policies.RequireAdminClaimPolicy());

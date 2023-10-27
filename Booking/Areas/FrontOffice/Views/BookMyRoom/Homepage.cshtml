@@ -294,14 +294,14 @@
             startDate: tomorrow,
         }).datepicker("setDate", tomorrow);
     
-    if (@Model?.roomFilterDTO?.CheckInDate != "") {
-        debugger
-        var date = new Date(@Model?.roomFilterDTO?.CheckInDate)
-        $('#CheckInDate').datepicker('setDate', date).trigger('change');
-    }
-    if (@Model?.roomFilterDTO?.CheckOutDate!="") {
-        debugger
+    // if (@Model?.roomFilterDTO?.CheckInDate != "") {
+    //     debugger
+    //     var date = new Date(@Model?.roomFilterDTO?.CheckInDate)
+    //     $('#CheckInDate').datepicker('setDate', date).trigger('change');
+    // }
+    // if (@Model?.roomFilterDTO?.CheckOutDate!="") {
+    //     debugger
        
-        $('#CheckOutDate').datepicker('setDate', '@(Model?.roomFilterDTO?.CheckOutDate)');
-    }
+    //     $('#CheckOutDate').datepicker('setDate', '@(Model?.roomFilterDTO?.CheckOutDate)');
+    // }
 </script>
