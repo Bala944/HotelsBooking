@@ -1,110 +1,70 @@
 ﻿
-function SaveDiscount() {
-    debugger
+const SaveDiscount=async() =>{
+
     // Check if the form is valid according to the validation rules
-    if ($("#roomForm").valid()) {
-        var FileImages = '';
+    if ($("#frmDiscount").valid()) {
 
-        for (j = 0; j < FileData.length; j++) {
-            FileImages += FileData[j].filenames + '$';
+        var data = {
+            DiscountID: parseInt($("#DiscountId").val()),
+            RoomId: parseInt($("#RoomId").val()),
+            DiscountPercentage: parseFloat($("#DiscountPercentage").val()),
+
+            StartDate: $("#StartDate").val(),
+            ExpirationDate:$("#ExpirationDate").val()
+        };
+
+        var result = await APIPostMethod('/save-discount-details', data);
+        debugger
+        if (result != null && result == 200) {
+            Swal.fire({
+                title: 'Discount',
+                text: 'Saved Successfully',
+                icon: 'success',
+                showConfirmButton: false,
+            });
+
+            setTimeout(function () {
+                window.location.href = "/view-discount";
+            }, 1000);
         }
-        FileImages = FileImages.substring(0, FileImages.length - 1);
-        // Append ImageFormData to RoomFormData
-        for (var pair of ImageFormData.entries()) {
-            RoomFormData.append("FileImages", pair[1]);
-        }
-
-        // Create a new FormData object
-        // Add form fields to FormData
-        RoomFormData.append("RoomId", $("#RoomId").val() || 0);
-        RoomFormData.append("RoomNumber", $("#roomNumber").val());
-        RoomFormData.append("RoomTypeId", $("#roomType").val());
-        RoomFormData.append("BedTypeId", $("#bedType").val());
-        RoomFormData.append("CancelationCharge", parseInt($("#cancellationType").val()));
-        RoomFormData.append("MaxOccupancy", parseInt($("#maxOccupancy").val()));
-        RoomFormData.append("MaxChild", parseInt($("#maxChild").val()));
-        RoomFormData.append("Price", $("#rate").val());
-        RoomFormData.append("Description", editor1.getData(),);
-        RoomFormData.append("Payment", parseInt($("#payment").val()));
-        RoomFormData.append("Quantity", parseInt($("#Quantity").val()));
-        RoomFormData.append("Status", 1);
-        RoomFormData.append("IsActive", 1);
-        RoomFormData.append("Images", FileImages);
-
-
-        $.ajax({
-            type: "POST",
-            url: "/save-room-details", // Replace with your actual endpoint URL
-            data: RoomFormData,
-            processData: false,  // Prevent jQuery from processing the data
-            contentType: false,  // Set content type to false
-            success: function (response) {
-                debugger
+        else if (result != null && result == 201) 
+        {
                 Swal.fire({
-                    title: 'Room',
-                    text: 'Saved Successfully',
-                    icon: 'success',
+                    title: 'Discount',
+                    text: 'Already discount available in between the date for this room',
+                    icon: 'info',
                     showConfirmButton: false,
                 });
-
-                setTimeout(function () {
-                    window.location.href = "/view-room-details";
-                }, 1000);
-            },
-            error: function (error) {
-                Swal.fire({
-                    title: 'Room',
-                    text: 'Something went wrong',
-                    icon: 'success',
-                    showConfirmButton: false,
-                });
-            }
-        });
+        }
+        else {
+            Swal.fire({
+                title: 'Discount',
+                text: 'Something went wrong',
+                icon: 'error',
+                showConfirmButton: false,
+            });
+        }
+     
     }
-
-
 }
 
-const GetDiscountDetailsById = async (RoomId) => {
+const GetDiscountDetailsById = async (DisCountId) => {
     debugger
-    var data = { "RoomId": RoomId }
-    var result = await APIGetMethod('/get-room-details-byId', data);
+    var data = { "DisCountId": DisCountId }
+    var result = await APIGetMethod('/get-discount-details-byId', data);
     debugger
     if (result != null && result != "") {
 
-        $("#RoomId").val(result.roomId);
-        $("#roomNumber").val(result.roomNumber);
-        $("#roomType").val(result.roomTypeId).trigger("change");;
-        $("#bedType").val(result.bedTypeId).trigger("change");
-        $("#cancellationType").val(result.cancelationCharge).trigger("change");
-        $("#payment").val(result.payment).trigger("change");
-        $("#maxOccupancy").val(result.maxOccupancy);
-        $("#Quantity").val(result.quantity);
-        $("#maxChild").val(result.maxChild);
-        $("#rate").val(result.price);
-        editor1.setData(result.description);
-        debugger
-        if (result.images != '' && result.images != null) {
-            var attachementpath1 = 'Attachments/RoomImages/';
-            Uploaddata = result.images.split('$');
-            for (var i = 0; i < Uploaddata.length; i++) {
-                files = {};
-                files["filenames"] = Uploaddata[i];
-                files["type"] = Uploaddata[i];
-                FileData.push(files);
-                labeldesign = '<label for="file-upload" data class="file-label mt-2">'
-                    + '<img id="preview-image' + Uploaddata[i] + '" src="' + attachementpath1 + '' + Uploaddata[i] + '" alt="Preview Image" width="60px" height="50px">'
-                    + '<span class="file-name" > ' + Uploaddata[i] + '</span>'
-                    + '<span class="close-icon file__value--removeTask" data-name=' + btoa(Uploaddata[i]) + ' data-type=2>&times;</span>'
-                    + '</label>';
-                $(labeldesign).insertAfter('#roomImages');
+        $("#DiscountId").val(result.discountID);
+        $("#RoomId").val(result.roomId).trigger('change');
+        $("#DiscountPercentage").val(result.discountPercentage);
+        $('#ExpirationDate').datepicker('setDate', result.expirationDate);
+        $('#StartDate').datepicker('setDate', result.startDate);
 
-            }
-        };
     }
 }
 
-const ConfirmDeleteDiscount = async (RoomId) => {
+const ConfirmDeleteDiscount = async (DisCountId) => {
     debugger
     Swal.fire({
         title: 'Do you sure to delete this record?',
@@ -115,34 +75,35 @@ const ConfirmDeleteDiscount = async (RoomId) => {
     }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-            DeleteDiscountById(RoomId);
+            DeleteDiscountById(DisCountId);
 
         }
     })
 
 }
-const DeleteDiscountById = async (RoomId) => {
-    var data = { "RoomId": RoomId }
+
+const DeleteDiscountById = async (DisCountId) => {
+    var data = { "DisCountId": DisCountId }
     var result = await APIGetMethod('/delete-room-details', data);
     debugger
     if (result != null && result != "") {
         if (result == 200) {
             Swal.fire({
-                title: 'Room',
+                title: 'Discount',
                 text: 'Deleted Successfully',
                 icon: 'success',
                 showConfirmButton: false,
             });
             setTimeout(function () {
-                window.location.href = "/view-room-details";
+                window.location.href = "/view-discount";
             }, 1000);
 
         }
         else {
             Swal.fire({
-                title: 'Room',
+                title: 'Discount',
                 text: 'Something went wrong',
-                icon: 'success',
+                icon: 'error',
                 showConfirmButton: false,
             });
         }
@@ -150,9 +111,9 @@ const DeleteDiscountById = async (RoomId) => {
     }
 }
 
-var page = function () {
+var Discountpage = function () {
     init = function () {
-        let frmSignup = $("#roomForm");
+        let frmSignup = $("#frmDiscount");
         select = $('.select2');
         // select2
         select.each(function () {

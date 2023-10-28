@@ -27,7 +27,7 @@
             </tr>
         </thead>
         <tbody>
-            @if (Model != null)
+            @if (Model != null && Model.Count>0)
             {
                 foreach (var room in Model)
                 {

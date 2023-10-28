@@ -175,9 +175,9 @@
                                         
                                     }
                                     <p>@days days @(item?.MaxOccupancy > 0 ? item.MaxOccupancy + "adults" : "")   @(item?.MaxChild > 0 ? item.MaxChild + "child" : "")</p>
-                                    @if (item?.Discount > 0)
+                                    @if (item?.DiscountId > 0)
                                     {
-                                        <h5><strike>@item?.Rate</strike> ₹ @item?.Discount</h5>
+                                        <h5><strike>@item?.Rate</strike> ₹ @item?.DiscountPercentage</h5>
                                     }
                                     else
                                     {

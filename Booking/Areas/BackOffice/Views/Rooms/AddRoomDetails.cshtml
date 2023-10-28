@@ -21,7 +21,7 @@
                         <select id="roomType" name="roomType" class="form-select select2" required>
                             @if (Model?.roomTypeModel != null)
                             {
-                                <option>Select</option>
+                                <option value="">Select</option>
                                 foreach (var roomType in Model?.roomTypeModel)
                                 {
                                     <option value="@roomType.RoomTypeId">@roomType.TypeName</option>
@@ -36,7 +36,7 @@
                         <select id="bedType" class="form-select select2" name="bedType" required>
                             @if (Model != null && Model?.bedTypeModel != null)
                             {
-                                <option value="">Select</option> 
+                                <option >Select</option> 
                                 foreach (var bedType in Model?.bedTypeModel)
                                 {
                                     <option value="@bedType.BedTypeId">@bedType.TypeName</option>

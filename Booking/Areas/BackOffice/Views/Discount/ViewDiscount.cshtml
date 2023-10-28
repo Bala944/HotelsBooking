@@ -1,16 +1,22 @@
 ﻿@model List<OrderDiscount>
 @{
     Layout = "_BackOfficeLayout";
-    ViewData["Title"] = "Booking";
+    ViewData["Title"] = "Discount";
 }
+
+
+<form id="frmDiscountDetails" asp-area="BackOffice" asp-controller="Discount" asp-action="AddDiscount">
+    <input type="hidden" id="DiscountId" name="DiscountId" value="" />
+</form>
+
 <div class="add-btn-section">
-    <a href="/add-room-details" class="btn btn-primary float-right">Add Discount</a>
+    <a href="/add-discount" class="btn btn-primary float-right">Add Discount</a>
 </div>
 <div class="col-md-12 mt-3">
     <table class="table table-stripped table-bordered table-hover table-center mb-0">
         <thead>
             <tr>
-                <th>Discount ID</th>
+                <th>Action</th>
                 <th>Room</th>
                 <th>Discount Percentage</th>
                 <th>Start Date</th>
@@ -23,11 +29,14 @@
                 @foreach (var discount in Model)
                 {
                     <tr>
-                        <td>@discount.DiscountID</td>
+                        <td>
+                            <a class="edit-icon" onclick="openEditMode(@discount.DiscountID)"><i class="fas fa-edit"></i></a>
+                            <a onclick="DeleteRoom(@discount.DiscountID)"><i class="fas fa-trash-alt"></i></a>
+                        </td>
                         <td>@discount.RoomName</td>
                         <td>@discount.DiscountPercentage</td>
-                        <td>@discount.StartDate.ToShortDateString()</td>
-                        <td>@discount.ExpirationDate.ToShortDateString()</td>
+                        <td>@discount.StartDate</td>
+                        <td>@discount.ExpirationDate</td>
                     </tr>
                 }
             }
@@ -44,4 +53,11 @@
     $(document).ready(function () {
         ApplyCommonGridStyle();
     });
+
+    function openEditMode(itemId) {
+        // Set the value of the hidden input field
+        $('#DiscountId').val(itemId);
+        // Submit the form
+        $('#frmDiscountDetails').submit();
+    }
 </script>

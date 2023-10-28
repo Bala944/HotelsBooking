@@ -1,19 +1,24 @@
-﻿@{
+﻿@model List<RoomDTO>
+@{
     ViewData["Title"] = "Rooms";
 }
 
 <div class="row mt-3">
     <div class="col-lg-12">
-        <form>
-            <div class="row formtype">
+        <form id="frmDiscount">
+            <div class="row ">
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Room Name<span class="required-star">*</span></label>
                         <select class="form-select select2" id="RoomId" name="RoomId">
-                            <option value="">Select</option>
-                            <option value="1">No prepayment needed – pay at the property</option>
-                            <option value="2">50% prepayment needed</option>
-                            <option value="3">Full payment needed</option>
+                            @if (Model != null)
+                            {
+                                <option value="">Select</option>
+                                foreach (var roomType in Model)
+                                {
+                                    <option value="@roomType.RoomId">@roomType.RoomName</option>
+                                }
+                            }
                         </select>
                     </div>
                 </div>
@@ -26,13 +31,13 @@
                 </div>
                 <!-- Add other form fields similar to your HTML code -->
             </div>
-            <div class="col">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label>Start Date</label>
                     <input id="StartDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
                 </div>
             </div>
-            <div class="col">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label>Expiration Date</label>
                     <input id="ExpirationDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
@@ -42,10 +47,82 @@
                 <div class="col-md-12">
                     <div class="bottom-btn">
                         <a  onclick="SaveDiscount()" class="btn btn-primary">Save</a>
-                        <a class="btn btn-secondary" asp-controller="Discount" asp-action="Index">Cancel</a>
+                        <a class="btn btn-secondary" href="/view-discount">Cancel</a>
                     </div>
                 </div>
             </div>
         </form>
     </div>
 </div>
+<input type="hidden" id="DiscountId" value="@ViewBag.DiscountId" />
+<partial name="_ValidationScriptsPartial" />
+<partial name="_SelectScriptPartial" />
+<partial name="_DatepickerPartial" />
+
+
+<script src="~/assets/plugins/sweetalert/sweetalert.js"></script>
+<script src="~/assets/js/ckeditor.js"></script>
+<script src="~/assets/js/ajaxconnector.js"></script>
+<script src="~/assets/js/backoffice/discount.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        Discountpage.init();
+
+        if ('@ViewBag.DiscountId' > 0) {
+            GetDiscountDetailsById('@ViewBag.DiscountId');
+        }
+
+
+        // Initialize the CheckInDate datepicker
+        $('#StartDate').datepicker({
+            orientation: "left",
+            autoclose: true,
+            format: 'dd/mm/yyyy',
+            startDate: new Date(),
+            todayBtn: false,
+            todayHighlight: true,
+        }).datepicker("setDate", "0").on('changeDate', function (ev) {
+            // When the CheckInDate changes, update the start date of CheckOutDate
+            var selectedDate = new Date(ev.date);
+            var selectedCheckOutDate = $('#ExpirationDate').datepicker('getDate');
+            var selectedDate = new Date(ev.date);
+            selectedDate.setDate(selectedDate.getDate() + 1); // Add one day
+
+            // Check if the selected CheckOutDate is lower than CheckInDate
+            if (selectedCheckOutDate < selectedDate) {
+                // If it's lower, set CheckOutDate to CheckInDate
+                $('#ExpirationDate').datepicker('setDate', selectedDate);
+            }
+            $('#ExpirationDate').datepicker('setStartDate', selectedDate);
+
+        });
+        // Calculate tomorrow's date
+        var tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        $('#ExpirationDate').datepicker({
+            orientation: "left",
+            autoclose: true,
+            format: 'dd/mm/yyyy',
+            todayBtn: false,
+            todayHighlight: true,
+            startDate: tomorrow,
+        }).datepicker("setDate", tomorrow);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    });
+</script>

@@ -4,21 +4,22 @@ namespace Booking.Areas.BackOffice.Models.Output
 {
     public class OrderDiscount
     {
-        public int DiscountID { get; set; }
+        public Int64 DiscountID { get; set; }
 
-        [Required]
         public  Int64 RoomId { get; set; }
-        public  string RoomName { get; set; }
+        public  string? RoomName { get; set; }
 
-        [Display(Name = "Discount Percentage")]
         public decimal DiscountPercentage { get; set; }
 
-        [Display(Name = "Start Date")]
-        [DataType(DataType.Date)]
-        public DateTime StartDate { get; set; }
+        public string? StartDate { get; set; }
 
-        [Display(Name = "Expiration Date")]
-        [DataType(DataType.Date)]
-        public DateTime ExpirationDate { get; set; }
+        public string? ExpirationDate { get; set; }
+    }
+
+    public class RoomDTO
+    {
+        public Int64 RoomId { get; set; }
+        public string? RoomName { get; set; }
+
     }
 }

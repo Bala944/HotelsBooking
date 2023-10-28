@@ -14,7 +14,8 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public decimal Rate { get; set; }
         public string? Description { get; set; }
         public string? RoomStatus { get; set; }
-        public decimal? Discount { get; set; } = 0;
+        public decimal? DiscountPercentage { get; set; } = 0;
+        public Int64 DiscountId { get; set; } = 0;
         public string? Tax { get; set; } = string.Empty;
         public string? Images { get; set; } = string.Empty;
         public string? Payment { get; set; } = string.Empty;

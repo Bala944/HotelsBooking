@@ -248,6 +248,8 @@ namespace Booking.Areas.FrontOffice.Controllers
                             };
 
                             var result = await _bookMyRoomRepository.ConfirmBooking(registrationDetails);
+
+                           return RedirectToAction("ConfirmedBookingStatus", "BookMyRoom", new {BBparams=EncryptionHelper.Encrypt("200")});
                         }
                     }
                 }
@@ -260,6 +262,16 @@ namespace Booking.Areas.FrontOffice.Controllers
             return View();
         }
 
+        [Route("/booking-us")]
+        public IActionResult ConfirmedBookingStatus(string BBparams)
+        {
+            if(BBparams !=null)
+            {
+                var status =EncryptionHelper.Decrypt(BBparams);
+                ViewBag.BookingStatus = status;
+            }
+            return View();
+        }
 
         [Route("/about-us")]
         public IActionResult AboutUs()
