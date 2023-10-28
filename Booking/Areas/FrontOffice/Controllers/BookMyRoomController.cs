@@ -3,7 +3,9 @@ using Booking.Areas.FrontOffice.Models.Input;
 using Booking.Areas.FrontOffice.Models.Output;
 using Booking.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Newtonsoft.Json;
+using Razorpay.Api;
 
 namespace Booking.Areas.FrontOffice.Controllers
 {
@@ -222,6 +224,14 @@ namespace Booking.Areas.FrontOffice.Controllers
             {
                 if (customerAndBookingDetails != null)
                 {
+
+                    Dictionary<string, string> attributes = new Dictionary<string, string>();
+                    attributes.Add("razorpay_payment_id", customerAndBookingDetails.paymentId);
+                    attributes.Add("razorpay_order_id", customerAndBookingDetails.Orderid);
+                    attributes.Add("razorpay_signature", customerAndBookingDetails.sign);
+
+                    Utils.verifyPaymentSignature(attributes);
+
                     string decryptedData = EncryptionHelper.Decrypt(customerAndBookingDetails.BookingParams);
 
                     if (!string.IsNullOrEmpty(decryptedData))
@@ -289,6 +299,32 @@ namespace Booking.Areas.FrontOffice.Controllers
         public IActionResult Services()
         {
             return View();
+        }
+
+
+        [Route("/Create-order")]
+        public IActionResult CreatePaymentOrder()
+        {
+
+            string Key = "rzp_test_CxRq0CbjDqDcpI";
+            string secret = "U96zupO4NVVgKbpnk0Ul19AI";
+
+
+            Random _random = new Random();
+            string TransactionId = _random.Next(0, 10000).ToString();
+
+
+
+            Dictionary<string, object> input = new Dictionary<string, object>();
+            input.Add("amount", 100); // this amount should be same as transaction amount
+            input.Add("currency", "INR");
+            input.Add("receipt", TransactionId);
+
+            RazorpayClient client = new RazorpayClient(Key, secret);
+            Razorpay.Api.Order order = client.Order.Create(input);
+            string OrderId = order["id"].ToString();
+
+            return Ok(OrderId);
         }
 
 

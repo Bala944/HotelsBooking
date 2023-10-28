@@ -69,6 +69,9 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public required string CheckIn { get; set; }
         public required string CheckOut { get; set; }
         public required string BookingParams { get; set; }
+        public required string paymentId { get; set; }
+        public required string Orderid { get; set; }
+        public required string sign { get; set; }
 
     }
 

@@ -58,8 +58,18 @@
     };
 }();
 
-const ConfirmAndPay = () => {
+const ConfirmAndPay = async () => {
     if ($('#frmCustomerDetails').valid()) {
-        $('#frmCustomerDetails').submit();
+        debugger
+        var data = {}
+        var result = await APIPostMethod('/Create-order', data)
+        debugger
+        if (result != null) {
+            $('#paymentOrder').val(result);
+            $('#rzp-button1').click();
+        }
+       
     }
+
+    
 }

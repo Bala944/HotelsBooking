@@ -108,7 +108,11 @@
 
 <form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ViewMoreRooms">
     <input type="hidden" id="Params" name="Params" value="@ViewBag.FParams" />
+   
 </form>
+<button  id="rzp-button1"  style="display:none">Pay</button>
+<input type="hidden" id="paymentOrder" name="paymentOrder" value="" />
+
 <!-- END: Page Title Section ========================================= -->
 <section id="featued-sec" class="section">
     <div class="container">
@@ -195,7 +199,9 @@
 
                     <div class="col-md-6">
                         <form id="frmCustomerDetails" method="post" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ConfirmBooking">
-
+                            <input id="paymentId" type="hidden" name="paymentId" />
+                            <input id="Orderid" type="hidden" name="Orderid" />
+                            <input id="sign" type="hidden" name="sign" />
                             <input type="hidden" id="BookingParams" name="BookingParams" value="@ViewBag.BParams" />
                             <input type="hidden" id="CheckIn" name="CheckIn" value="@Model?.bookingQueryDTO?.CheckInDate" />
                             <input type="hidden" id="CheckOut" name="CheckOut" value="@Model?.bookingQueryDTO?.CheckOutDate" />
@@ -249,10 +255,57 @@
 <script src="~/assets/plugins/sweetalert/sweetalert.js"></script>
 <script src="~/assets/js/frontoffice/register.js"></script>
 <script src="~/assets/js/commonfunction.js"></script>
+<script src="~/assets/js/ajaxconnector.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     $(document).ready(function () {
         page.init();
     });
-</script>
 
+   
+</script>
+<script>
+    var options = {
+        "key": "rzp_test_CxRq0CbjDqDcpI", // Enter the Key ID generated from the Dashboard
+        "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Acme Corp", //your business name
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": $('#paymentOrder').val(), //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response) {
+            alert('succes')
+            debugger
+            $('#paymentId').val(response.razorpay_payment_id);
+            $('#Orderid').val(response.razorpay_order_id);
+            $('#sign').val(response.razorpay_signature)
+            $('#frmCustomerDetails').submit();
+        },
+        "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+            "name": "Gaurav Kumar", //your customer's name
+            "email": "gaurav.kumar@example.com",
+            "contact": "9000090000"  //Provide the customer's phone number for better conversion rates
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function (response) {
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+    });
+    document.getElementById('rzp-button1').onclick = function (e) {
+        rzp1.open();
+        e.preventDefault();
+    }
+</script>
 
