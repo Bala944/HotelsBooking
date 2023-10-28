@@ -18,6 +18,7 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public string? Tax { get; set; } = string.Empty;
         public string? Images { get; set; } = string.Empty;
         public string? Payment { get; set; } = string.Empty;
+        public int? AvailableQuantity { get; set; } = 0;
     }
 
     public class RoomFilterDTO

@@ -209,11 +209,16 @@
 
                                         <p>+ ₹ @tax taxes and charges</p>
                                     </div>
+                                    @if (item.AvailableQuantity < 5)
+                                    {
+                                        <p>Available Quantity: @item.AvailableQuantity</p>
+                                    }
                                     <select class="select2 roomselection" data-attr="@item.RoomNumber" data-amount="@TotalPrice" data-roomid="@item.RoomId">
                                         <option value="">select</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
+                                        @for (int i = 1; i <= @item.AvailableQuantity; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
                                     </select>
                                 </div>
                             </div>
