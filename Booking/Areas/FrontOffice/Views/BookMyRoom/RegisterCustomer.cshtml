@@ -5,6 +5,96 @@
     ViewData["Title"] = "Rooms";
     string image = string.Empty;
 }
+<style>
+
+    .room-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .room-info {
+        text-align: right;
+        border-bottom:1px solid black;
+    }
+
+
+    /* Style the checkout-card container */
+    .checkout-card {
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #f5f5f5;
+    }
+
+    /* Style the room details within the checkout-card */
+   /*  .room-details {
+        margin: 20px 0;
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #fff;
+    } */
+
+    /* Style the room title (Name) */
+    .room-title h4 {
+        font-size: 18px;
+        color: #333;
+    }
+
+    /* Style the room info (Price and Quantity) */
+    .room-info p {
+        font-size: 16px;
+        color: #666;
+    }
+
+    /* Style the Check In and Check Out sections */
+    h4 {
+        font-size: 18px;
+        color: #333;
+        margin: 10px 0;
+    }
+
+    /* Style the panel */
+    .panel {
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 15px;
+        margin: 10px;
+    }
+
+    .panel-heading {
+        background-color: #5bc0de;
+        color: #fff;
+        padding: 10px;
+    }
+
+    .panel-title {
+        font-size: 18px;
+    }
+
+    .panel-body p {
+        margin: 0;
+        font-size: 16px;
+    }
+
+    .panel-total {
+        background-color: #5bc0de;
+        color: #fff;
+        padding: 10px;
+        border-radius: 4px;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+
+    .panel-grand-total {
+        text-align: right; /* Move the text to the right */
+        font-weight: bold; /* Make the text bold */
+    }
+
+
+</style>
 <!-- BEGIN: Page Title Section ======================================== -->
 <section class="page-title">
     <div class="container">
@@ -30,41 +120,86 @@
                 </div>
                 <div class="sub-panel-body row">
                     <div class="col-md-6">
-                       @*  <div class="col-md-12">
+                        <div class="checkout-card">
                             <h2 class="section-title text-center">Booking Details</h2>
-                        </div> *@
-                        @if (Model != null)
-                        {
-                            if (Model?.finalBookingDetails != null && Model?.finalBookingDetails.Count > 0)
-                            {
-                                @foreach (var item in Model?.finalBookingDetails)
-                                {
-                                    <div class="col-md-12">
-                                        <div class="rooms-panel">
-                                            <div class="room-discription">
-                                                <div class="room-title">
-                                                    <h4>@item.Name</h4>
-                                                </div>
-                                                <div class="">
-                                                    <h3><b>₹ @item.Amount</b> </h3> <h3>Quantity @item.Count</h3>
-                                                </div>
 
+                            <div class="panel">
+                                <div class="panel-body">
+                                    <strong>Check In:</strong> @Model?.bookingQueryDTO?.CheckInDate<br />
+                                    <strong>Check Out:</strong> @Model?.bookingQueryDTO?.CheckOutDate<br />
+
+                                    @{
+                                        DateTime? checkInDate = null;
+                                        DateTime? checkOutDate = null;
+
+                                        if (!string.IsNullOrEmpty(Model?.bookingQueryDTO?.CheckInDate))
+                                        {
+                                            checkInDate = DateTime.ParseExact(Model.bookingQueryDTO.CheckInDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                        }
+
+                                        if (!string.IsNullOrEmpty(Model?.bookingQueryDTO?.CheckOutDate))
+                                        {
+                                            checkOutDate = DateTime.ParseExact(Model.bookingQueryDTO.CheckOutDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                        }
+
+                                        int totalLengthOfStay = 0;
+                                        if (checkInDate.HasValue && checkOutDate.HasValue)
+                                        {
+                                            totalLengthOfStay = (checkOutDate - checkInDate).Value.Days;
+                                        }
+                                    }
+
+                                    <div>
+                                        <strong>Total stay: @totalLengthOfStay days</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            @if (Model != null)
+                            {
+                                if (Model?.finalBookingDetails != null && Model?.finalBookingDetails.Count > 0)
+                                {
+                                    decimal grandTotal = 0;
+                                    <div class="panel">
+                                        
+                                        @foreach (var item in Model?.finalBookingDetails)
+                                        {
+                                            <div class="room-details">
+                                                <div class="room-title">
+                                                    <h3>@item.Name</h3>
+                                                </div>
+                                                <div class="room-info">
+                                                    <p><strong>Price:</strong> ₹ @item.Amount?.ToString("F2")</p>
+                                                    <p><strong>Quantity:</strong> @item.Count</p>
+                                                    @{
+                                                        decimal? Total = item.Amount * item.Count;
+                                                        grandTotal += Total ?? 0;
+                                                    }
+                                                    <p><strong>Total:</strong> ₹ @Total?.ToString("F2")</p>
+                                                </div>
                                             </div>
+                                        }
+
+                                        <div class="panel-grand-total">
+                                            <p><strong>Grand Total:</strong> ₹ @grandTotal.ToString("F2")</p>
                                         </div>
                                     </div>
+
                                 }
                             }
-                            <h4>Check In <b>@Model?.bookingQueryDTO?.CheckInDate</b></h4>
-                            <h4>Check Out <b>@Model?.bookingQueryDTO?.CheckOutDate</b></h4>
-                        }
+                        </div>
                     </div>
+
+
+
                     <div class="col-md-6">
                         <form id="frmCustomerDetails" method="post" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ConfirmBooking">
 
                             <input type="hidden" id="BookingParams" name="BookingParams" value="@ViewBag.BParams" />
                             <input type="hidden" id="CheckIn" name="CheckIn" value="@Model?.bookingQueryDTO?.CheckInDate" />
                             <input type="hidden" id="CheckOut" name="CheckOut" value="@Model?.bookingQueryDTO?.CheckOutDate" />
-
+                            <h2 class="section-title text-center">Customer Information</h2>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -87,7 +222,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="MobileNumber">Mobile Number:</label>
-                                        <input type="text" class="form-control" onkeyup="AllowNumbersOnlyPhone(this.id)" id="MobileNumber" name="MobileNumber" required>
+                                        <input type="text" class="form-control" maxlength="10" onkeyup="AllowNumbersOnlyPhone(this.id)" id="MobileNumber" name="MobileNumber" required>
                                     </div>
                                 </div>
                             </div>
@@ -95,7 +230,7 @@
                                 <div class="col-md-12">
                                     <div class="bottom-btn">
                                         <a onclick="ConfirmAndPay()" class="btn btn-primary ">Confirm and Pay</a>
-                                        <a class="btn btn-secondary" onclick='$("#frmSelectRoom").submit()' >Cancel</a>
+                                        <a class="btn btn-secondary" onclick='$("#frmSelectRoom").submit()'>Cancel</a>
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +248,7 @@
 <partial name="_ValidationScriptsPartial" />
 <script src="~/assets/plugins/sweetalert/sweetalert.js"></script>
 <script src="~/assets/js/frontoffice/register.js"></script>
-
+<script src="~/assets/js/commonfunction.js"></script>
 <script>
     $(document).ready(function () {
         page.init();

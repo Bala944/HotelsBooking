@@ -21,7 +21,7 @@ const APIGetMethod = async (ActionURl, Parameter = {}) => {
 }
 
 const APIPostMethod = async (ActionURl, Parameter = null) => {
-    debugger
+   
     var Response;
     try {
         await $.ajax({

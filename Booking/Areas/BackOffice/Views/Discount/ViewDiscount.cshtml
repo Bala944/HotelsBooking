@@ -31,7 +31,7 @@
                     <tr>
                         <td>
                             <a class="edit-icon" onclick="openEditMode(@discount.DiscountID)"><i class="fas fa-edit"></i></a>
-                            <a onclick="DeleteRoom(@discount.DiscountID)"><i class="fas fa-trash-alt"></i></a>
+                            <a onclick="ConfirmDeleteDiscount(@discount.DiscountID)"><i class="fas fa-trash-alt"></i></a>
                         </td>
                         <td>@discount.RoomName</td>
                         <td>@discount.DiscountPercentage</td>
@@ -48,6 +48,9 @@
 
 <script src="~/assets/js/commonfunction.js"></script>
 <partial name="_DataTableScriptPartial" />
+<script src="~/assets/plugins/sweetalert/sweetalert.js"></script>
+<script src="~/assets/js/ajaxconnector.js"></script>
+<script src="~/assets/js/backoffice/discount.js"></script>
 <script>
 
     $(document).ready(function () {

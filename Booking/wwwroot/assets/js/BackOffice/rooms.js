@@ -102,16 +102,28 @@ function SaveRoomDetails() {
             contentType: false,  // Set content type to false
             success: function (response) {
                 debugger
-                Swal.fire({
-                    title: 'Room',
-                    text: 'Saved Successfully',
-                    icon: 'success',
-                     showConfirmButton: false,
-                });
+                if (response == 200) {
+                    Swal.fire({
+                        title: 'Room',
+                        text: 'Saved Successfully',
+                        icon: 'success',
+                        showConfirmButton: false,
+                    });
 
-                setTimeout(function () {
-                    window.location.href = "/view-room-details";
-                }, 1000);
+                    setTimeout(function () {
+                        window.location.href = "/view-room-details";
+                    }, 1000);
+                }
+                else if (response == 201) {
+
+                    Swal.fire({
+                        title: 'Room',
+                        text: 'Already exists',
+                        icon: 'info',
+                        showConfirmButton: false,
+                    });
+
+                }
             },
             error: function (error) {
                 Swal.fire({
@@ -128,10 +140,10 @@ function SaveRoomDetails() {
 }
 
 const GetRoomDetailsById = async (RoomId) => {
-    debugger
+    
     var data = { "RoomId": RoomId }
     var result = await APIGetMethod('/get-room-details-byId', data);
-    debugger
+  
     if (result != null && result != "") {
 
         $("#RoomId").val(result.roomId);
@@ -145,7 +157,7 @@ const GetRoomDetailsById = async (RoomId) => {
         $("#maxChild").val(result.maxChild);
         $("#rate").val(result.price);
         editor1.setData(result.description);
-        debugger
+        
         if (result.images != '' && result.images != null) {
             var attachementpath1 = 'Attachments/RoomImages/';
             Uploaddata = result.images.split('$');

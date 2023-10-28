@@ -14,7 +14,7 @@ const SaveDiscount=async() =>{
         };
 
         var result = await APIPostMethod('/save-discount-details', data);
-        debugger
+   
         if (result != null && result == 200) {
             Swal.fire({
                 title: 'Discount',

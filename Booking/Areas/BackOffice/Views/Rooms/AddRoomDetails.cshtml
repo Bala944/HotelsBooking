@@ -36,7 +36,7 @@
                         <select id="bedType" class="form-select select2" name="bedType" required>
                             @if (Model != null && Model?.bedTypeModel != null)
                             {
-                                <option >Select</option> 
+                                <option value="">Select</option>
                                 foreach (var bedType in Model?.bedTypeModel)
                                 {
                                     <option value="@bedType.BedTypeId">@bedType.TypeName</option>
@@ -59,7 +59,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="Quantity">Quantity<span class="required-star">*</span></label>
-                        <input type="number" class="form-control" id="Quantity" name="Quantity" required>
+                        <input type="number" class="form-control" id="Quantity" name="Quantity" required min="1" max="100">
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -76,19 +76,19 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="maxOccupancy">Max No of Adults<span class="required-star">*</span></label>
-                        <input type="number" class="form-control" id="maxOccupancy" name="maxOccupancy" required>
+                        <input type="number" class="form-control" id="maxOccupancy" name="maxOccupancy" min="1" max="20" required>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="maxChild">Max No of Child<span class="required-star">*</span></label>
-                        <input type="number" class="form-control" id="maxChild" name="maxChild" required>
+                        <input type="number" class="form-control" id="maxChild" name="maxChild" required min="0" max="10">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Rent<span class="required-star">*</span></label>
-                        <input type="number" class="form-control" id="rate" name="rate" required>
+                        <input type="number" class="form-control" id="rate" name="rate" required min="0" max="100000">
                     </div>
                 </div>
                 <div class="col-md-4">

@@ -4,10 +4,90 @@
     ViewData["Title"] = "Home";
 }
 <style>
+
+    /* Checkout Card styles */
+    .checkout-card {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 300px; /* Adjust the width as needed */
+        margin: 0 auto;
+    }
+
+    /* Section title styles */
+    .section-title {
+        text-align: center;
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    /* Booking details styles */
+    .booking-details {
+        margin: 20px 0;
+    }
+
+    /* Room details styles */
+    .room-details {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #ccc;
+        padding: 10px 0;
+    }
+
+    .room-name {
+        font-size: 18px;
+        color: #333;
+        margin: 10px;
+    }
+
+    /* Room price and quantity styles */
+    .room-price, .room-quantity {
+        font-size: 14px;
+        color: #666;
+        margin: 0;
+    }
+
+    /* Room total styles */
+    .room-total {
+        font-size: 16px;
+        color: #333;
+        margin: 0;
+    }
+
+    /* Total amount styles */
+    .total-amount {
+        text-align: right;
+        font-size: 18px;
+        color: #333;
+        margin-top: 20px;
+    }
+
+    /* Proceed button styles */
+    .proceed-button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+        .proceed-button:hover {
+            background-color: #0056b3;
+        }
+
+
+
     /* styles.css */
     .rooms-panel {
         background-color: #f4f4f4;
-        padding: 20px;
+        padding: 12px;
         border-radius: 10px;
     }
 
@@ -36,6 +116,7 @@
         font-size: 18px;
         font-weight: bold;
         color: #007BFF;
+        padding-right: 10px;
     }
 
     .proceed-button {
@@ -151,6 +232,7 @@
                     @foreach (var item in Model.listRoomsDetailsDTO)
                     {
                         string image = string.Empty;
+                        double DiscountAmount = 0;
                         @if (item != null && item.Images != null && item.Images != "")
                         {
                             string[] ImageData = item.Images.Split('$');
@@ -162,7 +244,7 @@
                             }
                         }
                         <div class="col-md-12">
-                            <div class="rooms-panel">
+                            <div class="rooms-panel" style="position: relative;">
                                 <div class="rooms-img">
                                     <img src="@(string.IsNullOrEmpty(image) ? "assets/images/rooms/room1.jpg" : "Attachments/RoomImages/" + image)" alt="Room" class="img-fluid" />
                                 </div>
@@ -175,13 +257,13 @@
                                         @item.BedType
                                     </div>
                                     <ul>
-                                        @if (@item?.CancelationCharge != "")
+                                        @if (!string.IsNullOrEmpty(item?.CancelationCharge))
                                         {
-                                            <li><i class="fas fa-check"></i>@item?.CancelationCharge</li>
+                                            <li><i class="fas fa-check"></i>@item.CancelationCharge</li>
                                         }
-                                        @if (@item?.Payment != "")
+                                        @if (!string.IsNullOrEmpty(item?.Payment))
                                         {
-                                            <li><i class="fas fa-check"></i>@item?.Payment</li>
+                                            <li><i class="fas fa-check"></i>@item.Payment</li>
                                         }
                                     </ul>
                                     <div class="pricing-details">
@@ -197,32 +279,42 @@
                                             tax = Math.Round(tax, 2);
 
                                         }
-                                        <p>@days days @(item?.MaxOccupancy > 0 ? item.MaxOccupancy + "adults" : "")   @(item?.MaxChild > 0 ? item.MaxChild + "child" : "")</p>
+                                        <p>@days days @(item?.MaxOccupancy > 0 ? item.MaxOccupancy + " adults" : "")   @(item?.MaxChild > 0 ? item.MaxChild + " child" : "")</p>
                                         @if (item?.DiscountId > 0)
                                         {
-                                            <h5><strike>@item?.Rate</strike> ₹ @item?.DiscountPercentage</h5>
+                                            DiscountAmount = Convert.ToDouble(item?.Rate) - Convert.ToDouble(item?.Rate * item?.DiscountPercentage) / 100;
+                                            <h5><strike>₹ @item?.Rate</strike> ₹ @DiscountAmount</h5>
                                         }
                                         else
                                         {
                                             <h5>@TotalPrice</h5>
                                         }
-
                                         <p>+ ₹ @tax taxes and charges</p>
                                     </div>
                                     @if (item.AvailableQuantity < 5)
                                     {
                                         <p>Available Quantity: @item.AvailableQuantity</p>
                                     }
-                                    <select class="select2 roomselection" data-attr="@item.RoomNumber" data-amount="@TotalPrice" data-roomid="@item.RoomId">
-                                        <option value="">select</option>
-                                        @for (int i = 1; i <= @item.AvailableQuantity; i++)
-                                        {
-                                            <option value="@i">@i</option>
-                                        }
-                                    </select>
+                                    <!-- Add Discount label at the top-right corner -->
+                                    <div style="position: absolute; top: 10px; right: 10px; background-color: #FF0000; color: #FFF; padding: 5px;">
+                                        Discount @string.Format("{0:0.##}", item?.DiscountPercentage) %
+                                    </div>
+                                    <!-- Move the <select> element to the right-center and apply Select2 styling -->
+                                    <div class="d-flex justify-content-end align-items-center" style="height: 100%;">
+                                        <select class="select2 roomselection" data-attr="@item.RoomNumber" data-amount="@DiscountAmount" data-roomid="@item.RoomId" data-discount="@item.DiscountId">
+                                            <option value="">Select</option>
+                                            @for (int i = 1; i <= @item.AvailableQuantity; i++)
+                                            {
+                                                <option value="@i">@i</option>
+                                            }
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+
+
                     }
                 </div>
                 <div class="col-md-4">
@@ -306,6 +398,7 @@
             var selectedValue = parseInt(selectedOption.val());
             var dataAttrValue = selectElement.data("attr");
             var dataamount = parseFloat(selectElement.data("amount"));
+            var discount = parseFloat(selectElement.data("discount"));
             var roomId = parseFloat(selectElement.data("roomid"));
 
             if (selectedValue > 0) {
@@ -313,7 +406,8 @@
                     "Name": dataAttrValue,
                     "Count": selectedValue,
                     "Amount": dataamount,
-                    "RoomId": roomId
+                    "RoomId": roomId,
+                    "DiscountId": discount
                 });
             }
         });
@@ -324,22 +418,39 @@
         // Clear the previous content in the div
         $("#bookingInfo").empty();
 
-        // Loop through the SelectedRooms array and create a div for each data entry
+        var totalAmount = 0;
+
         for (var i = 0; i < SelectedRooms.length; i++) {
             var dataEntry = SelectedRooms[i];
-            // Create a div element
-            var div = '<div class="hotel-list"><div class="hotel-info">' +
-                '<h4>' + dataEntry.Name + '</h4></div><div class="room-info" ><div class="room-count">' +
-                'Rooms: ' + dataEntry.Count + '</div><div class="amount" >Amount:' + (dataEntry.Amount * dataEntry.Count) + '</div></div></div>';
-            // Append the div to the bookingInfo div
-            $("#bookingInfo").append(div);
+            var roomTotalAmount = dataEntry.Amount * dataEntry.Count;
+            totalAmount += roomTotalAmount;
+
+            // Create a div for each room detail
+            var roomDiv = '<div class="room-section">' +
+                '<div class="room-info">' +
+                '<h4 class="room-name">' + dataEntry.Name + '</h4>' +
+                '<div class="room-details">' +
+                '<div class="room-count">Nights: ' + dataEntry.Count + '</div>' +
+                '<div class="amount">Amount: ₹ ' + parseFloat(roomTotalAmount).toFixed(2) + '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+
+            // Append the room div to the bookingInfo div
+            $("#bookingInfo").append(roomDiv);
         }
+
         if (SelectedRooms.length > 0) {
-            var btndesign = '<button class="proceed-button" onclick="ProceedNext()" > Proceed </button>'
+            // Display the total amount above the "Proceed" button and make it bold
+            var totalAmountDiv = '<div class="total-amount"><strong>Total Amount: ₹ ' + parseFloat(totalAmount).toFixed(2) + '</strong></div>';
+            $("#bookingInfo").append(totalAmountDiv);
+
+            // Add a "Proceed" button
+            var btndesign = '<button class="proceed-button" onclick="ProceedNext()">Proceed</button>';
             $("#bookingInfo").append(btndesign);
-        }
-        else {
-            var norecorddesign = '<h4 class=""  >No Room Selected </h4>';
+        } else {
+            // Display a message when no rooms are selected
+            var norecorddesign = '<h4 class="no-room-selected">No Room Selected</h4>';
             $("#bookingInfo").append(norecorddesign);
         }
     }
