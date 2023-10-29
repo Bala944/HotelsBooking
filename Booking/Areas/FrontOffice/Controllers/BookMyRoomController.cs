@@ -208,6 +208,25 @@ namespace Booking.Areas.FrontOffice.Controllers
 
             ViewBag.BParams = BParams;
             ViewBag.FParams = FilterParams;
+
+            string Key = "rzp_test_CxRq0CbjDqDcpI";
+            string secret = "U96zupO4NVVgKbpnk0Ul19AI";
+
+
+            Random _random = new Random();
+            string TransactionId = _random.Next(0, 10000).ToString();
+
+
+
+            Dictionary<string, object> input = new Dictionary<string, object>();
+            input.Add("amount", 100); // this amount should be same as transaction amount
+            input.Add("currency", "INR");
+            input.Add("receipt", TransactionId);
+
+            RazorpayClient client = new RazorpayClient(Key, secret);
+            Razorpay.Api.Order order = client.Order.Create(input);
+            string OrderId = order["id"].ToString();
+            ViewBag.OrderId = OrderId;
             return View("RegisterCustomer", result);
         }
 
