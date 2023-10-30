@@ -98,7 +98,7 @@ namespace Booking.Areas.BackOffice.Data.Services
                 parameters.Add("RoomId", orderDiscount.RoomId, DbType.Int64, ParameterDirection.Input);
                 parameters.Add("DiscountID", orderDiscount.DiscountID, DbType.Int64, ParameterDirection.Input);
                 parameters.Add("DiscountPercentage", orderDiscount.DiscountPercentage, DbType.Decimal, ParameterDirection.Input);
-                parameters.Add("StartDate",ConversionHelper.ToSQLlDatetime(orderDiscount.StartDate), DbType.DateTime, ParameterDirection.Input);
+                parameters.Add("StartDate", !string.IsNullOrEmpty(orderDiscount.StartDate)? ConversionHelper.ToSQLlDatetime(orderDiscount.StartDate):DateTime.Now, DbType.DateTime, ParameterDirection.Input);
                 parameters.Add("ExpirationDate", ConversionHelper.ToSQLlDatetime(orderDiscount.ExpirationDate), DbType.DateTime, ParameterDirection.Input);
                
                 using (_dbHandler.Connection)
