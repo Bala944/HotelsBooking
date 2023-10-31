@@ -35,10 +35,11 @@ namespace Booking.Areas.FrontOffice.Data.Services
                     roomsList = (await _dbHandler.QueryAsync<RoomsDetailsDTO>(_dbHandler.Connection, "dbo.GetFilteredRoomsDetails", CommandType.StoredProcedure, parameters)).AsList();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //new ErrorLog().WriteLog(ex);
+                new ErrorLog().WriteLog(ex);
             }
+
 
             return roomsList;
         }
@@ -55,10 +56,11 @@ namespace Booking.Areas.FrontOffice.Data.Services
                     roomsList = await _dbHandler.QuerySingleAsync<RoomsDetailsDTO>(_dbHandler.Connection, "dbo.GetFilteredRoomsDetailsById", CommandType.StoredProcedure, parameters);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //new ErrorLog().WriteLog(ex);
+                new ErrorLog().WriteLog(ex);
             }
+
 
             return roomsList;
         }
@@ -93,10 +95,11 @@ namespace Booking.Areas.FrontOffice.Data.Services
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                new ErrorLog().WriteLog(ex);
             }
+
 
             return result;
         }

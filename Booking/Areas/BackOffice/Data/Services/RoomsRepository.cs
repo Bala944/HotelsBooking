@@ -2,6 +2,7 @@
 using Booking.Areas.BackOffice.Models.Input;
 using Booking.Areas.BackOffice.Models.Output;
 using Booking.DBEngine;
+using Booking.Models;
 using Dapper;
 using System.Data;
 
@@ -56,9 +57,9 @@ namespace Booking.Areas.BackOffice.Data.Services
                     rooms = await _dbHandler.QuerySingleAsync<RoomsDetailsDTO>(_dbHandler.Connection, "dbo.ManageRoomDetails", CommandType.StoredProcedure, parameters);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //new ErrorLog().WriteLog(ex);
+                new ErrorLog().WriteLog(ex);
             }
 
             return rooms;
@@ -84,9 +85,9 @@ namespace Booking.Areas.BackOffice.Data.Services
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //new ErrorLog().WriteLog(ex);
+                new ErrorLog().WriteLog(ex);
             }
 
             return addRoomDetails;
@@ -119,10 +120,11 @@ namespace Booking.Areas.BackOffice.Data.Services
                     result = await _dbHandler.ExecuteScalarAsync<int>(_dbHandler.Connection, "[dbo].[ManageRoomDetails]", CommandType.StoredProcedure, parameters);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //new ErrorLog().WriteLog(ex);
+                new ErrorLog().WriteLog(ex);
             }
+
 
             return result;
         }
@@ -141,10 +143,11 @@ namespace Booking.Areas.BackOffice.Data.Services
                     result = await _dbHandler.ExecuteScalarAsync<int>(_dbHandler.Connection, "dbo.ManageRoomDetails", CommandType.StoredProcedure, parameters);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //new ErrorLog().WriteLog(ex);
+                new ErrorLog().WriteLog(ex);
             }
+
 
             return result;
         }

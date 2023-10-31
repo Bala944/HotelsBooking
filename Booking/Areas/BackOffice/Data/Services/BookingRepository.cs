@@ -2,6 +2,7 @@
 using Booking.Areas.BackOffice.Models.Input;
 using Booking.Areas.BackOffice.Models.Output;
 using Booking.DBEngine;
+using Booking.Models;
 using Dapper;
 using System.Data;
 
@@ -34,10 +35,11 @@ namespace Booking.Areas.BackOffice.Data.Services
                     listBooking = (await _dbHandler.QueryAsync<BookingDTO>(_dbHandler.Connection, "[dbo].[GetBookings]", CommandType.StoredProcedure, null)).ToList();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //new ErrorLog().WriteLog(ex);
+                new ErrorLog().WriteLog(ex);
             }
+
 
             return listBooking;
         }

@@ -29,34 +29,41 @@ namespace Booking.Areas.FrontOffice.Controllers
         public IActionResult Homepage(RoomFilterDTO roomFilterDTO)
         {
             BookMyRoomResultDTO bookMyRoomResultDTO = new BookMyRoomResultDTO();
-            if (string.IsNullOrEmpty(roomFilterDTO.CheckInDate))
-                roomFilterDTO.CheckInDate = DateTime.Now.ToString("dd/MM/yyyy");
-            if (string.IsNullOrEmpty(roomFilterDTO.CheckOutDate))
-                roomFilterDTO.CheckOutDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
-            if (roomFilterDTO.CheckInDate != null && roomFilterDTO.CheckOutDate != null)
+            try
             {
-                var rooms = _bookMyRoomRepository.GetRooms(roomFilterDTO);
-                if (rooms != null)
+                if (string.IsNullOrEmpty(roomFilterDTO.CheckInDate))
+                    roomFilterDTO.CheckInDate = DateTime.Now.ToString("dd/MM/yyyy");
+                if (string.IsNullOrEmpty(roomFilterDTO.CheckOutDate))
+                    roomFilterDTO.CheckOutDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
+                if (roomFilterDTO.CheckInDate != null && roomFilterDTO.CheckOutDate != null)
                 {
-                    bookMyRoomResultDTO.listRoomsDetailsDTO = rooms.Result;
+                    var rooms = _bookMyRoomRepository.GetRooms(roomFilterDTO);
+                    if (rooms != null)
+                    {
+                        bookMyRoomResultDTO.listRoomsDetailsDTO = rooms.Result;
+                    }
+
+                    bookMyRoomResultDTO.roomFilterDTO = roomFilterDTO;
+
+                    BookingQueryDTO bookingQueryDTO = new BookingQueryDTO();
+                    bookingQueryDTO.CheckInDate = bookMyRoomResultDTO.roomFilterDTO.CheckInDate;
+                    bookingQueryDTO.CheckOutDate = bookMyRoomResultDTO.roomFilterDTO.CheckOutDate;
+                    bookingQueryDTO.Adults = bookMyRoomResultDTO.roomFilterDTO.Adults;
+                    bookingQueryDTO.Children = bookMyRoomResultDTO.roomFilterDTO.Children;
+                    bookingQueryDTO.Rooms = bookMyRoomResultDTO.roomFilterDTO.Rooms;
+                    string json = JsonConvert.SerializeObject(bookingQueryDTO);
+                    string paramsEncrypted = EncryptionHelper.Encrypt(json);
+
+                    bookMyRoomResultDTO.roomFilterDTO.Params = paramsEncrypted;
+                    if (roomFilterDTO.IsViewMore)
+                    {
+                        return RedirectToAction("ViewMoreRooms", bookMyRoomResultDTO.roomFilterDTO);
+                    }
                 }
-
-                bookMyRoomResultDTO.roomFilterDTO = roomFilterDTO;
-
-                BookingQueryDTO bookingQueryDTO = new BookingQueryDTO();
-                bookingQueryDTO.CheckInDate = bookMyRoomResultDTO.roomFilterDTO.CheckInDate;
-                bookingQueryDTO.CheckOutDate = bookMyRoomResultDTO.roomFilterDTO.CheckOutDate;
-                bookingQueryDTO.Adults = bookMyRoomResultDTO.roomFilterDTO.Adults;
-                bookingQueryDTO.Children = bookMyRoomResultDTO.roomFilterDTO.Children;
-                bookingQueryDTO.Rooms = bookMyRoomResultDTO.roomFilterDTO.Rooms;
-                string json = JsonConvert.SerializeObject(bookingQueryDTO);
-                string paramsEncrypted = EncryptionHelper.Encrypt(json);
-
-                bookMyRoomResultDTO.roomFilterDTO.Params = paramsEncrypted;
-                if (roomFilterDTO.IsViewMore)
-                {
-                    return RedirectToAction("ViewMoreRooms", bookMyRoomResultDTO.roomFilterDTO);
-                }
+            }
+            catch (Exception ex)
+            {
+                new ErrorLog().WriteLog(ex);
             }
 
             return View(bookMyRoomResultDTO);
@@ -202,10 +209,11 @@ namespace Booking.Areas.FrontOffice.Controllers
                     }
                 }
             }
-            catch (JsonException ex)
+            catch (Exception ex)
             {
-                Console.WriteLine("Error parsing JSON: " + ex.Message);
+                new ErrorLog().WriteLog(ex);
             }
+
 
             ViewBag.BParams = BParams;
             ViewBag.FParams = FilterParams;
@@ -288,8 +296,9 @@ namespace Booking.Areas.FrontOffice.Controllers
             }
             catch (Exception ex)
             {
-
+                new ErrorLog().WriteLog(ex);
             }
+
 
             return View();
         }

@@ -35,10 +35,11 @@ namespace Booking.Areas.BackOffice.Data.Services
                     discount = (await _dbHandler.QueryAsync<OrderDiscount>(_dbHandler.Connection, "[dbo].[ManageDiscountDetails]", CommandType.StoredProcedure, parameters)).ToList();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //new ErrorLog().WriteLog(ex);
+                new ErrorLog().WriteLog(ex);
             }
+
 
             return discount;
         }
@@ -56,10 +57,11 @@ namespace Booking.Areas.BackOffice.Data.Services
                     discount = await _dbHandler.QuerySingleAsync<OrderDiscount>(_dbHandler.Connection, "dbo.ManageDiscountDetails", CommandType.StoredProcedure, parameters);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //new ErrorLog().WriteLog(ex);
+                new ErrorLog().WriteLog(ex);
             }
+
 
             return discount;
         }
@@ -80,10 +82,11 @@ namespace Booking.Areas.BackOffice.Data.Services
                    
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //new ErrorLog().WriteLog(ex);
+                new ErrorLog().WriteLog(ex);
             }
+
 
             return RoomDetails;
         }
@@ -106,10 +109,11 @@ namespace Booking.Areas.BackOffice.Data.Services
                     result = await _dbHandler.ExecuteScalarAsync<int>(_dbHandler.Connection, "[dbo].[ManageDiscountDetails]", CommandType.StoredProcedure, parameters);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //new ErrorLog().WriteLog(ex);
+                new ErrorLog().WriteLog(ex);
             }
+
 
             return result;
         }
@@ -128,10 +132,11 @@ namespace Booking.Areas.BackOffice.Data.Services
                     result = await _dbHandler.ExecuteScalarAsync<int>(_dbHandler.Connection, "dbo.ManageDiscountDetails", CommandType.StoredProcedure, parameters);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //new ErrorLog().WriteLog(ex);
+                new ErrorLog().WriteLog(ex);
             }
+
 
             return result;
         }
