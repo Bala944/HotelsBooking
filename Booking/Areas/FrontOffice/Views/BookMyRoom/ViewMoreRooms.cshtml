@@ -283,25 +283,29 @@
                                         @if (item?.DiscountId > 0)
                                         {
                                             DiscountAmount = Convert.ToDouble(item?.Rate) - Convert.ToDouble(item?.Rate * item?.DiscountPercentage) / 100;
-                                            <h5><strike>₹ @item?.Rate</strike> ₹ @DiscountAmount</h5>
+                                            <h5><strike>₹ @item?.Rate</strike> ₹ @DiscountAmount.ToString("F2")</h5>
+
+                                            TotalPrice = DiscountAmount;
                                         }
                                         else
                                         {
-                                            <h5>@TotalPrice</h5>
+                                            <h5>@TotalPrice.ToString("F2")</h5>
                                         }
                                         <p>+ ₹ @tax taxes and charges</p>
                                     </div>
                                     @if (item.AvailableQuantity < 5)
                                     {
                                         <p>Available Quantity: @item.AvailableQuantity</p>
+                                    } @if (item?.DiscountId > 0)
+                                    {
+                                        <!-- Add Discount label at the top-right corner -->
+                                        <div style="position: absolute; top: 10px; right: 10px; background-color: #FF0000; color: #FFF; padding: 5px;">
+                                            Discount @string.Format("{0:0.##}", item?.DiscountPercentage) %
+                                        </div>
                                     }
-                                    <!-- Add Discount label at the top-right corner -->
-                                    <div style="position: absolute; top: 10px; right: 10px; background-color: #FF0000; color: #FFF; padding: 5px;">
-                                        Discount @string.Format("{0:0.##}", item?.DiscountPercentage) %
-                                    </div>
                                     <!-- Move the <select> element to the right-center and apply Select2 styling -->
                                     <div class="d-flex justify-content-end align-items-center" style="height: 100%;">
-                                        <select class="select2 roomselection" data-attr="@item.RoomNumber" data-amount="@DiscountAmount" data-roomid="@item.RoomId" data-discount="@item.DiscountId">
+                                        <select class="select2 roomselection" data-attr="@item.RoomNumber" data-amount="@TotalPrice" data-roomid="@item.RoomId" data-discount="@item.DiscountId">
                                             <option value="">Select</option>
                                             @for (int i = 1; i <= @item.AvailableQuantity; i++)
                                             {
@@ -393,6 +397,7 @@
         SelectedRooms = [];
         // Find the select element with the "roomselection" class
         $(".roomselection").each(function () {
+            debugger
             var selectElement = $(this);
             var selectedOption = selectElement.find("option:selected");
             var selectedValue = parseInt(selectedOption.val());
@@ -415,6 +420,7 @@
     });
 
     function BindBookings() {
+        debugger
         // Clear the previous content in the div
         $("#bookingInfo").empty();
 

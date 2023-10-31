@@ -180,7 +180,7 @@ namespace Booking.Areas.FrontOffice.Controllers
         public IActionResult RegisterCustomerDetails(string BParams, string FilterParams)
         {
             BookingRegistrationDTO result = new BookingRegistrationDTO();
-
+            decimal TotalAmount = 0;
             try
             {
                 if (!string.IsNullOrEmpty(BParams))
@@ -189,6 +189,7 @@ namespace Booking.Areas.FrontOffice.Controllers
                     if (!string.IsNullOrEmpty(decryptedData))
                     {
                         result.finalBookingDetails = JsonConvert.DeserializeObject<FinalBookingDetailsDTO>(decryptedData)?.finalBookingDetails;
+                        TotalAmount = (decimal)result.finalBookingDetails.Sum(bd => bd.Amount);
                     }
                 }
 
@@ -212,14 +213,15 @@ namespace Booking.Areas.FrontOffice.Controllers
             string Key = "rzp_test_CxRq0CbjDqDcpI";
             string secret = "U96zupO4NVVgKbpnk0Ul19AI";
 
-
             Random _random = new Random();
             string TransactionId = _random.Next(0, 10000).ToString();
 
-
+            // Convert the amount to the smallest currency unit (e.g., paise for INR)
+            
+            int amountInPaise = (int)(TotalAmount * 100);
 
             Dictionary<string, object> input = new Dictionary<string, object>();
-            input.Add("amount", 100); // this amount should be same as transaction amount
+            input.Add("amount", amountInPaise); // Use the converted amount
             input.Add("currency", "INR");
             input.Add("receipt", TransactionId);
 
@@ -227,6 +229,7 @@ namespace Booking.Areas.FrontOffice.Controllers
             Razorpay.Api.Order order = client.Order.Create(input);
             string OrderId = order["id"].ToString();
             ViewBag.OrderId = OrderId;
+
             return View("RegisterCustomer", result);
         }
 
@@ -322,28 +325,41 @@ namespace Booking.Areas.FrontOffice.Controllers
 
 
         [Route("/Create-order")]
-        public IActionResult CreatePaymentOrder()
+        public async Task<IActionResult> CreatePaymentOrder([FromBody] CustomerAndBookingDetails customerAndBookingDetails)
         {
+            Int64 result = 0;
+            string decryptedData = EncryptionHelper.Decrypt(customerAndBookingDetails.BookingParams);
 
-            string Key = "rzp_test_CxRq0CbjDqDcpI";
-            string secret = "U96zupO4NVVgKbpnk0Ul19AI";
+            if (!string.IsNullOrEmpty(decryptedData))
+            {
+                FinalBookingDetailsDTO bookingDetailsDTO = new FinalBookingDetailsDTO
+                {
+                    finalBookingDetails = JsonConvert.DeserializeObject<FinalBookingDetailsDTO>(decryptedData).finalBookingDetails
+                };
 
+                if (bookingDetailsDTO != null && bookingDetailsDTO.finalBookingDetails.Count > 0 && customerAndBookingDetails != null)
+                {
+                    RegistrationDetails registrationDetails = new RegistrationDetails
+                    {
+                        CheckIn = customerAndBookingDetails.CheckIn,
+                        CheckOut = customerAndBookingDetails.CheckOut,
+                        FirstName = customerAndBookingDetails.FirstName,
+                        LastName = customerAndBookingDetails.LastName,
+                        MobileNumber = customerAndBookingDetails.MobileNumber,
+                        EmailAddress = customerAndBookingDetails.EmailAddress,
+                        TotalAmount = (decimal)bookingDetailsDTO.finalBookingDetails.Sum(bd => bd.Amount),
+                        RoomId = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.RoomId)),
+                        Count = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.Count)),
+                        Amount = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.Amount))
+                    };
 
-            Random _random = new Random();
-            string TransactionId = _random.Next(0, 10000).ToString();
+                     result = await _bookMyRoomRepository.ConfirmBooking(registrationDetails);
 
+                    
+                }
+            }
 
-
-            Dictionary<string, object> input = new Dictionary<string, object>();
-            input.Add("amount", 100); // this amount should be same as transaction amount
-            input.Add("currency", "INR");
-            input.Add("receipt", TransactionId);
-
-            RazorpayClient client = new RazorpayClient(Key, secret);
-            Razorpay.Api.Order order = client.Order.Create(input);
-            string OrderId = order["id"].ToString();
-
-            return Ok(OrderId);
+            return Ok(result);
         }
 
 

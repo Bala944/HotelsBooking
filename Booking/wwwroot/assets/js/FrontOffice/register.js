@@ -59,17 +59,27 @@
 }();
 
 const ConfirmAndPay = async () => {
+    debugger
     if ($('#frmCustomerDetails').valid()) {
-        debugger
-        var data = {}
-        var result = await APIPostMethod('/Create-order', data)
-        debugger
-        if (result != null) {
-            $('#paymentOrder').val(result);
+       //// debugger
+
+       // var data = 
+       // {
+       //     FirstName : $('#FirstName').val(),
+       //     LastName : $('#LastName').val(),
+       //     EmailAddress : $('#EmailAddress').val(),
+       //     MobileNumber : $('#MobileNumber').val(),
+       //     CheckIn : $('#CheckIn').val(),
+       //     CheckOut : $('#CheckOut').val(),
+       //     BookingParams : $('#BookingParams').val(),
+       // };
+       //var result = await APIPostMethod('/Create-order', data)
+       // debugger
+       // if (result != null) {
+           // $('#paymentOrder').val(result);
             $('#rzp-button1').click();
-        }
+        //}
        
     }
-
     
 }
