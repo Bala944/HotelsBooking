@@ -53,6 +53,13 @@
     };
 }();
 
+$("#login").on("keypress", "input,a", function (event) {
+    debugger
+    if (event.which === 13) { // Check if Enter key (key code 13) is pressed
+        event.preventDefault(); // Prevent form submission
+        AuthUser(); // Trigger the click event
+    }
+});
 
 const AuthUser = () => {
     if ($('#frmauth').valid()) {

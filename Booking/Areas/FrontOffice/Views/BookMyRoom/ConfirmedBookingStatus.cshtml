@@ -1,6 +1,28 @@
 ﻿@{
     ViewData["Title"] = "Booking Confirmation";
 }
+<section id="featued-sec" class="section">
+    <div class="container">
+        <div class="row">
+
+            <div class="sub-panel" style="text-align:center">
+                @if (ViewBag.BookingStatus == "200")
+                {
+                    <div class="sub-panel-header">
+                        <h4>Booking Confirmed</h4>
+                    </div>
+                    <div class="sub-panel-body row">
+                      
+                        <div class="col-md-12">
+                            <img src="~/assets/images/phonepeqr.jpeg" />
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</section>
 
 
 <script src="~/assets/plugins/sweetalert/sweetalert.js"></script>
@@ -14,7 +36,7 @@
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                window.location.href = '/home-page'
+              //  window.location.href = '/home-page'
             }
         })
     }

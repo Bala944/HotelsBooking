@@ -255,12 +255,12 @@ namespace Booking.Areas.FrontOffice.Controllers
                 if (customerAndBookingDetails != null)
                 {
 
-                    Dictionary<string, string> attributes = new Dictionary<string, string>();
-                    attributes.Add("razorpay_payment_id", customerAndBookingDetails.paymentId);
-                    attributes.Add("razorpay_order_id", customerAndBookingDetails.Orderid);
-                    attributes.Add("razorpay_signature", customerAndBookingDetails.sign);
+                    //Dictionary<string, string> attributes = new Dictionary<string, string>();
+                    //attributes.Add("razorpay_payment_id", customerAndBookingDetails.paymentId);
+                    //attributes.Add("razorpay_order_id", customerAndBookingDetails.Orderid);
+                    //attributes.Add("razorpay_signature", customerAndBookingDetails.sign);
 
-                    Utils.verifyPaymentSignature(attributes);
+                    //Utils.verifyPaymentSignature(attributes);
 
                     string decryptedData = EncryptionHelper.Decrypt(customerAndBookingDetails.BookingParams);
 
@@ -288,8 +288,8 @@ namespace Booking.Areas.FrontOffice.Controllers
                             };
 
                             var result = await _bookMyRoomRepository.ConfirmBooking(registrationDetails);
-
-                           return RedirectToAction("ConfirmedBookingStatus", "BookMyRoom", new {BBparams=EncryptionHelper.Encrypt("200")});
+                            ViewBag.BookingStatus = "200";
+                            return View("ConfirmedBookingStatus");
                         }
                     }
                 }

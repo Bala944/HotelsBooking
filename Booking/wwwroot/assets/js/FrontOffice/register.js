@@ -61,6 +61,7 @@
 const ConfirmAndPay = async () => {
     debugger
     if ($('#frmCustomerDetails').valid()) {
+        $('#frmCustomerDetails').submit();
        //// debugger
 
        // var data = 
@@ -77,7 +78,7 @@ const ConfirmAndPay = async () => {
        // debugger
        // if (result != null) {
            // $('#paymentOrder').val(result);
-            $('#rzp-button1').click();
+           // $('#rzp-button1').click();
         //}
        
     }
