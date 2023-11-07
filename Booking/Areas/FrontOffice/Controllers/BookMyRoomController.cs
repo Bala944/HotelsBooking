@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Newtonsoft.Json;
 using Razorpay.Api;
+using System.Security.Cryptography.Xml;
 
 namespace Booking.Areas.FrontOffice.Controllers
 {
@@ -80,7 +81,7 @@ namespace Booking.Areas.FrontOffice.Controllers
         {
             BookMyRoomResultDTO bookMyRoomResultDTO = new BookMyRoomResultDTO();
             BookingQueryDTO bookingQueryDTO1 = new BookingQueryDTO();
-            if (!string.IsNullOrEmpty(roomFilterDTO.Params ))
+            if (!string.IsNullOrEmpty(roomFilterDTO.Params))
             {
 
                 try
@@ -100,32 +101,32 @@ namespace Booking.Areas.FrontOffice.Controllers
                 }
             }
 
-                if (string.IsNullOrEmpty(roomFilterDTO.CheckInDate))
-                    roomFilterDTO.CheckInDate = DateTime.Now.ToString("dd/MM/yyyy");
-                if (string.IsNullOrEmpty(roomFilterDTO.CheckOutDate))
-                    roomFilterDTO.CheckOutDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
-                if (roomFilterDTO.CheckInDate != null && roomFilterDTO.CheckOutDate != null)
+            if (string.IsNullOrEmpty(roomFilterDTO.CheckInDate))
+                roomFilterDTO.CheckInDate = DateTime.Now.ToString("dd/MM/yyyy");
+            if (string.IsNullOrEmpty(roomFilterDTO.CheckOutDate))
+                roomFilterDTO.CheckOutDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
+            if (roomFilterDTO.CheckInDate != null && roomFilterDTO.CheckOutDate != null)
+            {
+                var rooms = _bookMyRoomRepository.GetRooms(roomFilterDTO);
+                if (rooms != null)
                 {
-                    var rooms = _bookMyRoomRepository.GetRooms(roomFilterDTO);
-                    if (rooms != null)
-                    {
-                        bookMyRoomResultDTO.listRoomsDetailsDTO = rooms.Result;
-                    }
-
-                    bookMyRoomResultDTO.roomFilterDTO = roomFilterDTO;
-
-                    BookingQueryDTO bookingQueryDTO = new BookingQueryDTO();
-                    bookingQueryDTO.CheckInDate = bookMyRoomResultDTO.roomFilterDTO.CheckInDate;
-                    bookingQueryDTO.CheckOutDate = bookMyRoomResultDTO.roomFilterDTO.CheckOutDate;
-                    bookingQueryDTO.Adults = bookMyRoomResultDTO.roomFilterDTO.Adults;
-                    bookingQueryDTO.Children = bookMyRoomResultDTO.roomFilterDTO.Children;
-                    bookingQueryDTO.Rooms = bookMyRoomResultDTO.roomFilterDTO.Rooms;
-                    string json = JsonConvert.SerializeObject(bookingQueryDTO);
-                    string paramsEncrypted = EncryptionHelper.Encrypt(json);
-
-                    bookMyRoomResultDTO.roomFilterDTO.Params = paramsEncrypted;
-                    ViewBag.FParams = paramsEncrypted;
+                    bookMyRoomResultDTO.listRoomsDetailsDTO = rooms.Result;
                 }
+
+                bookMyRoomResultDTO.roomFilterDTO = roomFilterDTO;
+
+                BookingQueryDTO bookingQueryDTO = new BookingQueryDTO();
+                bookingQueryDTO.CheckInDate = bookMyRoomResultDTO.roomFilterDTO.CheckInDate;
+                bookingQueryDTO.CheckOutDate = bookMyRoomResultDTO.roomFilterDTO.CheckOutDate;
+                bookingQueryDTO.Adults = bookMyRoomResultDTO.roomFilterDTO.Adults;
+                bookingQueryDTO.Children = bookMyRoomResultDTO.roomFilterDTO.Children;
+                bookingQueryDTO.Rooms = bookMyRoomResultDTO.roomFilterDTO.Rooms;
+                string json = JsonConvert.SerializeObject(bookingQueryDTO);
+                string paramsEncrypted = EncryptionHelper.Encrypt(json);
+
+                bookMyRoomResultDTO.roomFilterDTO.Params = paramsEncrypted;
+                ViewBag.FParams = paramsEncrypted;
+            }
             return View(bookMyRoomResultDTO);
         }
 
@@ -170,10 +171,17 @@ namespace Booking.Areas.FrontOffice.Controllers
         [HttpPost]
         public IActionResult ProcessData([FromBody] FinalBookingDetailsDTO finalBookingDetails)
         {
-            // Return the view with the processed data
-            string json = JsonConvert.SerializeObject(finalBookingDetails); // Corrected method name
-            string paramsEncrypted = EncryptionHelper.Encrypt(json);
-
+            string paramsEncrypted = string.Empty;
+            try
+            {
+                // Return the view with the processed data
+                string json = JsonConvert.SerializeObject(finalBookingDetails); // Corrected method name
+                paramsEncrypted = EncryptionHelper.Encrypt(json);
+            }
+            catch (Exception ex)
+            {
+                new ErrorLog().WriteLog(ex);
+            }
             return Ok(paramsEncrypted);
         }
 
@@ -184,7 +192,6 @@ namespace Booking.Areas.FrontOffice.Controllers
         /// <param name="FilterParams"></param>
         /// <returns></returns>
         [Route("/register")]
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult RegisterCustomer(string BParams, string FilterParams)
         {
             new ErrorLog().WriteLog("Register");
@@ -227,7 +234,7 @@ namespace Booking.Areas.FrontOffice.Controllers
             //string TransactionId = _random.Next(0, 10000).ToString();
 
             //// Convert the amount to the smallest currency unit (e.g., paise for INR)
-            
+
             //int amountInPaise = (int)(TotalAmount * 100);
 
             //Dictionary<string, object> input = new Dictionary<string, object>();
@@ -251,7 +258,7 @@ namespace Booking.Areas.FrontOffice.Controllers
         [Route("/confirmBooking")]
         public async Task<IActionResult> ConfirmBooking(CustomerAndBookingDetails customerAndBookingDetails)
         {
-          
+
 
             try
             {
@@ -291,19 +298,19 @@ namespace Booking.Areas.FrontOffice.Controllers
                             };
 
                             var result = await _bookMyRoomRepository.ConfirmBooking(registrationDetails);
+
+                            OrderDTO orderDTO = new OrderDTO();
                             if (result == "-99")
                             {
-                                ViewBag.BookingStatus = "-99";
-                                return RedirectToAction("ConfirmedBookingStatus");
-
-                                
+                                orderDTO.BookingStatus = "-99";
                             }
                             else if (result != null)
                             {
-                                ViewBag.BookingStatus = "200";
-                                ViewBag.BookingOrderId = result;
-                                return View("ConfirmedBookingStatus");
+                                orderDTO.BookingStatus = "200";
+                                orderDTO.BookingOrderId = result;
+
                             }
+                            return RedirectToAction("ConfirmedBookingStatus", new { BBparams = EncryptionHelper.Encrypt(JsonConvert.SerializeObject(orderDTO)) });
                         }
                     }
                 }
@@ -320,10 +327,28 @@ namespace Booking.Areas.FrontOffice.Controllers
         [Route("/booking-us")]
         public IActionResult ConfirmedBookingStatus(string BBparams)
         {
-            if(BBparams !=null)
+            try
             {
-                var status =EncryptionHelper.Decrypt(BBparams);
-                ViewBag.BookingStatus = status;
+                OrderDTO bookingDetailsDTO = new OrderDTO();
+
+                if (BBparams != null)
+                {
+                    string status = EncryptionHelper.Decrypt(BBparams);
+
+                    if (!string.IsNullOrEmpty(status))
+                    {
+
+                        bookingDetailsDTO = JsonConvert.DeserializeObject<OrderDTO>(status);
+
+                    }
+
+                    ViewBag.BookingStatus = bookingDetailsDTO.BookingStatus;
+                    ViewBag.BookingOrderId = bookingDetailsDTO.BookingOrderId;
+                }
+            }
+            catch (Exception ex)
+            {
+                new ErrorLog().WriteLog(ex);
             }
             return View();
         }
@@ -376,9 +401,9 @@ namespace Booking.Areas.FrontOffice.Controllers
                         Amount = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.Amount))
                     };
 
-                     result = await _bookMyRoomRepository.ConfirmBooking(registrationDetails);
+                    result = await _bookMyRoomRepository.ConfirmBooking(registrationDetails);
 
-                    
+
                 }
             }
 

@@ -307,9 +307,19 @@
                                     <div class="d-flex justify-content-end align-items-center" style="height: 100%;">
                                         <select class="select2 roomselection" data-attr="@item.RoomNumber" data-amount="@TotalPrice" data-roomid="@item.RoomId" data-discount="@item.DiscountId">
                                             <option value="">Select</option>
-                                            @for (int i = 1; i <= @item.AvailableQuantity; i++)
+                                            @if (item.AvailableQuantity < 5)
                                             {
-                                                <option value="@i">@i</option>
+                                                @for (int i = 1; i <= @item.AvailableQuantity; i++)
+                                                {
+                                                    <option value="@i">@i</option>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    <option value="@i">@i</option>
+                                                }
                                             }
                                         </select>
                                     </div>
@@ -397,7 +407,7 @@
         SelectedRooms = [];
         // Find the select element with the "roomselection" class
         $(".roomselection").each(function () {
-        
+
             var selectElement = $(this);
             var selectedOption = selectElement.find("option:selected");
             var selectedValue = parseInt(selectedOption.val());
@@ -413,7 +423,7 @@
                     "Amount": dataamount,
                     "RoomId": roomId,
                     "DiscountId": discount,
-                     "TotalAmount": dataamount * selectedValue
+                    "TotalAmount": dataamount * selectedValue
                 });
             }
         });
@@ -421,7 +431,7 @@
     });
 
     function BindBookings() {
-        
+
         // Clear the previous content in the div
         $("#bookingInfo").empty();
 

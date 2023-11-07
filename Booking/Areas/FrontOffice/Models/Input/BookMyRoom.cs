@@ -113,4 +113,10 @@ namespace Booking.Areas.FrontOffice.Models.Input
 
     }
 
+    public class OrderDTO
+    {
+        public string BookingStatus { get; set; }
+        public string BookingOrderId { get; set; }
+    }
+
 }
