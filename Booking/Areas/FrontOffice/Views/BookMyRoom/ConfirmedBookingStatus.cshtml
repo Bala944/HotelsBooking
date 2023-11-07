@@ -9,16 +9,25 @@
                 @if (ViewBag.BookingStatus == "200")
                 {
                     <div class="sub-panel-header">
-                        <h4>Booking Confirmed</h4>
+                        <h4>Booking Confirmed - Order Id #(@ViewBag.BookingOrderId)</h4>
                     </div>
                     <div class="sub-panel-body row">
-                      
+
                         <div class="col-md-12">
                             <img src="~/assets/images/phonepeqr.jpeg" />
                         </div>
                     </div>
 
                 }
+                else
+                {
+                    <div class="sub-panel-header">
+                        <h4>Booking is filled.Please try other options.</h4>
+                    </div>
+                }
+                <div class="sub-panel-footer mt-4">
+                    <a href="~/home-page" class="btn btn-primary">Go To Home</a>
+                </div>
             </div>
         </div>
     </div>
@@ -26,7 +35,23 @@
 
 
 <script src="~/assets/plugins/sweetalert/sweetalert.js"></script>
+
+
 <script>
+
+    $(document).ready(function () {
+        // Push a new state when the page loads
+        window.history.pushState(null, null, window.location.href);
+
+        // Listen for the popstate event (triggered when the back/forward button is pressed)
+        window.onpopstate = function (event) {
+            // Prevent the default behavior (navigating back)
+            window.history.pushState(null, null, window.location.href);
+
+        };
+    });
+
+
     if ('@ViewBag.BookingStatus' == '200') {
         Swal.fire({
             title: 'Booking Confirmed',
@@ -36,7 +61,21 @@
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-              //  window.location.href = '/home-page'
+                //  window.location.href = '/home-page'
+            }
+        })
+    }
+
+    if ('@ViewBag.BookingStatus' == '-99') {
+        Swal.fire({
+            title: 'Booking is filled. Please try other options.',
+            confirmButtonText: 'Yes',
+            allowOutsideClick: false, // Prevent closing by clicking outside the dialog
+            allowEscapeKey: false     // Prevent closing by pressing the "Escape" key
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                //  window.location.href = '/home-page'
             }
         })
     }

@@ -184,6 +184,7 @@ namespace Booking.Areas.FrontOffice.Controllers
         /// <param name="FilterParams"></param>
         /// <returns></returns>
         [Route("/register")]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult RegisterCustomer(string BParams, string FilterParams)
         {
             new ErrorLog().WriteLog("Register");
@@ -197,7 +198,7 @@ namespace Booking.Areas.FrontOffice.Controllers
                     if (!string.IsNullOrEmpty(decryptedData))
                     {
                         result.finalBookingDetails = JsonConvert.DeserializeObject<FinalBookingDetailsDTO>(decryptedData)?.finalBookingDetails;
-                        TotalAmount = (decimal)result.finalBookingDetails.Sum(bd => bd.Amount);
+                        TotalAmount = (decimal)result.finalBookingDetails.Sum(bd => bd.TotalAmount);
                     }
                 }
 
@@ -250,6 +251,7 @@ namespace Booking.Areas.FrontOffice.Controllers
         [Route("/confirmBooking")]
         public async Task<IActionResult> ConfirmBooking(CustomerAndBookingDetails customerAndBookingDetails)
         {
+          
 
             try
             {
@@ -282,15 +284,26 @@ namespace Booking.Areas.FrontOffice.Controllers
                                 LastName = customerAndBookingDetails.LastName,
                                 MobileNumber = customerAndBookingDetails.MobileNumber,
                                 EmailAddress = customerAndBookingDetails.EmailAddress,
-                                TotalAmount = (decimal)bookingDetailsDTO.finalBookingDetails.Sum(bd => bd.Amount),
+                                TotalAmount = (decimal)bookingDetailsDTO.finalBookingDetails.Sum(bd => bd.TotalAmount),
                                 RoomId = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.RoomId)),
                                 Count = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.Count)),
                                 Amount = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.Amount))
                             };
 
                             var result = await _bookMyRoomRepository.ConfirmBooking(registrationDetails);
-                            ViewBag.BookingStatus = "200";
-                            return View("ConfirmedBookingStatus");
+                            if (result == "-99")
+                            {
+                                ViewBag.BookingStatus = "-99";
+                                return RedirectToAction("ConfirmedBookingStatus");
+
+                                
+                            }
+                            else if (result != null)
+                            {
+                                ViewBag.BookingStatus = "200";
+                                ViewBag.BookingOrderId = result;
+                                return View("ConfirmedBookingStatus");
+                            }
                         }
                     }
                 }
@@ -301,7 +314,7 @@ namespace Booking.Areas.FrontOffice.Controllers
             }
 
 
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         [Route("/booking-us")]
@@ -337,7 +350,7 @@ namespace Booking.Areas.FrontOffice.Controllers
         [Route("/Create-order")]
         public async Task<IActionResult> CreatePaymentOrder([FromBody] CustomerAndBookingDetails customerAndBookingDetails)
         {
-            Int64 result = 0;
+            string result = string.Empty;
             string decryptedData = EncryptionHelper.Decrypt(customerAndBookingDetails.BookingParams);
 
             if (!string.IsNullOrEmpty(decryptedData))

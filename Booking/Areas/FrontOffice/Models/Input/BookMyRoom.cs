@@ -92,6 +92,7 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public Int64? RoomId { get; set; }
         public Int64? Count { get; set; }
         public decimal? Amount { get; set; }
+        public decimal? TotalAmount { get; set; }
         public string? Name { get; set; }
 
     }

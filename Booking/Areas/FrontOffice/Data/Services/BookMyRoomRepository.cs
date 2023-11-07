@@ -70,10 +70,10 @@ namespace Booking.Areas.FrontOffice.Data.Services
         /// </summary>
         /// <param name="registrationDetails"></param>
         /// <returns></returns>
-        public async Task<long> ConfirmBooking(RegistrationDetails registrationDetails)
+        public async Task<string> ConfirmBooking(RegistrationDetails registrationDetails)
         {
             var parameters = new DynamicParameters();
-            long result = 0;
+            string result = string.Empty;
             try
             {
                 if (registrationDetails != null)
@@ -91,7 +91,7 @@ namespace Booking.Areas.FrontOffice.Data.Services
 
                     using (_dbHandler.Connection)
                     {
-                        result = await _dbHandler.ExecuteScalarAsync<long>(_dbHandler.Connection, "dbo.InsertBookingDetails", CommandType.StoredProcedure, parameters);
+                        result = await _dbHandler.ExecuteScalarAsync<string>(_dbHandler.Connection, "dbo.InsertBookingDetails", CommandType.StoredProcedure, parameters);
                     }
                 }
             }
