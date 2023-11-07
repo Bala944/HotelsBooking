@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Home";
 }
-<style>
+@* <style>
 
     /* Checkout Card styles */
     .checkout-card {
@@ -133,7 +133,7 @@
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-</style>
+</style> *@
 <form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="SingleRoomDetails">
     <input type="hidden" id="roomId" name="roomId" value="" />
     <input type="hidden" id="Params" name="Params" value="@ViewBag.FParams" />
@@ -154,19 +154,19 @@
             </div>
             <form id="frmRoomFilter" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ViewMoreRooms">
                 <div class="row">
-                    <div class="col">
+                    <div class="col col-12 col-sm-6 col-lg-3 col-xl">
                         <div class="form-group">
                             <label>Check-in Date</label>
                             <input asp-for="roomFilterDTO.CheckInDate" id="CheckInDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-12 col-sm-6 col-lg-3 col-xl">
                         <div class="form-group">
                             <label>Check-out Date</label>
                             <input asp-for="roomFilterDTO.CheckOutDate" id="CheckOutDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-12 col-sm-6 col-lg-3 col-xl">
                         <div class="form-group">
                             <label>Adults</label>
                             <select class="form-select" asp-for="roomFilterDTO.Adults">
@@ -178,7 +178,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-12 col-sm-6 col-lg-3 col-xl">
                         <div class="form-group">
                             <label>Children</label>
                             <select class="form-select" asp-for="roomFilterDTO.Children">
@@ -191,7 +191,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col" style="display:none">
+                    <div class="col col-12 col-sm-6 col-lg-3 col-xl" style="display:none">
                         <div class="form-group">
                             <label>Rooms</label>
                             <select class="form-select" asp-for="roomFilterDTO.Rooms">
@@ -203,9 +203,9 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-12 col-lg-12 col-xl text-center">
                         <div class="form-group">
-                            <label class="d-block">&nbsp;</label>
+                            <label class="d-md-block">&nbsp;</label>
                             <a class="btn btn-primary" onclick="$('#frmRoomFilter').submit();">Check Availability</a>
 
                         </div>
@@ -304,8 +304,8 @@
                                         </div>
                                     }
                                     <!-- Move the <select> element to the right-center and apply Select2 styling -->
-                                    <div class="d-flex justify-content-end align-items-center" style="height: 100%;">
-                                        <select class="select2 roomselection" data-attr="@item.RoomNumber" data-amount="@TotalPrice" data-roomid="@item.RoomId" data-discount="@item.DiscountId">
+                                    <div class="d-flex justify-content-end align-items-center pe-3" style="height: 100%;">
+                                        <select class="select2-without-search roomselection" data-attr="@item.RoomNumber" data-amount="@TotalPrice" data-roomid="@item.RoomId" data-discount="@item.DiscountId">
                                             <option value="">Select</option>
                                             @if (item.AvailableQuantity < 5)
                                             {
@@ -349,6 +349,7 @@
 <!-- END: Featured Section ==================================== -->
 
 <partial name="_DatepickerPartial" />
+<partial name="_SelectScriptPartial" />
 <script src="~/assets/js/ajaxconnector.js"></script>
 
 <script>

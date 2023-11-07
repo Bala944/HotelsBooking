@@ -24,6 +24,7 @@
     <None Include="wwwroot\assets\plugins\fontawesome\webfonts\fa-regular-400.woff2" />
     <None Include="wwwroot\assets\plugins\fontawesome\webfonts\fa-solid-900.svg" />
     <None Include="wwwroot\assets\plugins\fontawesome\webfonts\fa-solid-900.woff2" />
+    <None Include="wwwroot\assets\plugins\menu\js\menu.js" />
   </ItemGroup>
 
   <ItemGroup>

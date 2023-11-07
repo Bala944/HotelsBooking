@@ -13,6 +13,8 @@
         width: 12rem;
         img {
             max-height: 100%;
+            object-fit: cover;
+            height: 15rem;
         }
     }
     .room-title {

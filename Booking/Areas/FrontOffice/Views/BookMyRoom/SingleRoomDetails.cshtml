@@ -43,7 +43,43 @@
                     }
                 }
             </article>
+          @*   <article class='gallery'>
 
+                <a class='gallery-link' href='assets/images/slider/slider1.jpg'>
+                    <figure class='gallery-image'>
+                        <img height='1400' src='assets/images/slider/slider1.jpg' width='1600'>
+                        <!--<figcaption>Photo caption</figcaption>-->
+                    </figure>
+                </a>
+                <a class='gallery-link' href='assets/images/slider/slider2.jpg'>
+                    <figure class='gallery-image'>
+                        <img height='1200' src='assets/images/slider/slider2.jpg' width='1600'>
+                        <!--<figcaption>Photo caption</figcaption>-->
+                    </figure>
+                </a>
+                <a class='gallery-link' href='assets/images/slider/slider3.jpg'>
+                    <figure class='gallery-image'>
+                        <img height='1600' src='assets/images/slider/slider3.jpg' width='1400'>
+                        <!--<figcaption>Photo caption</figcaption>-->
+                    </figure>
+                </a>
+
+                <a class='gallery-link' href='assets/images/rooms/room1.jpg'>
+                    <figure class='gallery-image'>
+                        <img height='1000' src='assets/images/rooms/room1.jpg' width='1600'>
+                        <!--<figcaption>Photo caption</figcaption>-->
+                    </figure>
+                </a>
+                <a class='gallery-link' href='assets/images/rooms/room2.jpg'>
+                    <figure class='gallery-image'>
+                        <img height='1400' src='assets/images/rooms/room2.jpg' width='1600'>
+                        <!--<figcaption>Photo caption</figcaption>-->
+                    </figure>
+                </a>
+
+
+            </article>
+ *@
             <div class="room-desc">
                 @Html.Raw(Model?.roomDetails?.Description)
             </div>
@@ -90,46 +126,15 @@
 
 <!-- END: Featured Section ==================================== -->
 <!-- BEGIN: Page Refrence ========================= -->
-<!-- Menu refrence -->
-<script src="assets/plugins/menu/js/menu.js"></script>
-<!-- Owl Carosel Refrence ============================ -->
-<link href="assets/plugins/slider/css/owl.carousel.min.css" rel="stylesheet" />
-<link href="assets/plugins/slider/css/owl.theme.default.css" rel="stylesheet" />
-<link href="assets/plugins/slider/css/animate.min.css" rel="stylesheet" />
-<script src="assets/plugins/slider/js/owl.carousel.js"></script>
-
 <!-- Photo Gallery Refrence ================= -->
 <link href="assets/plugins/gallery/css/magnific-popup.min.css" rel="stylesheet" />
 <link href="assets/plugins/gallery/css/gallery.css" rel="stylesheet" />
 <script src="assets/plugins/gallery/js/jquery.magnific-popup.min.js"></script>
 <!-- END: Page Refrence ========================= -->
-<script src="assets/js/aara.theme.function.js"></script>
+
 
 <script>
-    var currentYear = new Date().getFullYear();
-
-    // Update the content of the 'currentYear' span
-    document.getElementById("currentYear").textContent = currentYear;
-    $('.owl-carousel').owlCarousel({
-        loop: true,
-        margin: 10,
-        dots: false,
-        nav: true,
-        mouseDrag: false,
-        autoplay: true,
-        animateOut: 'slideOutUp',
-        responsive: {
-            0: {
-                items: 1
-            },
-            600: {
-                items: 1
-            },
-            1000: {
-                items: 1
-            }
-        }
-    });
+  
     (function () {
         $('.gallery-link').magnificPopup({
             type: 'image',

@@ -50,19 +50,19 @@
             </div>
             <form id="frmRoomFilter" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ViewMoreRooms">
                 <div class="row">
-                    <div class="col">
+                    <div class="col col-12 col-sm-6 col-lg-3 col-xl">
                         <div class="form-group">
                             <label>Check-in Date</label>
                             <input asp-for="roomFilterDTO.CheckInDate" id="CheckInDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-12 col-sm-6 col-lg-3 col-xl">
                         <div class="form-group">
                             <label>Check-out Date</label>
                             <input asp-for="roomFilterDTO.CheckOutDate" id="CheckOutDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-12 col-sm-6 col-lg-3 col-xl">
                         <div class="form-group">
                             <label>Adults</label>
                             <select class="form-select" asp-for="roomFilterDTO.Adults">
@@ -74,7 +74,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-12 col-sm-6 col-lg-3 col-xl">
                         <div class="form-group">
                             <label>Children</label>
                             <select class="form-select" asp-for="roomFilterDTO.Children">
@@ -87,7 +87,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col" style="display:none">
+                    <div class="col col-12 col-sm-6 col-lg-3 col-xl" style="display:none">
                         <div class="form-group">
                             <label>Rooms</label>
                             <select class="form-select" asp-for="roomFilterDTO.Rooms">
@@ -99,9 +99,9 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-12 col-lg-12 col-xl text-center">
                         <div class="form-group">
-                            <label class="d-block">&nbsp;</label>
+                            <label class="d-md-block">&nbsp;</label>
                             <a class="btn btn-primary" onclick="$('#frmRoomFilter').submit();">Check Availability</a>
 
                         </div>
@@ -122,7 +122,7 @@
             @if (Model != null && Model.listRoomsDetailsDTO != null && Model.listRoomsDetailsDTO.Count > 0)
             {
                 <div class="col-md-12">
-                    <h2 class="section-title text-center">Available Rooms</h2>
+                    <h2 class="section-title text-center">Services</h2>
                 </div>
 
                 foreach (var item in Model.listRoomsDetailsDTO)
@@ -138,7 +138,7 @@
 
                         }
                     }
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
                         <div class="rooms-panel">
                             <div class="rooms-img">
                                 <img src="@(string.IsNullOrEmpty(image) ? "assets/images/rooms/room1.jpg" : "Attachments/RoomImages/" + image)" alt="Room" class="img-fluid" />
@@ -191,9 +191,9 @@
                     </div>
                 }
 
-                <div class="col-md-12 text-center">
+               @*  <div class="col-md-12 text-center">
                     <a onclick="ViewMoreRoom()" class="btn btn-primary">View More</a>
-                </div>
+                </div> *@
             }
             else
             {
@@ -239,10 +239,7 @@
     $(document).ready(function () {
         // page.init();
 
-        ApplyCommonGridStyle();
-
-
-
+        //ApplyCommonGridStyle();
     });
 </script>
 

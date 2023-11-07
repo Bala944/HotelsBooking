@@ -12,7 +12,17 @@
            // selectOnClose: true,
             closeOnSelect: true
         });
-
+        $(".select2-without-search").select2({
+            width: "100%",
+            // minimumResultsForSearch: -1,
+            placeholder: function () {
+                $(this).data('placeholder');
+            },
+            //allowClear: true,
+            // selectOnClose: true,
+            closeOnSelect: true,
+            minimumResultsForSearch: -1
+        });
         //// steal focus during close - only capture once and stop propagation
         //$('select.select2').on('select2:closing', function (e) {
         //    $(e.target).data("select2").$selection.one('focus focusin', function (e) {
