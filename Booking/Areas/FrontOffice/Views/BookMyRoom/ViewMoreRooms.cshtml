@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Home";
 }
-@* <style>
+ <style>
 
     /* Checkout Card styles */
     .checkout-card {
@@ -133,7 +133,7 @@
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-</style> *@
+</style> 
 <form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="SingleRoomDetails">
     <input type="hidden" id="roomId" name="roomId" value="" />
     <input type="hidden" id="Params" name="Params" value="@ViewBag.FParams" />
