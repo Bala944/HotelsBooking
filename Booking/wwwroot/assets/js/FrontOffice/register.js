@@ -59,7 +59,7 @@
 }();
 
 const ConfirmAndPay = async () => {
-    debugger
+    
     if ($('#frmCustomerDetails').valid()) {
         $('#frmCustomerDetails').submit();
        //// debugger

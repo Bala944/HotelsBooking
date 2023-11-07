@@ -138,7 +138,7 @@
     <input type="hidden" id="roomId" name="roomId" value="" />
     <input type="hidden" id="Params" name="Params" value="@ViewBag.FParams" />
 </form>
-<form id="frmRegisterRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="RegisterCustomerDetails">
+<form id="frmRegisterRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="RegisterCustomer">
     <input type="hidden" id="BParams" name="BParams" value="" />
     <input type="hidden" id="FilterParams" name="FilterParams" value="@ViewBag.FParams" />
 </form>
@@ -397,7 +397,7 @@
         SelectedRooms = [];
         // Find the select element with the "roomselection" class
         $(".roomselection").each(function () {
-            debugger
+        
             var selectElement = $(this);
             var selectedOption = selectElement.find("option:selected");
             var selectedValue = parseInt(selectedOption.val());
@@ -420,7 +420,7 @@
     });
 
     function BindBookings() {
-        debugger
+        
         // Clear the previous content in the div
         $("#bookingInfo").empty();
 

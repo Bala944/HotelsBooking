@@ -16,7 +16,7 @@
 
     .room-info {
         text-align: right;
-        border-bottom:1px solid black;
+        border-bottom: 1px solid black;
     }
 
 
@@ -29,13 +29,13 @@
     }
 
     /* Style the room details within the checkout-card */
-   /*  .room-details {
-        margin: 20px 0;
-        border: 1px solid #ddd;
-        padding: 10px;
-        border-radius: 5px;
-        background-color: #fff;
-    } */
+    /*  .room-details {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+        } */
 
     /* Style the room title (Name) */
     .room-title h4 {
@@ -94,7 +94,6 @@
         font-weight: bold; /* Make the text bold */
     }
 
-
 </style>
 <!-- BEGIN: Page Title Section ======================================== -->
 <section class="page-title">
@@ -109,9 +108,9 @@
 
 <form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ViewMoreRooms">
     <input type="hidden" id="Params" name="Params" value="@ViewBag.FParams" />
-   
+
 </form>
-<button  id="rzp-button1"  style="display:none">Pay</button>
+<button id="rzp-button1" style="display:none">Pay</button>
 <input type="hidden" id="paymentOrder" name="paymentOrder" value="" />
 
 <!-- END: Page Title Section ========================================= -->
@@ -165,9 +164,9 @@
                             {
                                 if (Model?.finalBookingDetails != null && Model?.finalBookingDetails.Count > 0)
                                 {
-                                   
+
                                     <div class="panel">
-                                        
+
                                         @foreach (var item in Model?.finalBookingDetails)
                                         {
                                             <div class="room-details">
@@ -253,61 +252,16 @@
 
 
 <partial name="_ValidationScriptsPartial" />
+
 <script src="~/assets/plugins/sweetalert/sweetalert.js"></script>
 <script src="~/assets/js/frontoffice/register.js"></script>
 <script src="~/assets/js/commonfunction.js"></script>
 <script src="~/assets/js/ajaxconnector.js"></script>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 <script>
     $(document).ready(function () {
         page.init();
     });
 
-   
-</script>
-<script>
-    var options = {
-        
-        "key": "rzp_test_CxRq0CbjDqDcpI", // Enter the Key ID generated from the Dashboard
-        "amount": "@grandTotal", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-        "currency": "INR",
-        "name": "AARA COTTAGES", //your business name
-        "description": "Test Transaction",
-        "image": "https://example.com/your_logo",
-        "order_id":"@ViewBag.OrderId", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-        "handler": function (response) {
-           
-            $('#paymentId').val(response.razorpay_payment_id);
-            $('#Orderid').val(response.razorpay_order_id);
-            $('#sign').val(response.razorpay_signature)
-            $('#frmCustomerDetails').submit();
-        },
-        // "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
-        //     "name": "Gaurav Kumar", //your customer's name
-        //     "email": "gaurav.kumar@example.com",
-        //     "contact": "9000090000"  //Provide the customer's phone number for better conversion rates
-        // },
-        "notes": {
-            "address": "Razorpay Corporate Office"
-        },
-        "theme": {
-            "color": "#3399cc"
-        }
-    };
-    var rzp1 = new Razorpay(options);
-    rzp1.on('payment.failed', function (response) {
-        // alert(response.error.code);
-        // alert(response.error.description);
-        // alert(response.error.source);
-        // alert(response.error.step);
-        // alert(response.error.reason);
-        // alert(response.error.metadata.order_id);
-        // alert(response.error.metadata.payment_id);
-    });
-    document.getElementById('rzp-button1').onclick = function (e) {
-        
-        rzp1.open();
-        e.preventDefault();
-    }
 </script>
 

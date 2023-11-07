@@ -32,16 +32,16 @@ function UploadAttachments(e) {
 
 //Click to remove fiel item
 $('body').on('click', '.file__value--removeTask', function () {
-    debugger
+    
     var id = atob($(this).attr('data-name'));
     var type = $(this).attr('data-type') || 0;
-    debugger
+    
 
     // Define the filename you want to remove
     var filenameToRemove = id;
     // Iterate through the FormData keys
     for (var pair of ImageFormData.entries()) {
-        debugger
+        
         var key = pair[0];
         var value = pair[1];
 
@@ -62,7 +62,7 @@ $('body').on('click', '.file__value--removeTask', function () {
 });
 
 function SaveRoomDetails() {
-    debugger
+    
     // Check if the form is valid according to the validation rules
     if ($("#roomForm").valid()) {
         var FileImages = '';
@@ -101,7 +101,7 @@ function SaveRoomDetails() {
             processData: false,  // Prevent jQuery from processing the data
             contentType: false,  // Set content type to false
             success: function (response) {
-                debugger
+                
                 if (response == 200) {
                     Swal.fire({
                         title: 'Room',
@@ -179,7 +179,7 @@ const GetRoomDetailsById = async (RoomId) => {
 }
 
 const DeleteRoom = async (RoomId) => {
-    debugger
+    
      Swal.fire({
         title: 'Do you sure to delete this record?',
         showDenyButton: true,
@@ -198,7 +198,7 @@ const DeleteRoom = async (RoomId) => {
 const DeleteRoomById = async (RoomId) => {
     var data = { "RoomId": RoomId }
     var result = await APIGetMethod('/delete-room-details', data);
-    debugger
+    
     if (result != null && result != "") {
         if (result == 200) {
             Swal.fire({

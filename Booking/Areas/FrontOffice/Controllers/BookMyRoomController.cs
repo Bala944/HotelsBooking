@@ -184,8 +184,9 @@ namespace Booking.Areas.FrontOffice.Controllers
         /// <param name="FilterParams"></param>
         /// <returns></returns>
         [Route("/register")]
-        public IActionResult RegisterCustomerDetails(string BParams, string FilterParams)
+        public IActionResult RegisterCustomer(string BParams, string FilterParams)
         {
+            new ErrorLog().WriteLog("Register");
             BookingRegistrationDTO result = new BookingRegistrationDTO();
             decimal TotalAmount = 0;
             try
@@ -218,27 +219,27 @@ namespace Booking.Areas.FrontOffice.Controllers
             ViewBag.BParams = BParams;
             ViewBag.FParams = FilterParams;
 
-            string Key = "rzp_test_CxRq0CbjDqDcpI";
-            string secret = "U96zupO4NVVgKbpnk0Ul19AI";
+            //string Key = "rzp_test_CxRq0CbjDqDcpI";
+            //string secret = "U96zupO4NVVgKbpnk0Ul19AI";
 
-            Random _random = new Random();
-            string TransactionId = _random.Next(0, 10000).ToString();
+            //Random _random = new Random();
+            //string TransactionId = _random.Next(0, 10000).ToString();
 
-            // Convert the amount to the smallest currency unit (e.g., paise for INR)
+            //// Convert the amount to the smallest currency unit (e.g., paise for INR)
             
-            int amountInPaise = (int)(TotalAmount * 100);
+            //int amountInPaise = (int)(TotalAmount * 100);
 
-            Dictionary<string, object> input = new Dictionary<string, object>();
-            input.Add("amount", amountInPaise); // Use the converted amount
-            input.Add("currency", "INR");
-            input.Add("receipt", TransactionId);
+            //Dictionary<string, object> input = new Dictionary<string, object>();
+            //input.Add("amount", amountInPaise); // Use the converted amount
+            //input.Add("currency", "INR");
+            //input.Add("receipt", TransactionId);
 
-            RazorpayClient client = new RazorpayClient(Key, secret);
-            Razorpay.Api.Order order = client.Order.Create(input);
-            string OrderId = order["id"].ToString();
-            ViewBag.OrderId = OrderId;
+            //RazorpayClient client = new RazorpayClient(Key, secret);
+            //Razorpay.Api.Order order = client.Order.Create(input);
+            //string OrderId = order["id"].ToString();
+            ViewBag.OrderId = "test";
 
-            return View("RegisterCustomer", result);
+            return View(result);
         }
 
         /// <summary>

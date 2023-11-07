@@ -49,10 +49,10 @@ const SaveDiscount=async() =>{
 }
 
 const GetDiscountDetailsById = async (DisCountId) => {
-    debugger
+    
     var data = { "DisCountId": DisCountId }
     var result = await APIGetMethod('/get-discount-details-byId', data);
-    debugger
+    
     if (result != null && result != "") {
 
         $("#DiscountId").val(result.discountID);
@@ -65,7 +65,7 @@ const GetDiscountDetailsById = async (DisCountId) => {
 }
 
 const ConfirmDeleteDiscount = async (DisCountId) => {
-    debugger
+    
     Swal.fire({
         title: 'Do you sure to delete this record?',
         showDenyButton: true,
@@ -85,7 +85,7 @@ const ConfirmDeleteDiscount = async (DisCountId) => {
 const DeleteDiscountById = async (DisCountId) => {
     var data = { "DisCountId": DisCountId }
     var result = await APIGetMethod('/delete-room-details', data);
-    debugger
+    
     if (result != null && result != "") {
         if (result == 200) {
             Swal.fire({
