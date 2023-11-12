@@ -30,12 +30,12 @@
 
     /* Style the room details within the checkout-card */
     /*  .room-details {
-            margin: 20px 0;
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #fff;
-        } */
+                            margin: 20px 0;
+                            border: 1px solid #ddd;
+                            padding: 10px;
+                            border-radius: 5px;
+                            background-color: #fff;
+                        } */
 
     /* Style the room title (Name) */
     .room-title h4 {
@@ -94,6 +94,49 @@
         font-weight: bold; /* Make the text bold */
     }
 
+
+
+    .panel {
+        width: 100%;
+        margin: 20px auto;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #002349;
+        color: #fff;
+    }
+
+    tbody tr:hover {
+        background-color: #ecf0f1;
+    }
+
+    tfoot {
+        font-weight: bold;
+    }
+
+        tfoot td {
+            border-top: 2px solid #333;
+            padding-top: 12px;
+        }
+
+            tfoot td:first-child {
+                text-align: right;
+            }
+
 </style>
 <!-- BEGIN: Page Title Section ======================================== -->
 <section class="page-title">
@@ -128,33 +171,58 @@
                             <h2 class="section-title text-center">Booking Details</h2>
 
                             <div class="panel">
-                                <div class="panel-body">
-                                    <strong>Check In:</strong> @Model?.bookingQueryDTO?.CheckInDate<br />
-                                    <strong>Check Out:</strong> @Model?.bookingQueryDTO?.CheckOutDate<br />
+                                @{
+                                    DateTime? checkInDate = null;
+                                    DateTime? checkOutDate = null;
 
-                                    @{
-                                        DateTime? checkInDate = null;
-                                        DateTime? checkOutDate = null;
-
-                                        if (!string.IsNullOrEmpty(Model?.bookingQueryDTO?.CheckInDate))
-                                        {
-                                            checkInDate = DateTime.ParseExact(Model.bookingQueryDTO.CheckInDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                                        }
-
-                                        if (!string.IsNullOrEmpty(Model?.bookingQueryDTO?.CheckOutDate))
-                                        {
-                                            checkOutDate = DateTime.ParseExact(Model.bookingQueryDTO.CheckOutDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                                        }
-
-                                        int totalLengthOfStay = 0;
-                                        if (checkInDate.HasValue && checkOutDate.HasValue)
-                                        {
-                                            totalLengthOfStay = (checkOutDate - checkInDate).Value.Days;
-                                        }
+                                    if (!string.IsNullOrEmpty(Model?.bookingQueryDTO?.CheckInDate))
+                                    {
+                                        checkInDate = DateTime.ParseExact(Model.bookingQueryDTO.CheckInDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                                     }
 
-                                    <div>
-                                        <strong>Total stay: @totalLengthOfStay days</strong>
+                                    if (!string.IsNullOrEmpty(Model?.bookingQueryDTO?.CheckOutDate))
+                                    {
+                                        checkOutDate = DateTime.ParseExact(Model.bookingQueryDTO.CheckOutDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                    }
+
+                                    int totalLengthOfStay = 0;
+                                    if (checkInDate.HasValue && checkOutDate.HasValue)
+                                    {
+                                        totalLengthOfStay = (checkOutDate - checkInDate).Value.Days;
+                                    }
+                                }
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <strong>Check In</strong>
+
+                                    </div>
+                                    <div class="col-md-1">
+                                        <strong>:</strong>
+                                    </div>
+                                    <div class="col-md-4 fe-text-align-left">
+                                        @Model?.bookingQueryDTO?.CheckInDate
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <strong>Check Out</strong><br />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <strong>:</strong><br />
+                                    </div>
+                                    <div class="col-md-4 fe-text-align-left">
+                                        @Model?.bookingQueryDTO?.CheckOutDate<br />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <strong>Total stay</strong><br />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <strong>:</strong><br />
+                                    </div>
+                                    <div class="col-md-4 fe-text-align-left">
+                                        @totalLengthOfStay days
                                     </div>
                                 </div>
                             </div>
@@ -165,29 +233,48 @@
                                 if (Model?.finalBookingDetails != null && Model?.finalBookingDetails.Count > 0)
                                 {
 
-                                    <div class="panel">
+                                    <div class="panel table-responsive">
+                                        <table style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>
 
-                                        @foreach (var item in Model?.finalBookingDetails)
-                                        {
-                                            <div class="room-details">
-                                                <div class="room-title">
-                                                    <h3>@item.Name</h3>
-                                                </div>
-                                                <div class="room-info">
-                                                    <p><strong>Price:</strong> ₹ @item.Amount?.ToString("F2")</p>
-                                                    <p><strong>Quantity:</strong> @item.Count</p>
-                                                    @{
-                                                        decimal? Total = item.Amount * item.Count;
-                                                        grandTotal += Total ?? 0;
-                                                    }
-                                                    <p><strong>Total:</strong> ₹ @Total?.ToString("F2")</p>
-                                                </div>
-                                            </div>
-                                        }
+                                                    </th>
+                                                    <th>Quantity</th>
+                                                    <th></th>
+                                                    <th>Amount</th>
+                                                    <th>Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model?.finalBookingDetails)
+                                                {
 
-                                        <div class="panel-grand-total">
-                                            <p><strong>Grand Total:</strong> ₹ @grandTotal.ToString("F2")</p>
-                                        </div>
+                                                    decimal? Total = item.Amount * item.Count;
+                                                    grandTotal += Total ?? 0;
+
+
+                                                    <tr>
+                                                        <td>
+                                                            @item.Name
+                                                        </td>
+                                                        <td>
+                                                            @item.Count
+                                                        </td>
+                                                        <td>X</td>
+                                                        <td>₹ @item.Amount?.ToString("F2")</td>
+                                                        <td>₹ @Total?.ToString("F2")</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="4"><strong>Grand Total:</strong></td>
+                                                    <td><strong>₹ @grandTotal.ToString("F2")</strong></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+
                                     </div>
 
                                 }

@@ -112,26 +112,39 @@
             color: #333;
         }
 
-    .room-count, .amount {
-        font-size: 18px;
-        font-weight: bold;
-        color: #007BFF;
-        padding-right: 10px;
+
+
+
+    table {
+        width: 100%;
     }
 
-    .proceed-button {
-        background-color: #007BFF;
-        color: #fff;
-        padding: 15px 30px;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        display: block;
-        margin: 20px auto;
-        font-size: 18px;
-        text-transform: uppercase;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    th, td {
+        padding: 12px;
+        text-align: left;
     }
+
+    th {
+        background-color: #002349;
+        color: #fff;
+    }
+
+    tbody tr:hover {
+        background-color: #ecf0f1;
+    }
+
+    tfoot {
+        font-weight: bold;
+    }
+
+        tfoot td {
+            border-top: 2px solid #333;
+            padding-top: 12px;
+        }
+
+            tfoot td:first-child {
+                text-align: right;
+            }
 
 </style> 
 <form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="SingleRoomDetails">
@@ -282,8 +295,8 @@
                                         <p>@days days @(item?.MaxOccupancy > 0 ? item.MaxOccupancy + " adults" : "")   @(item?.MaxChild > 0 ? item.MaxChild + " child" : "")</p>
                                         @if (item?.DiscountId > 0)
                                         {
-                                            DiscountAmount = Convert.ToDouble(item?.Rate) - Convert.ToDouble(item?.Rate * item?.DiscountPercentage) / 100;
-                                            <h5><strike>₹ @item?.Rate</strike> ₹ @DiscountAmount.ToString("F2")</h5>
+                                            DiscountAmount = Convert.ToDouble(TotalPrice) - Convert.ToDouble(TotalPrice * Convert.ToDouble(item?.DiscountPercentage)) / 100;
+                                            <h5><strike>₹ @TotalPrice</strike> ₹ @DiscountAmount.ToString("F2")</h5>
 
                                             TotalPrice = DiscountAmount;
                                         }
@@ -435,36 +448,38 @@
         $("#bookingInfo").empty();
 
         var totalAmount = 0;
-
-        for (var i = 0; i < SelectedRooms.length; i++) {
-            var dataEntry = SelectedRooms[i];
-            var roomTotalAmount = dataEntry.Amount * dataEntry.Count;
-            totalAmount += roomTotalAmount;
-
-            // Create a div for each room detail
-            var roomDiv = '<div class="room-section">' +
-                '<div class="room-info">' +
-                '<h4 class="room-name">' + dataEntry.Name + '</h4>' +
-                '<div class="room-details">' +
-                '<div class="room-count">Nights: ' + dataEntry.Count + '</div>' +
-                '<div class="amount">Amount: ₹ ' + parseFloat(roomTotalAmount).toFixed(2) + '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>';
-
-            // Append the room div to the bookingInfo div
-            $("#bookingInfo").append(roomDiv);
-        }
-
         if (SelectedRooms.length > 0) {
-            // Display the total amount above the "Proceed" button and make it bold
-            var totalAmountDiv = '<div class="total-amount"><strong>Total Amount: ₹ ' + parseFloat(totalAmount).toFixed(2) + '</strong></div>';
-            $("#bookingInfo").append(totalAmountDiv);
+            var roomDiv = '<table> <thead><tr><th></th><th>Quantity</th > <th>Amount </th></tr></thead > ' +
+                '<tbody>';
+            for (var i = 0; i < SelectedRooms.length; i++) {
+                debugger
+                var dataEntry = SelectedRooms[i];
+                var roomTotalAmount = dataEntry.Amount * dataEntry.Count;
+                totalAmount += roomTotalAmount;
+            // Create a div for each room detail
 
-            // Add a "Proceed" button
-            var btndesign = '<button class="proceed-button" onclick="ProceedNext()">Proceed</button>';
-            $("#bookingInfo").append(btndesign);
-        } else {
+                roomDiv += '<tr><td>' + dataEntry.Name + '</td>' +
+                    '<td>' + dataEntry.Count + '</td>' +
+                    '<td> ₹ ' + parseFloat(roomTotalAmount).toFixed(2) + '</td></tr>';
+
+                if (i == (SelectedRooms.length - 1)) {
+
+                    if (SelectedRooms.length > 0) {
+                        // Display the total amount above the "Proceed" button and make it bold
+                        roomDiv += '</tbody><tfoot><tr>' +
+                            '<td colspan="2"><strong>Total Amount</strong></td>' +
+                            '<td><strong>₹ ' + parseFloat(totalAmount).toFixed(2) + '</strong></td>' +
+                            '</tr></tfoot></table>';
+
+                        $("#bookingInfo").append(roomDiv);
+                        var btndesign = '<div class="row justify-content-center form-group col-md-12"><button class="proceed-button btn btn-primary btn-sm" onclick="ProceedNext()">Proceed</button></div>';
+                        $("#bookingInfo").append(btndesign);
+                    }
+
+                }
+            }
+        }
+         else {
             // Display a message when no rooms are selected
             var norecorddesign = '<h4 class="no-room-selected">No Room Selected</h4>';
             $("#bookingInfo").append(norecorddesign);

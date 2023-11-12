@@ -1,6 +1,69 @@
 ﻿@using System.Globalization;
 @model SingleRoomDetails;
 
+<style>
+
+    table {
+        width: 100%;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #002349;
+        color: #fff;
+    }
+
+    tbody tr:hover {
+        background-color: #ecf0f1;
+    }
+
+    tfoot {
+        font-weight: bold;
+    }
+
+        tfoot td {
+            border-top: 2px solid #333;
+            padding-top: 12px;
+        }
+
+            tfoot td:first-child {
+                text-align: right;
+            }
+
+
+    .discount {
+        --f: 10px;
+        --r: 15px;
+        --t: 10px;
+        inset: var(--t) calc(-1*var(--f)) auto auto;
+        padding: 0 10px var(--f) calc(10px + var(--r));
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--f)), calc(100% - var(--f)) 100%, calc(100% - var(--f)) calc(100% - var(--f)), 0 calc(100% - var(--f)), var(--r) calc(50% - var(--f) / 2));
+        background: #bd1550;
+        box-shadow: 0 calc(-1*var(--f)) 0 inset rgba(0,0,0,.3333333333);
+        color: #fff;
+    }
+
+
+    /* Booking info panel styling */
+    #bookingInfo {
+        border: 1px solid #ddd;
+        padding: 20px;
+        margin-top: 20px;
+        background-color: #f9f9f9;
+        border-radius: 4px;
+    }
+
+    /* Add shadow for a subtle lift effect */
+    #bookingInfo {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+</style>
+
 <!-- BEGIN: Page Title Section ======================================== -->
 <section class="page-title">
     <div class="container">
@@ -14,6 +77,11 @@
 
 <form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ViewMoreRooms">
     <input type="hidden" id="Params" name="Params" value="@ViewBag.BParams" />
+</form>
+
+<form id="frmRegisterRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="RegisterCustomer">
+    <input type="hidden" id="BParams" name="BParams" value="" />
+    <input type="hidden" id="FilterParams" name="FilterParams" value="@ViewBag.BParams" />
 </form>
 <!-- END: Page Title Section ========================================= -->
 <!-- BEGIN: Search Section ========================================= -->
@@ -43,98 +111,121 @@
                     }
                 }
             </article>
-          @*   <article class='gallery'>
-
-                <a class='gallery-link' href='assets/images/slider/slider1.jpg'>
-                    <figure class='gallery-image'>
-                        <img height='1400' src='assets/images/slider/slider1.jpg' width='1600'>
-                        <!--<figcaption>Photo caption</figcaption>-->
-                    </figure>
-                </a>
-                <a class='gallery-link' href='assets/images/slider/slider2.jpg'>
-                    <figure class='gallery-image'>
-                        <img height='1200' src='assets/images/slider/slider2.jpg' width='1600'>
-                        <!--<figcaption>Photo caption</figcaption>-->
-                    </figure>
-                </a>
-                <a class='gallery-link' href='assets/images/slider/slider3.jpg'>
-                    <figure class='gallery-image'>
-                        <img height='1600' src='assets/images/slider/slider3.jpg' width='1400'>
-                        <!--<figcaption>Photo caption</figcaption>-->
-                    </figure>
-                </a>
-
-                <a class='gallery-link' href='assets/images/rooms/room1.jpg'>
-                    <figure class='gallery-image'>
-                        <img height='1000' src='assets/images/rooms/room1.jpg' width='1600'>
-                        <!--<figcaption>Photo caption</figcaption>-->
-                    </figure>
-                </a>
-                <a class='gallery-link' href='assets/images/rooms/room2.jpg'>
-                    <figure class='gallery-image'>
-                        <img height='1400' src='assets/images/rooms/room2.jpg' width='1600'>
-                        <!--<figcaption>Photo caption</figcaption>-->
-                    </figure>
-                </a>
-
-
-            </article>
- *@
             <div class="room-desc">
                 @Html.Raw(Model?.roomDetails?.Description)
             </div>
+        </div>
 
-            <div class="pricing-details-room">
+        <div class="row">
+            <div class="col-md-7">
+
+                <ul>
+                    @* <li><i class="fas fa-check"></i>Breakfast included in the price</li> *@
+                    @if (@Model?.roomDetails?.CancelationCharge != "")
+                    {
+                        <li><i class="fas fa-check"></i>@Model?.roomDetails?.CancelationCharge</li>
+                    }
+                    @if (Model?.roomDetails?.Payment != "")
+                    {
+                        <li><i class="fas fa-check"></i>@Model?.roomDetails?.Payment</li>
+                    }
+
+                </ul>
+
                 @{
+                    double DiscountAmount = 0;
                     // Assuming ViewBag.CheckIn and ViewBag.CheckOut are in the format "dd/mm/yyyy"
                     DateTime? checkInDate = DateTime.ParseExact(Model?.bookingQueryData?.CheckInDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     DateTime? checkOutDate = DateTime.ParseExact(Model?.bookingQueryData?.CheckOutDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     TimeSpan? timeSpan = checkOutDate - checkInDate;
                     int? days = timeSpan?.Days;
 
-                    double TotalPrice = Convert.ToDouble((Model?.roomDetails ? .Rate * days));
+                    double TotalPrice = Convert.ToDouble((Model?.roomDetails?.Rate * days));
                     double tax = TotalPrice * 0.05;
                     tax = Math.Round(tax, 2);
 
                 }
-                <p>@days days @(Model?.roomDetails?.MaxOccupancy > 0 ? Model?.roomDetails.MaxOccupancy + "adults" : "")   @(Model?.roomDetails?.MaxChild > 0 ? Model?.roomDetails.MaxChild + "child" : "")</p>
-                
-                <h5>₹ @TotalPrice</h5>
-                <p>+₹ @tax taxes and charges</p>
+                <p>@days days @(Model?.roomDetails?.MaxOccupancy > 0 ? Model?.roomDetails.MaxOccupancy + " adults" : "")   @(Model?.roomDetails?.MaxChild > 0 ? Model?.roomDetails.MaxChild + " child" : "")</p>
 
+                @if (Model?.roomDetails?.DiscountId > 0)
+                {
+                    @* style = "position: absolute; top: 10px; right: 10px; background-color: #FF0000; color: #FFF; padding: 5px;" *@
+                    <!-- Add Discount label at the top-right corner -->
+                    <div class="discount col-md-2">
+                        Discount @string.Format("{0:0.##}", Model?.roomDetails?.DiscountPercentage) %
+                    </div>
+                }
+                @if (Model?.roomDetails?.DiscountId > 0)
+                {
+                    DiscountAmount = Convert.ToDouble(Model?.roomDetails?.Rate) - Convert.ToDouble(Model?.roomDetails?.Rate * Model?.roomDetails?.DiscountPercentage) / 100;
+                    <h5><strike>₹ @Model?.roomDetails?.Rate</strike> ₹ @DiscountAmount.ToString("F2")</h5>
+
+                    TotalPrice = DiscountAmount;
+                }
+                else
+                {
+                    <h5>@TotalPrice.ToString("F2")</h5>
+                }
+                @if (Model?.roomDetails?.AvailableQuantity < 5)
+                {
+                    <p>Available Quantity: @Model?.roomDetails?.AvailableQuantity</p>
+                }
+
+                <div class="col-md-2">
+                    <!-- Move the <select> element to the right-center and apply Select2 styling -->
+                    <div class="select-room " style="height: 100%;">
+                        <select class="select2-without-search roomselection" data-attr="@Model?.roomDetails?.RoomNumber" data-amount="@TotalPrice" data-roomid="@Model?.roomDetails?.RoomId" data-discount="@Model?.roomDetails?.DiscountId">
+
+                            @if (Model?.roomDetails?.AvailableQuantity < 5)
+                            {
+                                @for (int i = 1; i <= @Model?.roomDetails?.AvailableQuantity; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            }
+                            else
+                            {
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
             </div>
-            <ul>
-                @* <li><i class="fas fa-check"></i>Breakfast included in the price</li> *@
-                @if (@Model?.roomDetails?.CancelationCharge != "")
-                {
-                    <li><i class="fas fa-check"></i>@Model?.roomDetails?.CancelationCharge</li>
-                }
-                @if (Model?.roomDetails?.Payment != "")
-                {
-                    <li><i class="fas fa-check"></i>@Model?.roomDetails?.Payment</li>
-                }
-            </ul>
+            <div class="col-md-5">
+                <div class="rooms-panel" id="bookingInfo">
+                </div>
+            </div>
+
         </div>
         <div class="row">
             <div class="col-md-12 text-center">
-                <a onclick='$("#frmSelectRoom").submit()' class='btn btn-info'>Go BAck</a>
+                <a onclick='$("#frmSelectRoom").submit()' class='btn btn-info'>Go Back</a>
+                <a id="btnconfirmpay" disabled class='btn btn-info' onclick="ProceedNext()">Proceed</a>
 
             </div>
         </div>
     </div>
 </section>
-
+<partial name="_SelectScriptPartial" />
 <!-- END: Featured Section ==================================== -->
 <!-- BEGIN: Page Refrence ========================= -->
 <!-- Photo Gallery Refrence ================= -->
 <link href="assets/plugins/gallery/css/magnific-popup.min.css" rel="stylesheet" />
 <link href="assets/plugins/gallery/css/gallery.css" rel="stylesheet" />
 <script src="assets/plugins/gallery/js/jquery.magnific-popup.min.js"></script>
+<script src="~/assets/js/ajaxconnector.js"></script>
 <!-- END: Page Refrence ========================= -->
 
 
 <script>
-  
+
+    $(document).ready(function () {
+        $(".roomselection").trigger('change');
+    });
+
     (function () {
         $('.gallery-link').magnificPopup({
             type: 'image',
@@ -162,5 +253,94 @@
         });
 
     }).call(this);
+
+
+    var SelectedRooms = [];
+    $(".roomselection").change(function () {
+        debugger
+        SelectedRooms = [];
+        // Find the select element with the "roomselection" class
+        $(".roomselection").each(function () {
+
+            var selectElement = $(this);
+            var selectedOption = selectElement.find("option:selected");
+            var selectedValue = parseInt(selectedOption.val());
+            var dataAttrValue = selectElement.data("attr");
+            var dataamount = parseFloat(selectElement.data("amount"));
+            var discount = parseFloat(selectElement.data("discount"));
+            var roomId = parseFloat(selectElement.data("roomid"));
+
+            if (selectedValue > 0) {
+                SelectedRooms.push({
+                    "Name": dataAttrValue,
+                    "Count": selectedValue,
+                    "Amount": dataamount,
+                    "RoomId": roomId,
+                    "DiscountId": discount,
+                    "TotalAmount": dataamount * selectedValue
+                });
+            }
+        });
+        BindBookings();
+    });
+
+
+    function BindBookings() {
+
+        // Clear the previous content in the div
+        $("#bookingInfo").empty();
+
+        var totalAmount = 0;
+        if (SelectedRooms.length > 0) {
+            var roomDiv = '<table> <thead><tr><th></th><th>Quanity</th > <th>Amount </th></tr></thead > ' +
+                '<tbody>';
+            for (var i = 0; i < SelectedRooms.length; i++) {
+                debugger
+                var dataEntry = SelectedRooms[i];
+                var roomTotalAmount = dataEntry.Amount * dataEntry.Count;
+                totalAmount += roomTotalAmount;
+                // Create a div for each room detail
+
+                roomDiv += '<tr><td>' + dataEntry.Name + '</td>' +
+                    '<td>' + dataEntry.Count + '</td>' +
+                    '<td> ₹ ' + parseFloat(roomTotalAmount).toFixed(2) + '</td></tr>';
+
+                if (i == (SelectedRooms.length - 1)) {
+
+                    if (SelectedRooms.length > 0) {
+                        // Display the total amount above the "Proceed" button and make it bold
+                        var totalAmountDiv = '<div class="total-amount"><strong>Total Amount: ₹ ' + parseFloat(totalAmount).toFixed(2) + '</strong></div>';
+                        roomDiv += '</tbody><tfoot>' +
+                            '<td></td>' +
+                            '<td><strong>Total Amount</strong></td>' +
+                            '<td><strong>₹ ' + parseFloat(totalAmount).toFixed(2) + '</strong></td>' +
+                            '</tfoot></table>';
+
+                        $("#bookingInfo").append(roomDiv);
+
+                        $("#btnconfirmpay").attr('disabled', false);
+                    }
+
+                }
+            }
+        }
+        else {
+            $("#btnconfirmpay").attr('disabled', true);
+        }
+    }
+
+
+    const ProceedNext = async () => {
+        var data = {
+            finalBookingDetails: SelectedRooms
+        }
+        var result = await APIPostMethod('/process-data', data)
+
+        if (result != null) {
+            $('#BParams').val(result);
+            $('#frmRegisterRoom').submit();
+        }
+    }
+
 </script>
 

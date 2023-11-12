@@ -158,7 +158,7 @@ namespace Booking.Areas.FrontOffice.Controllers
 
             ViewBag.BParams = selectedRoomDTO.Params;
             roomDetails.bookingQueryData = bookingQueryDTO;
-            roomDetails.roomDetails = await _bookMyRoomRepository.GetRoomsById(selectedRoomDTO.RoomId);
+            roomDetails.roomDetails = await _bookMyRoomRepository.GetRoomsById(bookingQueryDTO);
             return View(roomDetails);
         }
 

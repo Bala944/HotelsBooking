@@ -44,13 +44,16 @@ namespace Booking.Areas.FrontOffice.Data.Services
             return roomsList;
         }
 
-        public async Task<RoomsDetailsDTO> GetRoomsById(Int64 roomId)
+        public async Task<RoomsDetailsDTO> GetRoomsById(BookingQueryDTO  bookingQueryDTO)
         {
             RoomsDetailsDTO roomsList = new RoomsDetailsDTO();
             var parameters = new DynamicParameters();
             try
             {
-                parameters.Add("RoomId", roomId, DbType.Int64, ParameterDirection.Input);
+                parameters.Add("RoomId", bookingQueryDTO.SelectedRoomId, DbType.Int64, ParameterDirection.Input);
+                parameters.Add("CheckInDate", ConversionHelper.ToSQLlDatetime(bookingQueryDTO.CheckInDate), DbType.DateTime, ParameterDirection.Input);
+                parameters.Add("CheckOutDate", ConversionHelper.ToSQLlDatetime(bookingQueryDTO.CheckOutDate), DbType.DateTime, ParameterDirection.Input);
+
                 using (_dbHandler.Connection)
                 {
                     roomsList = await _dbHandler.QuerySingleAsync<RoomsDetailsDTO>(_dbHandler.Connection, "dbo.GetFilteredRoomsDetailsById", CommandType.StoredProcedure, parameters);

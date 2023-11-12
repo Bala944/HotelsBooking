@@ -5,7 +5,7 @@ namespace Booking.Areas.FrontOffice.Data.Interface
     public interface IBookMyRoomRepository
     {
         Task<List<RoomsDetailsDTO>> GetRooms(RoomFilterDTO roomFilterDTO);
-        Task<RoomsDetailsDTO> GetRoomsById(Int64 roomId);
+        Task<RoomsDetailsDTO> GetRoomsById(BookingQueryDTO bookingQueryDTO);
         Task<string> ConfirmBooking(RegistrationDetails registrationDetails);
     }
 }

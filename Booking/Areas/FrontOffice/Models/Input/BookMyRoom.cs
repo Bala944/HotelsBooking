@@ -49,6 +49,8 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public Int64 RoomId { get; set; }
         public bool IsViewMore { get; set; } = false;
         public string? Params { get; set; }
+        public string? CheckInDate { get; set; }
+        public string? CheckOutDate { get; set; }
 
     }
 
