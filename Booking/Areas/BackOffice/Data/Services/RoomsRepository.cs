@@ -102,6 +102,7 @@ namespace Booking.Areas.BackOffice.Data.Services
                 parameters.Add("ActionId", 2, DbType.Int64, ParameterDirection.Input);
                 parameters.Add("RoomId", roomsDetailsDTO.RoomId, DbType.Int64, ParameterDirection.Input);
                 parameters.Add("RoomTypeId", roomsDetailsDTO.RoomTypeId, DbType.Int16, ParameterDirection.Input);
+                parameters.Add("RoomType2Id", roomsDetailsDTO.RoomACTypeId, DbType.Int16, ParameterDirection.Input);
                 parameters.Add("BedTypeId", roomsDetailsDTO.BedTypeId, DbType.Int16, ParameterDirection.Input);
                 parameters.Add("Number", roomsDetailsDTO.RoomNumber, DbType.String, ParameterDirection.Input);
                 parameters.Add("Price", roomsDetailsDTO.Price, DbType.Decimal, ParameterDirection.Input);

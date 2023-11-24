@@ -23,7 +23,7 @@
                 <th>Max Occupancy</th>
                 <th>Rate</th>
                 <th>Description</th>
-                <th>Room Status</th>
+                @* <th>Room Status</th> *@
             </tr>
         </thead>
         <tbody>
@@ -42,7 +42,7 @@
                         <td>@room.MaxOccupancy</td>
                         <td>@room.Rate</td>
                         <td>@Html.Raw(room.Description)</td>
-                        <td>@room.RoomStatus</td>
+                        @* <td>@room.RoomStatus</td> *@
                     </tr>
                 }
             }

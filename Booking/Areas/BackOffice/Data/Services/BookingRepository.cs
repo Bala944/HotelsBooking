@@ -44,5 +44,34 @@ namespace Booking.Areas.BackOffice.Data.Services
             return listBooking;
         }
 
+        /// <summary>
+        /// To Update bookings  Status 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Int16> UpdateBookingStatus(BookingStatusDTO bookingStatusDTO)
+        {
+
+            Int16 result = 0;
+          var Parameters = new DynamicParameters();
+            try
+            {
+
+                Parameters.Add("BookingId",EncryptionHelper.Decrypt(bookingStatusDTO.BookingId), DbType.Int16, ParameterDirection.Input);
+                Parameters.Add("BookingStatusId", bookingStatusDTO.BookingStatus, DbType.Int16, ParameterDirection.Input);
+
+                using (_dbHandler.Connection)
+                {
+                    result = await _dbHandler.ExecuteScalarAsync<Int16>(_dbHandler.Connection, "[dbo].[ManageBookingStatus]", CommandType.StoredProcedure, Parameters);
+                }
+            }
+            catch (Exception ex)
+            {
+                new ErrorLog().WriteLog(ex);
+            }
+
+
+            return result;
+        }
+
     }
 }

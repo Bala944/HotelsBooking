@@ -6,6 +6,7 @@ namespace Booking.Areas.BackOffice.Data.Interface
     public interface IBookingRepository
     {
          Task<List<BookingDTO>> GetBookings();
+         Task<Int16> UpdateBookingStatus(BookingStatusDTO bookingStatusDTO);
         
     }
 }

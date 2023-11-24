@@ -20,6 +20,7 @@
         public  string? RoomNumber { get; set; }
         public  int BedTypeId { get; set; }
         public  int RoomTypeId { get; set; }
+        public  int RoomACTypeId { get; set; }
         public int CancelationCharge { get; set; }
         public int MaxOccupancy { get; set; }
         public int MaxChild { get; set; }

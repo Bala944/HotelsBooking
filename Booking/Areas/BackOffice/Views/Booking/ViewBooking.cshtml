@@ -8,48 +8,106 @@
     <table class="table table-stripped table-bordered table-hover table-center mb-0">
         <thead>
             <tr>
+                <th>Action</th>
+                <th>Booking OrderId</th>
                 <th>Room Name</th>
-                <th>Room Type</th>
+                @* <th>Room Type</th> *@
                 <th>Quantity</th>
                 <th>CheckIn Date</th>
                 <th>CheckOut Date</th>
-                <th>Booking Date</th>
                 <th>Name</th>
                 <th>Email ID</th>
                 <th>Ph.Number</th>
-                @* <th>Status</th> *@
+                <th>Booking Date</th>
+                <th>Status</th>
+
+               
             </tr>
         </thead>
         <tbody>
-            @if (Model !=null && Model.Count>0)
+            @if (Model != null && Model.Count > 0)
             {
                 @foreach (var booking in Model)
                 {
                     <tr>
-                        <td>@booking.RoomName</td>
-                        <td>@booking.RoomType</td>
+                        <td>
+                            <select onchange="BookingStatus('@(booking?.EnBookingId)',this)">
+                                <option value="1" selected="@(booking?.Status == 1)">Waiting</option>
+                                <option value="2" selected="@(booking?.Status == 2)">Confirmed</option>
+                                <option value="3" selected="@(booking?.Status == 3)">Declined</option>
+                            </select>
+                        </td>
+                        <td>@booking.BookingOrderId</td>
+                        <td>@Html.Raw(booking.RoomName)</td>
+                        @* <td>@booking.RoomType</td> *@
                         <td>@booking.Quantity</td>
                         <td>@booking.CheckInDate</td>
                         <td>@booking.CheckOutDate</td>
-                        <td>@booking.BookingDate</td>
                         <td>@booking.CustomerName</td>
                         <td>@booking.Email</td>
                         <td>@booking.PhoneNumber</td>
-                        @* <td>@booking.Status</td> *@
+                        <td>@booking.BookingDate</td>
+
+                        <td>
+                            @(booking?.Status == 1 ? "Waiting" : booking?.Status == 2 ? "Confirmed" : "Declined")
+                        </td>
+                        
                     </tr>
                 }
             }
         </tbody>
     </table>
-  
+
 
 </div>
 
 <script src="~/assets/js/commonfunction.js"></script>
 <partial name="_DataTableScriptPartial" />
+<partial name="_SelectScriptPartial" />
+
+
+<script src="~/assets/plugins/sweetalert/sweetalert.js"></script>
+<script src="~/assets/js/ajaxconnector.js"></script>
+
 <script>
 
     $(document).ready(function () {
         ApplyCommonGridStyle();
     });
+
+
+    const BookingStatus = async (Id, ctrl) => {
+        debugger
+        // Check if the form is valid according to the validation rules
+
+        var data = {
+            BookingId: Id,
+            BookingStatus: parseInt($(ctrl).val())
+        };
+
+        var result = await APIPostMethod('/update-Booking-status', data);
+
+        if (result != null && result == 200) {
+            Swal.fire({
+                title: 'Booking',
+                text: 'Updated Successfully',
+                icon: 'success',
+                showConfirmButton: false,
+            });
+
+            setTimeout(function () {
+                window.location.href = "/view-Booking";
+            }, 1000);
+        }
+        else {
+            Swal.fire({
+                title: 'Booking',
+                text: 'Something went wrong',
+                icon: 'error',
+                showConfirmButton: false,
+            });
+        }
+
+    }
+
 </script>

@@ -1,4 +1,5 @@
 ﻿using Booking.Areas.BackOffice.Data.Interface;
+using Booking.Areas.BackOffice.Models.Input;
 using Booking.Areas.BackOffice.Models.Output;
 using Booking.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -24,5 +25,14 @@ namespace Booking.Areas.BackOffice.Controllers
             bookings = await _bookingRepository.GetBookings();
 			return View(bookings);
 		}
-	}
+
+
+        [Route("~/update-Booking-status")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateBookingStatus([FromBody] BookingStatusDTO bookingStatusDTO)
+        {
+            Int16 result = await _bookingRepository.UpdateBookingStatus(bookingStatusDTO);
+            return Ok(result);
+        }
+    }
 }
