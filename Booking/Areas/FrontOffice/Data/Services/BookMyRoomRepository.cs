@@ -88,6 +88,7 @@ namespace Booking.Areas.FrontOffice.Data.Services
                     parameters.Add("Email", registrationDetails?.EmailAddress, DbType.String, ParameterDirection.Input);
                     parameters.Add("MobileNumber", registrationDetails?.MobileNumber, DbType.String, ParameterDirection.Input);
                     parameters.Add("TotalAmount", registrationDetails?.TotalAmount, DbType.Decimal, ParameterDirection.Input);
+                    parameters.Add("TotalCount", registrationDetails?.TotalCount, DbType.Int16, ParameterDirection.Input);
                     parameters.Add("RoomIds", registrationDetails?.RoomId, DbType.String, ParameterDirection.Input);
                     parameters.Add("Counts", registrationDetails?.Count, DbType.String, ParameterDirection.Input);
                     parameters.Add("Amounts", registrationDetails?.Amount, DbType.String, ParameterDirection.Input);

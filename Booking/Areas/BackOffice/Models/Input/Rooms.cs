@@ -12,6 +12,7 @@
         public string? Description { get; set; }
         public  string? RoomStatus { get; set; }
         public int payment { get; set; }
+        public int Quantity { get; set; }
     }
 
     public class RoomsDetailsDTO

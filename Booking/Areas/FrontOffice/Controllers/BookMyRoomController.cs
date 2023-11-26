@@ -292,6 +292,7 @@ namespace Booking.Areas.FrontOffice.Controllers
                                 MobileNumber = customerAndBookingDetails.MobileNumber,
                                 EmailAddress = customerAndBookingDetails.EmailAddress,
                                 TotalAmount = (decimal)bookingDetailsDTO.finalBookingDetails.Sum(bd => bd.TotalAmount),
+                                TotalCount = (int)bookingDetailsDTO.finalBookingDetails.Sum(bd => bd.Count),
                                 RoomId = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.RoomId)),
                                 Count = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.Count)),
                                 Amount = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.Amount))
@@ -395,7 +396,8 @@ namespace Booking.Areas.FrontOffice.Controllers
                         LastName = customerAndBookingDetails.LastName,
                         MobileNumber = customerAndBookingDetails.MobileNumber,
                         EmailAddress = customerAndBookingDetails.EmailAddress,
-                        TotalAmount = (decimal)bookingDetailsDTO.finalBookingDetails.Sum(bd => bd.Amount),
+                        TotalAmount = (decimal)bookingDetailsDTO?.finalBookingDetails?.Sum(bd => bd?.Amount),
+                        TotalCount = (int)bookingDetailsDTO?.finalBookingDetails?.Sum(bd => bd?.Count),
                         RoomId = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.RoomId)),
                         Count = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.Count)),
                         Amount = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.Amount))

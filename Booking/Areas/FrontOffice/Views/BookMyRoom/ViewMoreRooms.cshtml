@@ -124,7 +124,7 @@
         text-align: left;
     }
 
-    th {
+    .section th {
         background-color: #002349;
         color: #fff;
     }
@@ -306,10 +306,16 @@
                                         }
                                         @* <p>+ ₹ @tax taxes and charges</p> *@
                                     </div>
-                                    @if (item.AvailableQuantity < 5)
+                                    @if (item.AvailableQuantity < 5 && item.TotalReservedQuantity>0)
                                     {
-                                        <p>Available Quantity: @item.AvailableQuantity</p>
-                                    } @if (item?.DiscountId > 0)
+                                        <p style="color:red">only @item.AvailableQuantity rooms are available more Hurry up!!</p>
+                                    }
+                                    else if (item.TotalReservedQuantity <=0)
+                                    {
+                                        <p style="color:red">Waitlist only available  Hurry up!!</p>
+
+                                    }
+                                    @if (item?.DiscountId > 0)
                                     {
                                         @* style = "position: absolute; top: 10px; right: 10px; background-color: #FF0000; color: #FFF; padding: 5px;" *@
                                         <!-- Add Discount label at the top-right corner -->
@@ -472,7 +478,7 @@
                             '</tr></tfoot></table>';
 
                         $("#bookingInfo").append(roomDiv);
-                        var btndesign = '<div class="row justify-content-center form-group col-md-12"><button class="proceed-button btn btn-primary btn-sm" onclick="ProceedNext()">Proceed</button></div>';
+                        var btndesign = '<div class="justify-content-center form-group col-md-12"><button class="proceed-button btn btn-primary btn-sm" onclick="ProceedNext()">Proceed</button></div>';
                         $("#bookingInfo").append(btndesign);
                     }
 

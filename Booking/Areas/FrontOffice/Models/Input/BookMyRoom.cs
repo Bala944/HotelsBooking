@@ -20,6 +20,7 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public string? Images { get; set; } = string.Empty;
         public string? Payment { get; set; } = string.Empty;
         public int? AvailableQuantity { get; set; } = 0;
+        public int? TotalReservedQuantity { get; set; } = 0;
     }
 
     public class RoomFilterDTO
@@ -109,6 +110,7 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public required string Count { get; set; }
         public required string Amount { get; set; }
         public required decimal TotalAmount { get; set; }
+        public required int TotalCount { get; set; }
         public required string CheckIn { get; set; }
         public required string? CheckOut { get; set; }
 
