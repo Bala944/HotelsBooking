@@ -30,6 +30,7 @@ namespace Booking.Areas.FrontOffice.Data.Services
                 parameters.Add("Adults", roomFilterDTO.Adults, DbType.Int16, ParameterDirection.Input);
                 parameters.Add("Children", roomFilterDTO.Children, DbType.Int16, ParameterDirection.Input);
                 parameters.Add("Rooms", roomFilterDTO.Rooms, DbType.Int16, ParameterDirection.Input);
+                parameters.Add("RoomType", roomFilterDTO.RoomType, DbType.Int16, ParameterDirection.Input);
                 using (_dbHandler.Connection)
                 {
                     roomsList = (await _dbHandler.QueryAsync<RoomsDetailsDTO>(_dbHandler.Connection, "dbo.GetFilteredRoomsDetails", CommandType.StoredProcedure, parameters)).AsList();

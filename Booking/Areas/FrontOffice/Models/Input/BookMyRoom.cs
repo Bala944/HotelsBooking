@@ -30,6 +30,7 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public int? Adults { get; set; }
         public int? Children { get; set; }
         public int? Rooms { get; set; }
+        public int? RoomType { get; set; }
         public bool IsViewMore { get; set; } =false;
         public string? Params { get; set; } =string.Empty;
 
@@ -41,6 +42,7 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public int? Adults { get; set; }
         public int? Children { get; set; }
         public int? Rooms { get; set; }
+        public int? RoomType { get; set; }
         public  Int64 SelectedRoomId { get; set; }
 
     }

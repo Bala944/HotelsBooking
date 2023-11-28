@@ -52,6 +52,7 @@ namespace Booking.Areas.FrontOffice.Controllers
                     bookingQueryDTO.Adults = bookMyRoomResultDTO.roomFilterDTO.Adults;
                     bookingQueryDTO.Children = bookMyRoomResultDTO.roomFilterDTO.Children;
                     bookingQueryDTO.Rooms = bookMyRoomResultDTO.roomFilterDTO.Rooms;
+                    bookingQueryDTO.RoomType = bookMyRoomResultDTO.roomFilterDTO.RoomType;
                     string json = JsonConvert.SerializeObject(bookingQueryDTO);
                     string paramsEncrypted = EncryptionHelper.Encrypt(json);
 
@@ -93,6 +94,7 @@ namespace Booking.Areas.FrontOffice.Controllers
                     roomFilterDTO.CheckOutDate = bookingQueryDTO1.CheckOutDate;
                     roomFilterDTO.Adults = bookingQueryDTO1.Adults;
                     roomFilterDTO.Children = bookingQueryDTO1.Children;
+                    roomFilterDTO.RoomType = bookingQueryDTO1.RoomType;
 
                 }
                 catch (JsonException ex)
@@ -121,6 +123,7 @@ namespace Booking.Areas.FrontOffice.Controllers
                 bookingQueryDTO.Adults = bookMyRoomResultDTO.roomFilterDTO.Adults;
                 bookingQueryDTO.Children = bookMyRoomResultDTO.roomFilterDTO.Children;
                 bookingQueryDTO.Rooms = bookMyRoomResultDTO.roomFilterDTO.Rooms;
+                bookingQueryDTO.RoomType = bookMyRoomResultDTO.roomFilterDTO.RoomType;
                 string json = JsonConvert.SerializeObject(bookingQueryDTO);
                 string paramsEncrypted = EncryptionHelper.Encrypt(json);
 
