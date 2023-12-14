@@ -1,5 +1,6 @@
 //BEGIN: Slider Style
 .owl-carousel {
+    position: relative;
     .item {
         height: calc(100vh - 4.2rem);
         position: relative;

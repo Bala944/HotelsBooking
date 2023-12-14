@@ -1,10 +1,30 @@
 //BEGIN: Search panel
+#search-sec {
+    position: absolute;
+    top: 6rem;
+    width: 100%;
+    max-width: 1320px;
+    margin-left: 6rem;
+}
 .search-panel {
-    background-color: $theme-secondary-color;
+    background-color: rgba(149, 124, 61, 0.8);
     padding: 1rem;
+
     h2 {
         font-size: 1.8rem;
         font-weight: 700;
     }
 }
 //END: Search Panel
+@media (min-width: 320px) and (max-width: 575px) {
+    #search-sec {
+        margin: 0;
+        top: 3rem;
+    }
+}
+@media (min-width: 576px) and (max-width: 1320px) {
+    #search-sec {
+        margin: 0;
+        top: 3rem;
+    }
+}
