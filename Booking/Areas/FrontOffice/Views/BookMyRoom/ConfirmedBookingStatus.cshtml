@@ -9,7 +9,7 @@
                 @if (ViewBag.BookingStatus == "200")
                 {
                     <div class="sub-panel-header">
-                        <h4>Booking Confirmed - Order Id #(@ViewBag.BookingOrderId)</h4>
+                        <h4>Order Id #(@ViewBag.BookingOrderId) <br> Please confirm your booking by contacting Aara Home Stay at 8072172838 or 8760164055 <br> complete your payment using the QR scanner code below.</h4>
                     </div>
                     <div class="sub-panel-body row">
 
@@ -22,7 +22,7 @@
                 else
                 {
                     <div class="sub-panel-header">
-                        <h4>Booking is filled.Please try other options.</h4>
+                        <h4>Rooms are already filled.Please try other options.</h4>
                     </div>
                 }
                 <div class="sub-panel-footer mt-1">
