@@ -80,6 +80,8 @@ function SaveRoomDetails() {
         // Add form fields to FormData
         RoomFormData.append("RoomId", $("#RoomId").val() || 0);
         RoomFormData.append("RoomNumber", $("#roomNumber").val());
+        RoomFormData.append("Address", $("#address").val());
+        RoomFormData.append("MailId", $("#mailId").val());
         RoomFormData.append("RoomTypeId", $("#roomType").val());
         RoomFormData.append("RoomACTypeId", $("#roomType2").val());
         RoomFormData.append("BedTypeId", $("#bedType").val());
@@ -158,7 +160,10 @@ const GetRoomDetailsById = async (RoomId) => {
         $("#Quantity").val(result.quantity);
         $("#maxChild").val(result.maxChild);
         $("#rate").val(result.price);
-        debugger
+        $("#address").val(result.address);
+
+        $("#mailId").val(result.mailId);
+
         if (result.images != '' && result.images != null) {
             var attachementpath1 = 'Attachments/RoomImages/';
             Uploaddata = result.images.split('$');
@@ -243,11 +248,17 @@ var page = function () {
                     placeholder: '(Select)',
                     width: "100%",
                     dropdownParent: $this.parent()
-                })
-                .change(function () {
+                }).change(function () {
                     $(this).valid();
                 });
         });
+        //custom validation rule
+        $.validator.addMethod("customemail",
+            function (value, element) {
+                return /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(value);
+            },
+            "Please enter a valid email address."
+        );
 
         if (frmSignup.length) {
             frmSignup.validate({
@@ -300,6 +311,20 @@ var page = function () {
                     Quantity: {
                         required: true
                     },
+                    address: {
+                        required: true
+                    },
+                    
+                    mailId:
+                    {
+                        required: {
+                            depends: function () {
+                                $(this).val($.trim($(this).val()));
+                                return true;
+                            }
+                        },
+                        customemail: true
+                    }
                 },
             });
 

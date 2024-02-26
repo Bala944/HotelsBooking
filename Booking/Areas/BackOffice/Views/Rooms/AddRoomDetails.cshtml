@@ -17,7 +17,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="roomType">Room Type<span class="required-star">*</span></label>
+                        <label for="roomType">Property Type<span class="required-star">*</span></label>
                         <select id="roomType" name="roomType" class="form-select select2" required>
                             @if (Model?.roomTypeModel != null)
                             {
@@ -57,12 +57,10 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Charges For cancellation<span class="required-star">*</span></label>
+                        <label>Cancelation Charges<span class="required-star">*</span></label>
                         <select class="form-select select2" id="cancellationType" name="cancellationType">
                             <option value="">Select</option>
-                            <option value="1">Free</option>
-                            <option value="2">5% Before 24Hours</option>
-                            <option value="3">No Cancellation Allow</option>
+                            <option value="1">1 day before free</option>
                         </select>
                     </div>
                 </div>
@@ -78,7 +76,7 @@
                         <select class="form-select select2" id="payment" name="payment">
                             <option value="">Select</option>
                             <option value="1">No prepayment needed – pay at the property</option>
-                            <option value="2">50% prepayment needed</option>
+                            <option value="2">Partial Payment Needed</option>
                             <option value="3">Full payment needed</option>
                         </select>
                     </div>
@@ -99,6 +97,18 @@
                     <div class="form-group">
                         <label>Rent<span class="required-star">*</span></label>
                         <input type="number" class="form-control" id="rate" name="rate" required min="0" max="100000">
+                    </div>
+                </div>
+                 <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Address<span class="required-star">*</span></label>
+                        <input type="text" class="form-control" id="address" name="address" required maxlength="200">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Villa Owner MailId<span class="required-star">*</span></label>
+                        <input type="text" class="form-control" id="mailId" name="mailId" required maxlength="50">
                     </div>
                 </div>
                 <div class="col-md-4">

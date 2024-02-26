@@ -115,6 +115,8 @@ namespace Booking.Areas.BackOffice.Data.Services
                 parameters.Add("MaxChild", roomsDetailsDTO.MaxChild, DbType.Int16, ParameterDirection.Input);
                 parameters.Add("Payment", roomsDetailsDTO.Payment, DbType.Int16, ParameterDirection.Input);
                 parameters.Add("Quantity", roomsDetailsDTO.Quantity, DbType.Int16, ParameterDirection.Input);
+                parameters.Add("Address", roomsDetailsDTO.Address, DbType.String, ParameterDirection.Input);
+                parameters.Add("MailId", roomsDetailsDTO.MailId, DbType.String, ParameterDirection.Input);
 
                 using (_dbHandler.Connection)
                 {

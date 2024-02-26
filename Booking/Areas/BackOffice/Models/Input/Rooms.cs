@@ -19,6 +19,8 @@
     {
         public long RoomId { get; set; } = 0;
         public  string? RoomNumber { get; set; }
+        public  string? Address { get; set; }
+        public  string? MailId { get; set; }
         public  int BedTypeId { get; set; }
         public  int RoomTypeId { get; set; }
         public  int RoomACTypeId { get; set; }
