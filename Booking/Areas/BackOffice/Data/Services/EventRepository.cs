@@ -78,11 +78,10 @@ namespace Booking.Areas.BackOffice.Data.Services
                 parameters.Add("EventType", events.EventType, DbType.String, ParameterDirection.Input);
                 parameters.Add("Description", events.Description, DbType.String, ParameterDirection.Input);
                 parameters.Add("TotalSeats", events.TotalSeats, DbType.Int64, ParameterDirection.Input);
-                parameters.Add("StartDate", events.StartDate, DbType.DateTime, ParameterDirection.Input);
+                parameters.Add("StartDate", ConversionHelper.ToSQLlDatetime(events.StartDate) , DbType.DateTime, ParameterDirection.Input);
                 parameters.Add("Price", events.Price, DbType.Decimal, ParameterDirection.Input);
-                parameters.Add("EndDate", events.EndDate, DbType.DateTime, ParameterDirection.Input);
+                parameters.Add("EndDate", ConversionHelper.ToSQLlDatetime(events.EndDate), DbType.DateTime, ParameterDirection.Input);
                 parameters.Add("Images", events.Images, DbType.String, ParameterDirection.Input);
-                parameters.Add("IsActive", events.IsActive, DbType.Boolean, ParameterDirection.Input);
             
                 using (_dbHandler.Connection)
                 {

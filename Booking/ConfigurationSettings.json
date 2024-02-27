@@ -1,0 +1,14 @@
+{
+  "SMTPMailConfig": {
+    "SendMailFlag": "1",
+    "SMTPServer": "smtp.gmail.com",
+    "SMTPPort": "587",
+    "DisplayName": "TEST",
+    "MUserName": "testmyemail@boscosofttech.com",
+    "MPassword": "jH%CKQgJuUN5mF6",
+    "IsSSLEnabled": "1",
+    "ContactUsMailId": "",
+    "CCMailId": "",
+    "BCCMailId": ""
+  }
+}

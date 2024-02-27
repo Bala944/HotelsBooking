@@ -1,6 +1,7 @@
 ﻿using Booking.Areas.BackOffice.Data.Interface;
 using Booking.Areas.BackOffice.Models.Input;
 using Booking.Areas.BackOffice.Models.Output;
+using Booking.Data;
 using Booking.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,9 @@ namespace Booking.Areas.BackOffice.Controllers
         public async Task<IActionResult> UpdateBookingStatus([FromBody] BookingStatusDTO bookingStatusDTO)
         {
             Int16 result = await _bookingRepository.UpdateBookingStatus(bookingStatusDTO);
+
+            MailingService mailingService = new MailingService();
+            mailingService.SendEmail();
             return Ok(result);
         }
     }

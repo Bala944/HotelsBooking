@@ -1,0 +1,71 @@
+﻿@model List<Event>
+@{
+    ViewData["Title"] = "Event";
+}
+
+
+<form id="frmEventDetails" asp-area="BackOffice" asp-controller="Event" asp-action="AddEventDetails">
+    <input type="hidden" id="EventId" name="EventId" value="" />
+</form>
+
+<div class="add-btn-section">
+    <a href="/add-event-details" class="btn btn-primary float-right">Add Event</a>
+</div>
+<div class="col-md-12 mt-3">
+    <table class="table table-stripped table-bordered table-hover table-center mb-0">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Event Type</th>
+                <th>Description</th>
+                <th>Total Seats</th>
+                <th>Sold Seats</th>
+                <th>Price</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                @foreach (var events in Model)
+                {
+                    <tr>
+                        <td>
+                            <a class="edit-icon" onclick="openEditMode(@events.EventID)"><i class="fas fa-edit"></i></a>
+                            <a onclick="ConfirmDeleteEvent(@events.EventID)"><i class="fas fa-trash-alt"></i></a>
+                        </td>
+                        <td>@events.EventType</td>
+                        <td>@events.Description</td>
+                        <td>@events.StartDate</td>
+                        <td>@events.TotalSeats</td>
+                        <td>@events.SoldSeats</td>
+                        <td>@events.Price</td>
+                        <td>@events.EndDate</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+
+</div>
+
+<script src="~/assets/js/commonfunction.js"></script>
+<partial name="_DataTableScriptPartial" />
+<script src="~/assets/plugins/sweetalert/sweetalert.js"></script>
+<script src="~/assets/js/ajaxconnector.js"></script>
+<script src="~/assets/js/backoffice/Events.js"></script>
+<script>
+
+    $(document).ready(function () {
+        ApplyCommonGridStyle();
+    });
+
+    function openEditMode(itemId) {
+        // Set the value of the hidden input field
+        $('#EventId').val(itemId);
+        // Submit the form
+        $('#frmEventDetails').submit();
+    }
+</script>

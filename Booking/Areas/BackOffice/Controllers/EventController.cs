@@ -8,7 +8,7 @@ using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 namespace Booking.Areas.BackOffice.Controllers
 {
     [Area("BackOffice")]
-    [Authorize(Policy = Policies.RequireAdminClaim)]
+   // [Authorize(Policy = Policies.RequireAdminClaim)]
     public class EventController : Controller
     {
         public required IEventRepository _eventRepository;

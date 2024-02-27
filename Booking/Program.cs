@@ -18,6 +18,7 @@ builder.Services.AddTransient<IRoomsRepository, RoomsRepository>();
 builder.Services.AddTransient<IBookMyRoomRepository, BookMyRoomRepository>();
 builder.Services.AddTransient<IBookingRepository, BookingRepository>();
 builder.Services.AddTransient<IDiscountRepository, DiscountRepository>();
+builder.Services.AddTransient<IEventRepository, EventRepository>();
 
 
 builder.Services.AddAuthorization(options =>
