@@ -85,11 +85,12 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public class FinalBookingDetailsDTO
     {
         public required List<FinalBookingDetails> finalBookingDetails { get; set; }
+        public  string FilterParams { get; set; }
     }
 
     public class BookingRegistrationDTO
     {
-        public List<FinalBookingDetails>? finalBookingDetails { get; set; }
+        public FinalConfirmationData? finalBookingDetails { get; set; }
         public BookingQueryDTO? bookingQueryDTO { get; set; }
     }
     public class FinalBookingDetails
@@ -102,7 +103,47 @@ namespace Booking.Areas.FrontOffice.Models.Input
 
     }
 
-    public class RegistrationDetails
+    public class FinalConfirmationData
+    {
+        public List<RoomConfirmationDetailsDTO> roomConfirmationDetailsDTO { get; set; }
+        public  List<EventConfirmationDetailsDTO> eventConfirmationDetailsDTO { get; set; }
+	}
+
+	public class RoomConfirmationDetailsDTO
+	{
+		public long? RoomId { get; set; }
+		public string? Name { get; set; }
+		public long? Count { get; set; }
+		public long? DiscountId { get; set; }
+		public decimal? Amount { get; set; }
+		public decimal? TotalAmount { get; set; }
+		public decimal? DiscountAmount { get; set; }
+		public string? EmailId { get; set; }
+		public string? OwnerEmailId { get; set; }
+		public string? OrderId { get; set; }
+
+	}
+
+	public class EventConfirmationDetailsDTO
+	{
+		public long? EventId { get; set; }
+		public string? Name { get; set; }
+		public long? Count { get; set; }
+		public decimal? Amount { get; set; }
+		public decimal? TotalAmount { get; set; }
+
+	}
+
+    public class BookingSelectedDTO
+    {
+        public long? RoomId { get; set; }
+        public long Count { get; set; }
+        public string? EventIds { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+    }
+
+	public class RegistrationDetails
     {
         public required string FirstName { get; set; }
         public required  string LastName { get; set; }
@@ -115,6 +156,12 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public required int TotalCount { get; set; }
         public required string CheckIn { get; set; }
         public required string? CheckOut { get; set; }
+        public  long? DiscountId { get; set; }
+        public  decimal? DiscountAmount { get; set; }
+
+        public  string? EventId { get; set; }
+        public  string? EventCount { get; set; }
+        public  string? EventAmount { get; set; }
 
 
     }
@@ -125,4 +172,15 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public string BookingOrderId { get; set; }
     }
 
+    public class EventDTO
+    {
+        public long? EventID { get; set; }
+        public string? EventType { get; set; }
+        public string? Description { get; set; }
+        public string? Images { get; set; }
+        public decimal? Price { get; set; }
+        public long? SoldSeats { get; set; }
+        public string? StartDate { get; set; }
+        public string? EndDate { get; set; }
+    }
 }

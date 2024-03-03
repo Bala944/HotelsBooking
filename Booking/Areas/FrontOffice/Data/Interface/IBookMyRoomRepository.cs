@@ -7,5 +7,7 @@ namespace Booking.Areas.FrontOffice.Data.Interface
         Task<List<RoomsDetailsDTO>> GetRooms(RoomFilterDTO roomFilterDTO);
         Task<RoomsDetailsDTO> GetRoomsById(BookingQueryDTO bookingQueryDTO);
         Task<string> ConfirmBooking(RegistrationDetails registrationDetails);
+        Task<EventDTO> GetEventDetailsById(long EventId);
+        Task<FinalConfirmationData> GetRoomConfirmationDetails(BookingSelectedDTO bookingSelectedDTO);
     }
 }

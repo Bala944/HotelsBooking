@@ -150,7 +150,22 @@
         margin-left: 12rem;
         position:initial;
     }
+
+       .slider {
+        width: 100%; /* Set the width of the slider container */
+        margin: 0 auto;
+    }
+
+        .slider img {
+            max-width: 100%; /* Set the maximum width of the images */
+            height: auto; /* Maintain the aspect ratio of the images */
+        }
+
 </style> 
+
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+
 <form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="SingleRoomDetails">
     <input type="hidden" id="roomId" name="roomId" value="" />
     <input type="hidden" id="Params" name="Params" value="@ViewBag.FParams" />
@@ -274,7 +289,30 @@
                         <div class="col-md-12">
                             <div class="rooms-panel" style="position: relative;">
                                 <div class="rooms-img">
-                                    <img src="@(string.IsNullOrEmpty(image) ? "assets/images/rooms/room1.jpg" : "Attachments/RoomImages/" + image)" alt="Room" class="img-fluid" />
+
+                                    @if (item != null && item.Images != null && item.Images != "")
+                                    {
+                                        string[] allimages = item.Images.Split("$");
+                                        <div class="slider">
+                                            @foreach (var item1 in allimages)
+                                            {
+                                                if (item1 != "")
+                                                {
+                                                    <div><img src="~/Attachments/RoomImages/@item1" alt="Room Image"></div>
+                                                }
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <img src="assets/images/rooms/room1.jpg" alt="Room" class="img-fluid" />
+
+                                    }
+
+
+                               
+                                
+                                
                                 </div>
                                 <div class="room-discription">
                                     <div class="room-title">
@@ -383,11 +421,28 @@
 </section>
 <!-- END: Featured Section ==================================== -->
 
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <partial name="_DatepickerPartial" />
 <partial name="_SelectScriptPartial" />
 <script src="~/assets/js/ajaxconnector.js"></script>
 
+
+
 <script>
+
+      $(document).ready(function () {
+        $('.slider').slick({
+            autoplay: true,
+            autoplaySpeed: 1000,
+            dots: false, // Hide the dots
+            infinite: true,
+            speed: 1000,
+            fade: true,
+            cssEase: 'linear',
+           
+        });
+    });
 
     function openEditMode(itemId) {
         // Set the value of the hidden input field
@@ -509,7 +564,8 @@
 
     const ProceedNext = async () => {
         var data = {
-            finalBookingDetails: SelectedRooms
+            finalBookingDetails: SelectedRooms,
+            FilterParams: $('#Params').val()
         }
         var result = await APIPostMethod('/process-data', data)
 

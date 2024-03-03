@@ -1,10 +1,12 @@
 ﻿using Booking.Areas.BackOffice.Data.Interface;
 using Booking.Areas.BackOffice.Models.Input;
 using Booking.Areas.BackOffice.Models.Output;
+using Booking.Areas.FrontOffice.Models.Input;
 using Booking.Data;
 using Booking.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Razorpay.Api;
 
 namespace Booking.Areas.BackOffice.Controllers
 {
@@ -13,9 +15,11 @@ namespace Booking.Areas.BackOffice.Controllers
     public class BookingController : Controller
 	{
 		private IBookingRepository _bookingRepository;
-		public BookingController(IBookingRepository bookingRepository) 
+		private IMailing _mailing;
+		public BookingController(IBookingRepository bookingRepository, IMailing mailing) 
 		{
 			_bookingRepository = bookingRepository;
+            _mailing = mailing;
 
         }
 
@@ -34,8 +38,60 @@ namespace Booking.Areas.BackOffice.Controllers
         {
             Int16 result = await _bookingRepository.UpdateBookingStatus(bookingStatusDTO);
 
+            FinalConfirmationData bookingDetailsDTO = new FinalConfirmationData();
+
+            bookingDetailsDTO = await _bookingRepository.GetConfirmStatus(Convert.ToInt64(EncryptionHelper.Decrypt(bookingStatusDTO.BookingId)));
+
+            List<MailDetailsDTO> mailDetails = new List<MailDetailsDTO>();
+
+			mailDetails = await _mailing.GetMailDetails(3);
+
             MailingService mailingService = new MailingService();
-            mailingService.SendEmail();
+
+
+            for (int i = 0; i < mailDetails.Count; i++)
+            {
+                string Booking = "<table style='width:100%;'>";
+                decimal? totalAmount = 0;
+
+                for (int j = 0; j < bookingDetailsDTO.roomConfirmationDetailsDTO.Count; j++)
+                {
+                    Booking += $"<tr><td style='padding: 8px;'>{bookingDetailsDTO.roomConfirmationDetailsDTO[j].Name}</td><td style='padding: 8px;'>X {bookingDetailsDTO.roomConfirmationDetailsDTO[j].Count}</td><td style='padding: 8px;'>   {bookingDetailsDTO.roomConfirmationDetailsDTO[j].Amount}</td></tr>";
+                    totalAmount += bookingDetailsDTO.roomConfirmationDetailsDTO[j].Amount;
+                }
+
+                if (bookingDetailsDTO.eventConfirmationDetailsDTO != null)
+                {
+                    for (int j = 0; j < bookingDetailsDTO.eventConfirmationDetailsDTO.Count; j++)
+                    {
+                        Booking += $"<tr><td style='padding: 8px;'>             {bookingDetailsDTO.eventConfirmationDetailsDTO[j].Name}</td><td style='padding: 8px;'></td><td style='padding: 8px;'>   {bookingDetailsDTO.eventConfirmationDetailsDTO[j].Amount}</td></tr>";
+                        totalAmount += bookingDetailsDTO.eventConfirmationDetailsDTO[j].Amount;
+                    }
+                }
+
+                Booking += $"<tfoot><tr><td colspan='2' style='text-align:right;padding: 8px;'>Total Amount:</td><td style='padding: 8px;'>{totalAmount}</td></tr></tfoot>";
+                Booking += "</table>";
+                string formattedHtmlContent = string.Empty;
+                string Email = null;
+                if (mailDetails[i].MailType == 3)
+                {
+                    formattedHtmlContent = string.Format(mailDetails[i].Content, bookingDetailsDTO.roomConfirmationDetailsDTO[0].OrderId, Booking);
+                    Email = bookingDetailsDTO.roomConfirmationDetailsDTO[0].EmailId;
+                }
+                else if (mailDetails[i].MailType == 5)
+                {
+                    formattedHtmlContent = string.Format(mailDetails[i].Content, bookingDetailsDTO.roomConfirmationDetailsDTO[0].OrderId, Booking);
+                    Email = bookingDetailsDTO.roomConfirmationDetailsDTO[0].OwnerEmailId;
+                }
+                else
+                {
+                    formattedHtmlContent = string.Format(mailDetails[i].Content, bookingDetailsDTO.roomConfirmationDetailsDTO[0].OrderId, Booking);
+                }
+
+                mailingService.SendEmail(mailDetails[i].Subject, formattedHtmlContent, Email);
+            }
+           
+
             return Ok(result);
         }
     }

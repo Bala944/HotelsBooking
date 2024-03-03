@@ -1,6 +1,7 @@
 ﻿using Booking.Areas.BackOffice.Data.Interface;
 using Booking.Areas.BackOffice.Models.Input;
 using Booking.Areas.BackOffice.Models.Output;
+using Booking.Areas.FrontOffice.Models.Input;
 using Booking.DBEngine;
 using Booking.Models;
 using Dapper;
@@ -43,6 +44,8 @@ namespace Booking.Areas.BackOffice.Data.Services
 
             return listBooking;
         }
+        
+        
 
         /// <summary>
         /// To Update bookings  Status 
@@ -72,6 +75,32 @@ namespace Booking.Areas.BackOffice.Data.Services
 
             return result;
         }
+        public async Task<FinalConfirmationData> GetConfirmStatus(long BookingId)
+        {
+            FinalConfirmationData finalConfirmationData = new FinalConfirmationData();
 
+            var parameters = new DynamicParameters();
+            parameters.Add("BookingId", BookingId, DbType.Int64, ParameterDirection.Input);
+           
+            try
+            {
+                using (_dbHandler.Connection)
+                {
+                    var multiResult = await _dbHandler.QueryMultipleAsync(_dbHandler.Connection, "dbo.FetchBookingStatusConfirm", CommandType.StoredProcedure, parameters);
+                    if (multiResult != null)
+                    {
+                        finalConfirmationData.roomConfirmationDetailsDTO = (await multiResult.ReadAsync<RoomConfirmationDetailsDTO>()).ToList();
+
+                        finalConfirmationData.eventConfirmationDetailsDTO = (await multiResult.ReadAsync<EventConfirmationDetailsDTO>()).ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                new ErrorLog().WriteLog(ex);
+            }
+
+            return finalConfirmationData;
+        }
     }
 }

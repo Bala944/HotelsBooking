@@ -93,6 +93,13 @@ namespace Booking.Areas.FrontOffice.Data.Services
                     parameters.Add("RoomIds", registrationDetails?.RoomId, DbType.String, ParameterDirection.Input);
                     parameters.Add("Counts", registrationDetails?.Count, DbType.String, ParameterDirection.Input);
                     parameters.Add("Amounts", registrationDetails?.Amount, DbType.String, ParameterDirection.Input);
+                    parameters.Add("DiscountAmount", registrationDetails?.DiscountAmount, DbType.Decimal, ParameterDirection.Input);
+                    parameters.Add("DiscountId", registrationDetails?.DiscountId, DbType.Int64, ParameterDirection.Input);
+
+                    parameters.Add("EventIds", registrationDetails?.EventId, DbType.String, ParameterDirection.Input);
+                    parameters.Add("EventCounts", registrationDetails?.EventCount, DbType.String, ParameterDirection.Input);
+                    parameters.Add("EventAmounts", registrationDetails?.EventAmount, DbType.String, ParameterDirection.Input);
+
 
                     using (_dbHandler.Connection)
                     {
@@ -107,6 +114,65 @@ namespace Booking.Areas.FrontOffice.Data.Services
 
 
             return result;
+        }
+
+		public async Task<FinalConfirmationData> GetRoomConfirmationDetails(BookingSelectedDTO bookingSelectedDTO)
+		{
+			FinalConfirmationData finalConfirmationData = new FinalConfirmationData();
+
+			var parameters = new DynamicParameters();
+			parameters.Add("RoomId", bookingSelectedDTO.RoomId, DbType.String, ParameterDirection.Input);
+			parameters.Add("Count", bookingSelectedDTO.Count, DbType.String, ParameterDirection.Input);
+			parameters.Add("EventIds", bookingSelectedDTO.EventIds, DbType.String, ParameterDirection.Input);
+			parameters.Add("StartDate", bookingSelectedDTO.StartDate, DbType.String, ParameterDirection.Input);
+			parameters.Add("EndDate", bookingSelectedDTO.EndDate, DbType.String, ParameterDirection.Input);
+
+			try
+			{
+				using (_dbHandler.Connection)
+				{
+					var multiResult = await _dbHandler.QueryMultipleAsync(_dbHandler.Connection, "dbo.FetchConfirmationDetails", CommandType.StoredProcedure, parameters);
+					if (multiResult != null)
+					{
+						finalConfirmationData.roomConfirmationDetailsDTO = (await multiResult.ReadAsync<RoomConfirmationDetailsDTO>()).ToList();
+
+						finalConfirmationData.eventConfirmationDetailsDTO = (await multiResult.ReadAsync<EventConfirmationDetailsDTO>()).ToList();
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				new ErrorLog().WriteLog(ex);
+			}
+
+			return finalConfirmationData;
+		}
+
+        /// <summary>
+        /// To get the bookings
+        /// </summary>
+        /// <returns></returns>
+        public async Task<EventDTO> GetEventDetailsById(long EventId)
+        {
+            EventDTO events = new EventDTO();
+
+            var Parameters = new DynamicParameters();
+            try
+            {
+                Parameters.Add("EventId", EventId, DbType.Int64, ParameterDirection.Input);
+
+                using (_dbHandler.Connection)
+                {
+                    events = await _dbHandler.QuerySingleAsync<EventDTO>(_dbHandler.Connection, "[dbo].[GetEventDetailsById]", CommandType.StoredProcedure, Parameters);
+                }
+            }
+            catch (Exception ex)
+            {
+                new ErrorLog().WriteLog(ex);
+            }
+
+
+            return events;
         }
     }
 }

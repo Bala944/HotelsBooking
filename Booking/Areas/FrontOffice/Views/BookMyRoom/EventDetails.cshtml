@@ -1,0 +1,86 @@
+﻿@using System.Globalization;
+@model EventDTO
+@{
+    ViewData["Title"] = "Event";
+    string image = string.Empty;
+    decimal grandTotal = 0;
+}
+<style>
+    .slider {
+        width: 100%; /* Set the width of the slider container */
+        margin: 0 auto;
+    }
+
+        .slider img {
+            max-width: 100%; /* Set the maximum width of the images */
+            height: auto; /* Maintain the aspect ratio of the images */
+        }
+</style>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+
+
+<!-- BEGIN: Page Title Section ======================================== -->
+<section class="page-title">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Event Information</h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- END: Page Title Section ========================================= -->
+<section id="featued-sec" class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                @if (Model.Images != null)
+                {
+                    string[] allimages = Model.Images.Split("$");
+                    <div class="slider">
+                        @foreach (var item in allimages)
+                        {
+
+                            <div><img src="~/Attachments/EventImages/@item" alt="Event Image"></div>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="col-md-6">
+                <div>
+                    <h3>@Model.EventType</h3>
+                    <p>@Model.Description</p>
+                    <p><strong>Start Date:</strong> @Model.StartDate</p>
+                    <p><strong>End Date:</strong> @Model.EndDate</p>
+                    <p><strong>Price:</strong> @Model.Price</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+<partial name="_ValidationScriptsPartial" />
+<script src="~/assets/plugins/sweetalert/sweetalert.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.slider').slick({
+            autoplay: true,
+            autoplaySpeed: 1000,
+            dots: true, // Hide the dots
+            infinite: true,
+            speed: 1000,
+            fade: true,
+            cssEase: 'linear',
+           
+        });
+    });
+</script>
+
+

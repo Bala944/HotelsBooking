@@ -17,31 +17,6 @@ namespace Booking.Data
             _smtpConfig = _config.GetSection("SMTPMailConfig");
         }
 
-        public string FormatMailContent(string MailContent)
-        {
-            string SendMailContent = string.Empty;
-            string LoginURL = _smtpConfig["LoginURL"].ToString();
-            string ContactMailId = _smtpConfig["ContactUsMailId"].ToString();
-
-            SendMailContent = @"<section style='border: 1px solid #ccc;padding:20px;max-width:800px;margin:0 auto'>
-
-            <header style='border-bottom: 1px solid #ccc;margin-bottom:30px;'>
-	            <img src='" + LoginURL + @"/Images/optioclogo_email.jpg' width='100%' height='auto' alt='OptionC'/>
-            </header>";
-            MailContent = MailContent.Replace("URL", @"<a title='Click here to login'  target='_blank' style='border-radius: 3px; font-size: 12px; line-height: 1.5; padding: 5px 10px; background-color: #1ca59e; border-color: #1ca59e; color: #ffffff; text-decoration: none; '
-                                                        href='" + LoginURL + "/find-school'>Login Now</a>");
-
-            SendMailContent += MailContent + @"<p style='margin-top:50px;border-top:solid 1px #808080'><span style='text-transform: uppercase; font-family: Verdana,sans-serif; color: black; font-size: 10pt; '>DISCLAIMER</span><br/><span style='color:
-
-               black; line-height: 12.26px; font-family: Verdana,sans-serif; font-size: 8pt'>Please do not respond directly to this e-mail. The originating e-mail account is not monitored.<br /> If you have any questions please feel free to
-
-               contact us via <a href='mailto:" + ContactMailId + @"' target='_blank'><span><b><span style='font-size:9.0pt;font-family:&quot;Calibri&quot;,sans-
-
-               serif;color:#604a7b'>" + ContactMailId + @"</span></b></span><span></span></a></span></p>" + "</section>";
-
-            return SendMailContent;
-        }
-
         public bool SendEmail(string MailSubject, string MailContent, string ToAddress, string CCAddress = null, string AttachmentFile = null)
         {
             string SendMailFlag = _smtpConfig["SendMailFlag"];
@@ -60,7 +35,11 @@ namespace Booking.Data
                 string bccMailId = _smtpConfig["BCCMailId"];
 
                 string SendMailContent = string.Empty;
-                try
+
+                //if(ToAddress==null)
+                ToAddress = _smtpConfig["AdminEmail"];
+
+				try
                 {
                     // MailMessage mail = new MailMessage(Username, ToAddress, MailSubject, MailContent);
                     MailMessage mail = new MailMessage();
@@ -74,7 +53,7 @@ namespace Booking.Data
                     mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
                     mail.IsBodyHtml = true;
                     if (MailContent != null)
-                        mail.Body = FormatMailContent(MailContent);
+                        mail.Body = MailContent;
 
                     if (!string.IsNullOrEmpty(CCAddress))
                     {

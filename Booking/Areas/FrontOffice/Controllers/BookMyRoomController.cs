@@ -1,9 +1,11 @@
 ﻿using Booking.Areas.FrontOffice.Data.Interface;
 using Booking.Areas.FrontOffice.Models.Input;
 using Booking.Areas.FrontOffice.Models.Output;
+using Booking.Data;
 using Booking.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Razorpay.Api;
 using System.Security.Cryptography.Xml;
@@ -14,10 +16,12 @@ namespace Booking.Areas.FrontOffice.Controllers
     public class BookMyRoomController : Controller
     {
         private readonly IBookMyRoomRepository _bookMyRoomRepository;
+        private readonly IMailing _mailing;
 
-        public BookMyRoomController(IBookMyRoomRepository bookMyRoomRepository)
+        public BookMyRoomController(IBookMyRoomRepository bookMyRoomRepository, IMailing mailing)
         {
             _bookMyRoomRepository = bookMyRoomRepository;
+            _mailing = mailing;
         }
 
 
@@ -172,13 +176,36 @@ namespace Booking.Areas.FrontOffice.Controllers
         /// <returns></returns>
         [Route("/process-data")]
         [HttpPost]
-        public IActionResult ProcessData([FromBody] FinalBookingDetailsDTO finalBookingDetails)
+        public async Task<IActionResult> ProcessData([FromBody] FinalBookingDetailsDTO finalBookingDetails)
         {
             string paramsEncrypted = string.Empty;
+            FinalConfirmationData finalConfirmationData = new FinalConfirmationData();
+            BookingQueryDTO bookingQueryDTO = new BookingQueryDTO();
+
             try
             {
+                if (!string.IsNullOrEmpty(finalBookingDetails.FilterParams))
+                {
+                    string decryptedData2 = EncryptionHelper.Decrypt(finalBookingDetails.FilterParams);
+                    if (!string.IsNullOrEmpty(decryptedData2))
+                    {
+                        bookingQueryDTO = JsonConvert.DeserializeObject<BookingQueryDTO>(decryptedData2);
+                    }
+                }
+
+
+                BookingSelectedDTO bookingSelectedDTO = new BookingSelectedDTO();
+                bookingSelectedDTO.RoomId = finalBookingDetails.finalBookingDetails[0].RoomId;
+                bookingSelectedDTO.Count = (long)finalBookingDetails.finalBookingDetails[0].Count;
+                bookingSelectedDTO.StartDate = bookingQueryDTO.CheckInDate;
+                bookingSelectedDTO.EndDate = bookingQueryDTO.CheckOutDate;
+                bookingSelectedDTO.EventIds = "1";
+
+
+                finalConfirmationData = await _bookMyRoomRepository.GetRoomConfirmationDetails(bookingSelectedDTO);
+
                 // Return the view with the processed data
-                string json = JsonConvert.SerializeObject(finalBookingDetails); // Corrected method name
+                string json = JsonConvert.SerializeObject(finalConfirmationData); // Corrected method name
                 paramsEncrypted = EncryptionHelper.Encrypt(json);
             }
             catch (Exception ex)
@@ -195,7 +222,7 @@ namespace Booking.Areas.FrontOffice.Controllers
         /// <param name="FilterParams"></param>
         /// <returns></returns>
         [Route("/register")]
-        public IActionResult RegisterCustomer(string BParams, string FilterParams)
+        public async Task<IActionResult> RegisterCustomer(string BParams, string FilterParams)
         {
             new ErrorLog().WriteLog("Register");
             BookingRegistrationDTO result = new BookingRegistrationDTO();
@@ -207,8 +234,8 @@ namespace Booking.Areas.FrontOffice.Controllers
                     string decryptedData = EncryptionHelper.Decrypt(BParams);
                     if (!string.IsNullOrEmpty(decryptedData))
                     {
-                        result.finalBookingDetails = JsonConvert.DeserializeObject<FinalBookingDetailsDTO>(decryptedData)?.finalBookingDetails;
-                        TotalAmount = (decimal)result.finalBookingDetails.Sum(bd => bd.TotalAmount);
+                        result.finalBookingDetails = JsonConvert.DeserializeObject<FinalConfirmationData>(decryptedData);
+                        TotalAmount = (decimal)result.finalBookingDetails.roomConfirmationDetailsDTO.Sum(bd => bd.TotalAmount);
                     }
                 }
 
@@ -230,25 +257,7 @@ namespace Booking.Areas.FrontOffice.Controllers
             ViewBag.BParams = BParams;
             ViewBag.FParams = FilterParams;
 
-            //string Key = "rzp_test_CxRq0CbjDqDcpI";
-            //string secret = "U96zupO4NVVgKbpnk0Ul19AI";
 
-            //Random _random = new Random();
-            //string TransactionId = _random.Next(0, 10000).ToString();
-
-            //// Convert the amount to the smallest currency unit (e.g., paise for INR)
-
-            //int amountInPaise = (int)(TotalAmount * 100);
-
-            //Dictionary<string, object> input = new Dictionary<string, object>();
-            //input.Add("amount", amountInPaise); // Use the converted amount
-            //input.Add("currency", "INR");
-            //input.Add("receipt", TransactionId);
-
-            //RazorpayClient client = new RazorpayClient(Key, secret);
-            //Razorpay.Api.Order order = client.Order.Create(input);
-            //string OrderId = order["id"].ToString();
-            ViewBag.OrderId = "test";
 
             return View(result);
         }
@@ -262,29 +271,21 @@ namespace Booking.Areas.FrontOffice.Controllers
         public async Task<IActionResult> ConfirmBooking(CustomerAndBookingDetails customerAndBookingDetails)
         {
 
+            FinalConfirmationData bookingDetailsDTO = new FinalConfirmationData();
 
             try
             {
                 if (customerAndBookingDetails != null)
                 {
 
-                    //Dictionary<string, string> attributes = new Dictionary<string, string>();
-                    //attributes.Add("razorpay_payment_id", customerAndBookingDetails.paymentId);
-                    //attributes.Add("razorpay_order_id", customerAndBookingDetails.Orderid);
-                    //attributes.Add("razorpay_signature", customerAndBookingDetails.sign);
-
-                    //Utils.verifyPaymentSignature(attributes);
-
                     string decryptedData = EncryptionHelper.Decrypt(customerAndBookingDetails.BookingParams);
 
                     if (!string.IsNullOrEmpty(decryptedData))
                     {
-                        FinalBookingDetailsDTO bookingDetailsDTO = new FinalBookingDetailsDTO
-                        {
-                            finalBookingDetails = JsonConvert.DeserializeObject<FinalBookingDetailsDTO>(decryptedData).finalBookingDetails
-                        };
+                        bookingDetailsDTO = JsonConvert.DeserializeObject<FinalConfirmationData>(decryptedData);
 
-                        if (bookingDetailsDTO != null && bookingDetailsDTO.finalBookingDetails.Count > 0 && customerAndBookingDetails != null)
+
+                        if (bookingDetailsDTO != null && bookingDetailsDTO.roomConfirmationDetailsDTO.Count > 0 && customerAndBookingDetails != null)
                         {
                             RegistrationDetails registrationDetails = new RegistrationDetails
                             {
@@ -294,12 +295,23 @@ namespace Booking.Areas.FrontOffice.Controllers
                                 LastName = customerAndBookingDetails.LastName,
                                 MobileNumber = customerAndBookingDetails.MobileNumber,
                                 EmailAddress = customerAndBookingDetails.EmailAddress,
-                                TotalAmount = (decimal)bookingDetailsDTO.finalBookingDetails.Sum(bd => bd.TotalAmount),
-                                TotalCount = (int)bookingDetailsDTO.finalBookingDetails.Sum(bd => bd.Count),
-                                RoomId = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.RoomId)),
-                                Count = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.Count)),
-                                Amount = string.Join("$", bookingDetailsDTO.finalBookingDetails.Select(bd => bd.Amount))
+                                TotalAmount = ((decimal)bookingDetailsDTO.roomConfirmationDetailsDTO.Sum(bd => bd.Amount) + (decimal)bookingDetailsDTO.eventConfirmationDetailsDTO.Sum(bd => bd.Amount)- (decimal)bookingDetailsDTO.roomConfirmationDetailsDTO.Sum(bd => bd.DiscountAmount)),
+                                DiscountId = (long)bookingDetailsDTO.roomConfirmationDetailsDTO.Sum(bd => bd.DiscountId),
+                                DiscountAmount = (long)bookingDetailsDTO.roomConfirmationDetailsDTO.Sum(bd => bd.DiscountAmount),
+                                TotalCount = (int)bookingDetailsDTO.roomConfirmationDetailsDTO.Sum(bd => bd.Count),
+                                RoomId = string.Join("$", bookingDetailsDTO.roomConfirmationDetailsDTO.Select(bd => bd.RoomId)),
+                                Count = string.Join("$", bookingDetailsDTO.roomConfirmationDetailsDTO.Select(bd => bd.Count)),
+                                Amount = string.Join("$", bookingDetailsDTO.roomConfirmationDetailsDTO.Select(bd => bd.Amount))
                             };
+
+                            if (bookingDetailsDTO.eventConfirmationDetailsDTO != null)
+                            {
+                                registrationDetails.EventId = string.Join("$", bookingDetailsDTO.eventConfirmationDetailsDTO.Select(bd => bd.EventId));
+
+                                registrationDetails.EventCount = string.Join("$", bookingDetailsDTO.eventConfirmationDetailsDTO.Select(bd => bd.Count));
+
+                                registrationDetails.EventAmount = string.Join("$", bookingDetailsDTO.eventConfirmationDetailsDTO.Select(bd => bd.Amount));
+                            }
 
                             var result = await _bookMyRoomRepository.ConfirmBooking(registrationDetails);
 
@@ -313,6 +325,47 @@ namespace Booking.Areas.FrontOffice.Controllers
                                 orderDTO.BookingStatus = "200";
                                 orderDTO.BookingOrderId = result;
 
+                                List<MailDetailsDTO> mailDetails = new List<MailDetailsDTO>();
+                                mailDetails = await _mailing.GetMailDetails(1);
+
+                                MailingService mailingService = new MailingService();
+
+                                for (int i = 0; i < mailDetails.Count; i++)
+                                {
+                                    string Booking = "<table style='width:100%;'>";
+                                    decimal? totalAmount = 0;
+
+                                    for (int j = 0; j < bookingDetailsDTO.roomConfirmationDetailsDTO.Count; j++)
+                                    {
+                                        Booking += $"<tr><td style='padding: 8px;'>{bookingDetailsDTO.roomConfirmationDetailsDTO[j].Name}</td><td style='padding: 8px;'>X {bookingDetailsDTO.roomConfirmationDetailsDTO[j].Count}</td><td style='padding: 8px;'>   {bookingDetailsDTO.roomConfirmationDetailsDTO[j].Amount}</td></tr>";
+                                        totalAmount += bookingDetailsDTO.roomConfirmationDetailsDTO[j].Amount;
+                                    }
+
+                                    if (bookingDetailsDTO.eventConfirmationDetailsDTO != null)
+                                    {
+                                        for (int j = 0; j < bookingDetailsDTO.eventConfirmationDetailsDTO.Count; j++)
+                                        {
+                                            Booking += $"<tr><td style='padding: 8px;'>             {bookingDetailsDTO.eventConfirmationDetailsDTO[j].Name}</td><td style='padding: 8px;'></td><td style='padding: 8px;'>   {bookingDetailsDTO.eventConfirmationDetailsDTO[j].Amount}</td></tr>";
+                                            totalAmount += bookingDetailsDTO.eventConfirmationDetailsDTO[j].Amount;
+                                        }
+                                    }
+
+                                    Booking += $"<tfoot><tr><td colspan='2' style='text-align:right;padding: 8px;'>Total Amount:</td><td style='padding: 8px;'>{totalAmount}</td></tr></tfoot>";
+                                    Booking += "</table>";
+                                    string formattedHtmlContent = string.Empty;
+                                    string Email = null;
+                                    if (mailDetails[i].MailType == 1)
+                                    {
+                                         formattedHtmlContent = string.Format(mailDetails[i].Content, result, Booking);
+                                         Email = customerAndBookingDetails.EmailAddress;
+                                    }
+                                    else
+                                    {
+                                         formattedHtmlContent = string.Format(mailDetails[i].Content, result, Booking);
+                                    }
+
+                                    mailingService.SendEmail(mailDetails[i].Subject, formattedHtmlContent, Email);
+                                }
                             }
                             return RedirectToAction("ConfirmedBookingStatus", new { BBparams = EncryptionHelper.Encrypt(JsonConvert.SerializeObject(orderDTO)) });
                         }
@@ -415,6 +468,47 @@ namespace Booking.Areas.FrontOffice.Controllers
             return Ok(result);
         }
 
+        [Route("/event-details")]
+        public async Task<IActionResult> EventDetails(string EventId)
+        {
+            long Event = 1;
+            EventDTO eventDTO = new EventDTO();
 
+            try
+            {
+                long.TryParse(EventId, out Event);
+                Event = 1;
+
+                eventDTO = await _bookMyRoomRepository.GetEventDetailsById(Event);
+            }
+            catch (Exception ex)
+            {
+                new ErrorLog().WriteLog(ex);
+            }
+            return View(eventDTO);
+        }
+
+
+        [Route("/feedback")]
+        public async Task<IActionResult> FeedBack(string BookingId)
+        {
+            long Booking =0;
+
+            try
+            {
+                if (BookingId == null)
+                {
+                    BookingId = EncryptionHelper.Decrypt(BookingId);
+                    long.TryParse(BookingId, out Booking);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                new ErrorLog().WriteLog(ex);
+            }
+
+            return View(Booking);
+        }
     }
 }

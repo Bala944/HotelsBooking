@@ -1,0 +1,84 @@
+﻿@using System.Globalization;
+
+@{
+    ViewData["Title"] = "FeedBack";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.1.2/js/star-rating.min.js" integrity="sha512-BjVoLC9Qjuh4uR64WRzkwGnbJ+05UxQZphP2n7TJE/b0D/onZ/vkhKTWpelfV6+8sLtQTUqvZQbvvGnzRZniTQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/all.min.css" />
+
+
+<!-- BEGIN: Page Title Section ======================================== -->
+<section class="page-title">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>FeedBack Information</h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- END: Page Title Section ========================================= -->
+<!-- Include Font Awesome CSS -->
+
+<section id="featued-sec" class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Your Feedback</h3>
+                <form action="/submit-feedback" method="post">
+                    <div class="form-group">
+                        <label for="bookingId">Booking ID</label>
+                        <input type="text" id="bookingId" name="bookingId" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="roomRating">Room Rating</label>
+                        <div class="rating"></div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="appRating">Application Rating</label>
+                        <div class="rating" id="appRating"></div>
+                        <input type="hidden" name="appRating" id="appRatingValue">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedback">Feedback</label>
+                        <textarea id="feedback" name="feedback" class="form-control" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+<partial name="_ValidationScriptsPartial" />
+<script src="~/assets/plugins/sweetalert/sweetalert.js"></script>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('.rating').starRating({
+            starIconEmpty: 'far fa-star',
+            starIconFull: 'fas fa-star',
+            starColorEmpty: 'lightgray',
+            starColorFull: '#FFC107',
+            starsSize: 4, // em
+            stars: 5,
+        });
+    });
+
+</script>
+
+
+
