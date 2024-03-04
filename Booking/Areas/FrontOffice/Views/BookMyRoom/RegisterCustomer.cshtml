@@ -230,7 +230,7 @@
 
                             @if (Model != null)
                             {
-                                if (Model?.finalBookingDetails != null && Model?.finalBookingDetails.Count > 0)
+                                if (Model?.finalBookingDetails != null && Model?.finalBookingDetails.roomConfirmationDetailsDTO.Count > 0)
                                 {
 
                                     <div class="panel table-responsive">
@@ -247,7 +247,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var item in Model?.finalBookingDetails)
+                                                @foreach (var item in Model?.finalBookingDetails.roomConfirmationDetailsDTO)
                                                 {
 
                                                     decimal? Total = item.Amount * item.Count;
@@ -265,7 +265,44 @@
                                                         <td>₹ @item.Amount?.ToString("F2")</td>
                                                         <td>₹ @Total?.ToString("F2")</td>
                                                     </tr>
+                                                    if (item.DiscountAmount > 0)
+                                                    {
+                                                        decimal? Total1 = item.DiscountAmount;
+                                                        grandTotal -= Total1 ?? 0;
+
+
+                                                        <tr>
+                                                            <td>
+                                                                Discount
+                                                            </td>
+                                                            <td>
+                                                            </td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td>₹ @Total1?.ToString("F2")</td>
+                                                        </tr>
+                                                    }
                                                 }
+                                                @foreach (var item in Model?.finalBookingDetails.eventConfirmationDetailsDTO)
+                                                {
+
+                                                    decimal? Total = item.Amount * item.Count;
+                                                    grandTotal += Total ?? 0;
+
+
+                                                    <tr>
+                                                        <td>
+                                                            @item.Name
+                                                        </td>
+                                                        <td>
+                                                            @* @item.Count *@
+                                                        </td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>₹ @Total?.ToString("F2")</td>
+                                                    </tr>
+                                                }
+                                                
                                             </tbody>
                                             <tfoot>
                                                 <tr>

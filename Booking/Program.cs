@@ -2,6 +2,7 @@ using Booking.Areas.BackOffice.Data.Interface;
 using Booking.Areas.BackOffice.Data.Services;
 using Booking.Areas.FrontOffice.Data.Interface;
 using Booking.Areas.FrontOffice.Data.Services;
+using Booking.Data;
 using Booking.DBEngine;
 using Booking.Models;
 
@@ -19,6 +20,7 @@ builder.Services.AddTransient<IBookMyRoomRepository, BookMyRoomRepository>();
 builder.Services.AddTransient<IBookingRepository, BookingRepository>();
 builder.Services.AddTransient<IDiscountRepository, DiscountRepository>();
 builder.Services.AddTransient<IEventRepository, EventRepository>();
+builder.Services.AddTransient<IMailing, Mailing>();
 
 
 builder.Services.AddAuthorization(options =>
