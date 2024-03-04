@@ -6,7 +6,6 @@ using Booking.Data;
 using Booking.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Razorpay.Api;
 
 namespace Booking.Areas.BackOffice.Controllers
 {
@@ -75,18 +74,35 @@ namespace Booking.Areas.BackOffice.Controllers
                 string Email = null;
                 if (mailDetails[i].MailType == 3)
                 {
-                    formattedHtmlContent = string.Format(mailDetails[i].Content, bookingDetailsDTO.roomConfirmationDetailsDTO[0].OrderId, Booking);
+                    formattedHtmlContent = string.Format(mailDetails[i].Content,"", bookingDetailsDTO.roomConfirmationDetailsDTO[0].OrderId, Booking);
                     Email = bookingDetailsDTO.roomConfirmationDetailsDTO[0].EmailId;
                 }
                 else if (mailDetails[i].MailType == 5)
                 {
-                    formattedHtmlContent = string.Format(mailDetails[i].Content, bookingDetailsDTO.roomConfirmationDetailsDTO[0].OrderId, Booking);
+                    string Booking1 = "<table style='width:100%;'>";
+
+
+                    for (int j = 0; j < bookingDetailsDTO.roomConfirmationDetailsDTO.Count; j++)
+                    {
+                        Booking1 += $"<tr><td style='padding: 8px;'>{bookingDetailsDTO.roomConfirmationDetailsDTO[j].Name}</td><td style='padding: 8px;'>X {bookingDetailsDTO.roomConfirmationDetailsDTO[j].Count}</td><td style='padding: 8px;'>  </td></tr>";
+
+                    }
+
+                    if (bookingDetailsDTO.eventConfirmationDetailsDTO != null)
+                    {
+                        for (int j = 0; j < bookingDetailsDTO.eventConfirmationDetailsDTO.Count; j++)
+                        {
+                            Booking1 += $"<tr><td style='padding: 8px;'>             {bookingDetailsDTO.eventConfirmationDetailsDTO[j].Name}</td><td style='padding: 8px;'></td><td style='padding: 8px;'> </td></tr>";
+                        }
+                    }
+
+                    Booking1 += $"<tfoot><tr><td colspan='2' style='text-align:right;padding: 8px;'></td><td style='padding: 8px;'></td></tr></tfoot>";
+                    Booking1 += "</table>";
+
+                    formattedHtmlContent = string.Format(mailDetails[i].Content,"", bookingDetailsDTO.roomConfirmationDetailsDTO[0].OrderId, Booking1);
                     Email = bookingDetailsDTO.roomConfirmationDetailsDTO[0].OwnerEmailId;
                 }
-                else
-                {
-                    formattedHtmlContent = string.Format(mailDetails[i].Content, bookingDetailsDTO.roomConfirmationDetailsDTO[0].OrderId, Booking);
-                }
+                
 
                 mailingService.SendEmail(mailDetails[i].Subject, formattedHtmlContent, Email);
             }

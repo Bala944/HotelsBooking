@@ -378,7 +378,7 @@
                                     }
                                     <!-- Move the <select> element to the right-center and apply Select2 styling -->
                                     <div class="select-room " style="height: 100%;">
-                                        <select class="select2-without-search roomselection" data-attr="@item.RoomNumber" data-amount="@TotalPrice" data-roomid="@item.RoomId" data-discount="@item.DiscountId">
+                                        <select class="select2-without-search roomselection" id="@("room_" + @item.RoomId)" data-attr="@item.RoomNumber" data-amount="@TotalPrice" data-roomid="@item.RoomId" data-discount="@item.DiscountId">
                                             <option value="">Select</option>
                                             @if (item.AvailableQuantity < 5)
                                             {
@@ -413,11 +413,8 @@
 
                                             }
                                         }
-          @*                               <div class="rooms-img">
-                                            <img src="@(string.IsNullOrEmpty(image1) ? "assets/images/rooms/room1.jpg" : "Attachments/EventImages/" + image1)" alt="Room" class="img-fluid" />
-                                        </div> *@
-                                        <input type="checkbox" id="@("event" + eventitem.EventID)" class="eventslist" data-attr="@("roomevent" + item.RoomId)" data-price="@eventitem.Price" />
-                                       <label>@eventitem.EventType</label>
+                                        <input type="checkbox" id="@("event_" + eventitem.EventID)" class="eventslist @("roomeventclass_" + item.RoomId) " data-name="@eventitem.EventType" data-roomid="@(item.RoomId)" data-attr="@(item.RoomId)" data-price="@eventitem.Price" value="@eventitem.EventID" />
+                                        <a href="~/event-details?EventId=@eventitem.EventID" target="_blank"><label>@eventitem.EventType</label></a>
                                        <label>@eventitem.Price</label>
                                     }
                                 </div>
@@ -520,6 +517,7 @@
     $(".roomselection,.eventslist").change(function () {
         debugger
         SelectedRooms = [];
+        SelectedEvents = [];
         // Find the select element with the "roomselection" class
         var roomId = parseInt($(this).attr("data-roomid") || 0)
 
@@ -545,29 +543,29 @@
             }
         });
 
-       @*  $(".SelectedEvents").each(function () {
+     
+            $('.eventslist:checked').map(function () {
 
-            var selectElement = $(this);
-            var selectedOption = selectElement.find("option:selected");
-            var selectedValue = parseInt(selectedOption.val());
-            var dataAttrValue = selectElement.data("attr");
-            var dataamount = parseFloat(selectElement.data("amount"));
-            var discount = parseFloat(selectElement.data("discount"));
-            var roomId = parseFloat(selectElement.data("roomid"));
+                var selectElement = $(this);
+               
+                var roomId = selectElement.data("attr");
+            var price = parseFloat(selectElement.data("price"));
+                var Name = selectElement.data("name");
+          
 
-            if (selectedValue > 0) {
-                SelectedRooms.push({
-                    "Name": dataAttrValue,
-                    "Count": selectedValue,
-                    "Amount": dataamount,
-                    "RoomId": roomId,
-                    "DiscountId": discount,
-                    "TotalAmount": dataamount * selectedValue
-                });
-            }
-        }); *@
 
+               
+                    SelectedEvents.push({
+                        "Name": Name,
+                        "Count": 1,
+                        "Amount": price,
+                        "RoomId": roomId,
+                        "TotalAmount": price * 1
+                    });
+                
         
+
+        });
 
         BindBookings(roomId);
     });
@@ -578,23 +576,41 @@
         $("#bookingInfo_" + roomId).empty();
 
         var totalAmount = 0;
-
+        debugger
         const selectedRoomsWithRoomIdOne = SelectedRooms.filter(room => room.RoomId === roomId);
+        const Events = SelectedEvents.filter(room => room.RoomId === roomId);
+
 
 
         if (selectedRoomsWithRoomIdOne.length > 0) {
             var roomDiv = '<table> <thead><tr><th></th><th>Quantity</th > <th>Amount </th></tr></thead > ' +
                 '<tbody>';
+
             for (var i = 0; i < selectedRoomsWithRoomIdOne.length; i++) {
                 debugger
                 var dataEntry = selectedRoomsWithRoomIdOne[i];
                 var roomTotalAmount = dataEntry.Amount * dataEntry.Count;
                 totalAmount += roomTotalAmount;
+
+               
                 // Create a div for each room detail
 
                 roomDiv += '<tr><td>' + dataEntry.Name + '</td>' +
                     '<td>' + dataEntry.Count + '</td>' +
                     '<td> ₹ ' + parseFloat(roomTotalAmount).toFixed(2) + '</td></tr>';
+
+                   
+
+                for (var j = 0; j < Events.length; j++) {
+                    var singlevent = Events[j];
+                    roomDiv += '<tr><td>' + singlevent.Name + '</td>' +
+                        '<td></td>' +
+                        '<td> ₹ ' + parseFloat(singlevent.Amount.toFixed(2)) + '</td></tr>';
+
+                    totalAmount += singlevent.Amount;
+                }
+                
+
 
                 if (i == (selectedRoomsWithRoomIdOne.length - 1)) {
 
@@ -604,9 +620,8 @@
                             '<td colspan="2"><strong>Total Amount</strong></td>' +
                             '<td><strong>₹ ' + parseFloat(totalAmount).toFixed(2) + '</strong></td>' +
                             '</tr></tfoot></table>';
-
                         $("#bookingInfo_" + roomId).append(roomDiv);
-                        var btndesign = '<div class="justify-content-center form-group col-md-12"><button class="proceed-button btn btn-primary btn-sm" onclick="ProceedNext(roomId)">Proceed</button></div>';
+                        var btndesign = '<div class="justify-content-center form-group col-md-12"><button class="proceed-button btn btn-primary btn-sm" onclick="ProceedNext(' + roomId + ')">Proceed</button></div>'
                         $("#bookingInfo_" + roomId).append(btndesign);
                     }
 
@@ -620,10 +635,20 @@
         }
     }
 
-    const ProceedNext = async () => {
+    const ProceedNext = async (id) => {
+
+        var proccedData = [];
+        debugger
+        proccedData = SelectedRooms.filter(x => x.RoomId === id);
+
+        var EventscheckedValues = $('.roomeventclass_' + id + ':checked').map(function () {
+            return this.value;
+        }).get().join(',');
+
         var data = {
             finalBookingDetails: SelectedRooms,
-            FilterParams: $('#Params').val()
+            FilterParams: $('#Params').val(),
+            Events: EventscheckedValues
         }
         var result = await APIPostMethod('/process-data', data)
 

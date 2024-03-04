@@ -208,5 +208,34 @@ namespace Booking.Areas.FrontOffice.Data.Services
 
             return events;
         }
+
+        public async Task<int> SaveFeedback(Feedback feedback)
+        {
+            var parameters = new DynamicParameters();
+            int result =0;
+            try
+            {
+                if (feedback != null)
+                {
+                    parameters.Add("BookingId", feedback.BookingID, DbType.Int64, ParameterDirection.Input);
+                    parameters.Add("ApplicationRating",feedback.ApplicationRating, DbType.Int16, ParameterDirection.Input);
+                    parameters.Add("HotelRating", feedback.HotelRating, DbType.Int16, ParameterDirection.Input);
+                    parameters.Add("Comment", feedback.Comment, DbType.String, ParameterDirection.Input);
+                
+
+                    using (_dbHandler.Connection)
+                    {
+                        result = await _dbHandler.ExecuteScalarAsync<int>(_dbHandler.Connection, "dbo.InsertFeedback", CommandType.StoredProcedure, parameters);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                new ErrorLog().WriteLog(ex);
+            }
+
+
+            return result;
+        }
     }
 }
