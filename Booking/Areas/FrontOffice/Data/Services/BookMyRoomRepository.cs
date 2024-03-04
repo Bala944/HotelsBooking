@@ -45,6 +45,40 @@ namespace Booking.Areas.FrontOffice.Data.Services
             return roomsList;
         }
 
+        public async Task<RoomandEventDetailsDTO> GetRoomsanEvents(RoomFilterDTO roomFilterDTO)
+        {
+            RoomandEventDetailsDTO roomsandeventList = new RoomandEventDetailsDTO();
+            var parameters = new DynamicParameters();
+            try
+            {
+                parameters.Add("CheckInDate", ConversionHelper.ToSQLlDatetime(roomFilterDTO.CheckInDate), DbType.String, ParameterDirection.Input);
+                parameters.Add("CheckOutDate", ConversionHelper.ToSQLlDatetime(roomFilterDTO.CheckOutDate), DbType.String, ParameterDirection.Input);
+                parameters.Add("Adults", roomFilterDTO.Adults, DbType.Int16, ParameterDirection.Input);
+                parameters.Add("Children", roomFilterDTO.Children, DbType.Int16, ParameterDirection.Input);
+                parameters.Add("Rooms", roomFilterDTO.Rooms, DbType.Int16, ParameterDirection.Input);
+                parameters.Add("RoomType", roomFilterDTO.RoomType, DbType.Int16, ParameterDirection.Input);
+
+
+                using (_dbHandler.Connection)
+                {
+                    var multiResult = await _dbHandler.QueryMultipleAsync(_dbHandler.Connection, "dbo.GetRoomsandEventsDetails", CommandType.StoredProcedure, null);
+                    if (multiResult != null)
+                    {
+                        roomsandeventList.RoomDetails = (await multiResult.ReadAsync<RoomsDetailsDTO>()).ToList();
+                        roomsandeventList.events = (await multiResult.ReadAsync<Event>()).ToList();
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                new ErrorLog().WriteLog(ex);
+            }
+
+
+            return roomsandeventList;
+        }
+
         public async Task<RoomsDetailsDTO> GetRoomsById(BookingQueryDTO  bookingQueryDTO)
         {
             RoomsDetailsDTO roomsList = new RoomsDetailsDTO();

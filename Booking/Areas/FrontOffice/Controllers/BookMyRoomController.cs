@@ -78,10 +78,12 @@ namespace Booking.Areas.FrontOffice.Controllers
         /// <param name="selectedRoomDTO"></param>
         /// <returns></returns>
         [Route("/view-room")]
-        public IActionResult ViewMoreRooms(RoomFilterDTO roomFilterDTO)
+        public async Task<IActionResult> ViewMoreRooms(RoomFilterDTO roomFilterDTO)
         {
             BookMyRoomResultDTO bookMyRoomResultDTO = new BookMyRoomResultDTO();
             BookingQueryDTO bookingQueryDTO1 = new BookingQueryDTO();
+            RoomandEventDetailsDTO roomandeventdetails = new RoomandEventDetailsDTO();
+
             if (!string.IsNullOrEmpty(roomFilterDTO.Params))
             {
 
@@ -109,28 +111,32 @@ namespace Booking.Areas.FrontOffice.Controllers
                 roomFilterDTO.CheckOutDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
             if (roomFilterDTO.CheckInDate != null && roomFilterDTO.CheckOutDate != null)
             {
-                var rooms = _bookMyRoomRepository.GetRooms(roomFilterDTO);
-                if (rooms != null)
+
+                roomandeventdetails = await _bookMyRoomRepository.GetRoomsanEvents(roomFilterDTO);
+
+
+                if (roomandeventdetails != null)
                 {
-                    bookMyRoomResultDTO.listRoomsDetailsDTO = rooms.Result;
+                    roomandeventdetails.RoomDetails = roomandeventdetails.RoomDetails;
+                    roomandeventdetails.events = roomandeventdetails.events;
                 }
 
-                bookMyRoomResultDTO.roomFilterDTO = roomFilterDTO;
+                roomandeventdetails.roomFilterDTO = roomFilterDTO;
 
                 BookingQueryDTO bookingQueryDTO = new BookingQueryDTO();
-                bookingQueryDTO.CheckInDate = bookMyRoomResultDTO.roomFilterDTO.CheckInDate;
-                bookingQueryDTO.CheckOutDate = bookMyRoomResultDTO.roomFilterDTO.CheckOutDate;
-                bookingQueryDTO.Adults = bookMyRoomResultDTO.roomFilterDTO.Adults;
-                bookingQueryDTO.Children = bookMyRoomResultDTO.roomFilterDTO.Children;
-                bookingQueryDTO.Rooms = bookMyRoomResultDTO.roomFilterDTO.Rooms;
-                bookingQueryDTO.RoomType = bookMyRoomResultDTO.roomFilterDTO.RoomType;
+                bookingQueryDTO.CheckInDate = roomandeventdetails.roomFilterDTO.CheckInDate;
+                bookingQueryDTO.CheckOutDate = roomandeventdetails.roomFilterDTO.CheckOutDate;
+                bookingQueryDTO.Adults = roomandeventdetails.roomFilterDTO.Adults;
+                bookingQueryDTO.Children = roomandeventdetails.roomFilterDTO.Children;
+                bookingQueryDTO.Rooms = roomandeventdetails.roomFilterDTO.Rooms;
+                bookingQueryDTO.RoomType = roomandeventdetails.roomFilterDTO.RoomType;
                 string json = JsonConvert.SerializeObject(bookingQueryDTO);
                 string paramsEncrypted = EncryptionHelper.Encrypt(json);
 
-                bookMyRoomResultDTO.roomFilterDTO.Params = paramsEncrypted;
+                roomandeventdetails.roomFilterDTO.Params = paramsEncrypted;
                 ViewBag.FParams = paramsEncrypted;
             }
-            return View(bookMyRoomResultDTO);
+            return View(roomandeventdetails);
         }
 
         /// <summary>

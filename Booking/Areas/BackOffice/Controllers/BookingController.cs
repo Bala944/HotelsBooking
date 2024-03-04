@@ -35,7 +35,7 @@ namespace Booking.Areas.BackOffice.Controllers
             Int16 result = await _bookingRepository.UpdateBookingStatus(bookingStatusDTO);
 
             MailingService mailingService = new MailingService();
-            mailingService.SendEmail();
+            //mailingService.SendEmail();
             return Ok(result);
         }
     }

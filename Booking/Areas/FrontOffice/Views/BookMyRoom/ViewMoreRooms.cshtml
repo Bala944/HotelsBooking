@@ -1,9 +1,9 @@
 ﻿@using System.Globalization;
-@model BookMyRoomResultDTO
+@model RoomandEventDetailsDTO
 @{
     ViewData["Title"] = "Home";
 }
- <style>
+<style>
 
     /* Checkout Card styles */
     .checkout-card {
@@ -148,9 +148,9 @@
 
     #search-sec {
         margin-left: 12rem;
-        position:initial;
+        position: initial;
     }
-</style> 
+</style>
 <form id="frmSelectRoom" method="get" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="SingleRoomDetails">
     <input type="hidden" id="roomId" name="roomId" value="" />
     <input type="hidden" id="Params" name="Params" value="@ViewBag.FParams" />
@@ -220,7 +220,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col col-12 col-sm-6 col-lg-3 col-xl" >
+                    <div class="col col-12 col-sm-6 col-lg-3 col-xl">
                         <div class="form-group">
                             <label>Room Type</label>
                             <select class="form-select" asp-for="roomFilterDTO.RoomType">
@@ -251,13 +251,13 @@
         <div class="row">
 
 
-            @if (Model != null && Model.listRoomsDetailsDTO != null && Model.listRoomsDetailsDTO.Count > 0)
+            @if (Model != null && Model.RoomDetails != null && Model.RoomDetails.Count > 0)
             {
                 <div class="col-md-12">
                     <h2 class="section-title text-center">Available Rooms</h2>
                 </div>
                 <div class="col-md-8">
-                    @foreach (var item in Model.listRoomsDetailsDTO)
+                    @foreach (var item in Model.RoomDetails)
                     {
                         string image = string.Empty;
                         double DiscountAmount = 0;
@@ -321,11 +321,11 @@
                                         }
                                         @* <p>+ ₹ @tax taxes and charges</p> *@
                                     </div>
-                                    @if (item.AvailableQuantity < 5 && item.TotalReservedQuantity>0)
+                                    @if (item.AvailableQuantity < 5 && item.TotalReservedQuantity > 0)
                                     {
                                         <p style="color:red">only @item.AvailableQuantity rooms are available more Hurry up!!</p>
                                     }
-                                    else if (item.TotalReservedQuantity <=0)
+                                    else if (item.TotalReservedQuantity <= 0)
                                     {
                                         <p style="color:red">Waitlist only available  Hurry up!!</p>
 
@@ -359,15 +359,40 @@
                                         </select>
                                     </div>
                                 </div>
+
+                                <div>
+                                    @foreach (var eventitem in Model.events)
+                                    {
+                                        string image1 = string.Empty;
+
+                                        @if (eventitem != null && eventitem.Images != null && eventitem.Images != "")
+                                        {
+                                            string[] ImageData = eventitem.Images.Split('$');
+                                            if (ImageData.Length > 0)
+                                            {
+
+                                                image1 = ImageData[0];
+
+                                            }
+                                        }
+          @*                               <div class="rooms-img">
+                                            <img src="@(string.IsNullOrEmpty(image1) ? "assets/images/rooms/room1.jpg" : "Attachments/EventImages/" + image1)" alt="Room" class="img-fluid" />
+                                        </div> *@
+                                        <input type="checkbox" id="@("event" + eventitem.EventID)" class="eventslist" data-attr="@("roomevent" + item.RoomId)" data-price="@eventitem.Price" />
+                                       <label>@eventitem.EventType</label>
+                                       <label>@eventitem.Price</label>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="rooms-panel" id="@("bookingInfo_" + item.RoomId)" data-roomid="@item.RoomId">
+                                <h4 class="">No Room Selected </h4>
                             </div>
                         </div>
                     }
                 </div>
-                <div class="col-md-4">
-                    <div class="rooms-panel" id="bookingInfo">
-                        <h4 class="">No Room Selected </h4>
-                    </div>
-                </div>
+
 
             }
             else
@@ -436,9 +461,13 @@
     }).datepicker("setDate", tomorrow);
 
     var SelectedRooms = [];
-    $(".roomselection").change(function () {
+    var SelectedEvents = [];
+    $(".roomselection,.eventslist").change(function () {
+        debugger
         SelectedRooms = [];
         // Find the select element with the "roomselection" class
+        var roomId = parseInt($(this).attr("data-roomid") || 0)
+
         $(".roomselection").each(function () {
 
             var selectElement = $(this);
@@ -460,50 +489,79 @@
                 });
             }
         });
-        BindBookings();
+
+       @*  $(".SelectedEvents").each(function () {
+
+            var selectElement = $(this);
+            var selectedOption = selectElement.find("option:selected");
+            var selectedValue = parseInt(selectedOption.val());
+            var dataAttrValue = selectElement.data("attr");
+            var dataamount = parseFloat(selectElement.data("amount"));
+            var discount = parseFloat(selectElement.data("discount"));
+            var roomId = parseFloat(selectElement.data("roomid"));
+
+            if (selectedValue > 0) {
+                SelectedRooms.push({
+                    "Name": dataAttrValue,
+                    "Count": selectedValue,
+                    "Amount": dataamount,
+                    "RoomId": roomId,
+                    "DiscountId": discount,
+                    "TotalAmount": dataamount * selectedValue
+                });
+            }
+        }); *@
+
+        
+
+        BindBookings(roomId);
     });
 
-    function BindBookings() {
+    function BindBookings(roomId) {
 
         // Clear the previous content in the div
-        $("#bookingInfo").empty();
+        $("#bookingInfo_" + roomId).empty();
 
         var totalAmount = 0;
-        if (SelectedRooms.length > 0) {
+
+        const selectedRoomsWithRoomIdOne = SelectedRooms.filter(room => room.RoomId === roomId);
+
+
+        if (selectedRoomsWithRoomIdOne.length > 0) {
             var roomDiv = '<table> <thead><tr><th></th><th>Quantity</th > <th>Amount </th></tr></thead > ' +
                 '<tbody>';
-            for (var i = 0; i < SelectedRooms.length; i++) {
+            for (var i = 0; i < selectedRoomsWithRoomIdOne.length; i++) {
                 debugger
-                var dataEntry = SelectedRooms[i];
+                var dataEntry = selectedRoomsWithRoomIdOne[i];
                 var roomTotalAmount = dataEntry.Amount * dataEntry.Count;
                 totalAmount += roomTotalAmount;
-            // Create a div for each room detail
+                // Create a div for each room detail
 
                 roomDiv += '<tr><td>' + dataEntry.Name + '</td>' +
                     '<td>' + dataEntry.Count + '</td>' +
                     '<td> ₹ ' + parseFloat(roomTotalAmount).toFixed(2) + '</td></tr>';
 
-                if (i == (SelectedRooms.length - 1)) {
+                if (i == (selectedRoomsWithRoomIdOne.length - 1)) {
 
-                    if (SelectedRooms.length > 0) {
+                    if (selectedRoomsWithRoomIdOne.length > 0) {
                         // Display the total amount above the "Proceed" button and make it bold
                         roomDiv += '</tbody><tfoot><tr>' +
                             '<td colspan="2"><strong>Total Amount</strong></td>' +
                             '<td><strong>₹ ' + parseFloat(totalAmount).toFixed(2) + '</strong></td>' +
                             '</tr></tfoot></table>';
 
-                        $("#bookingInfo").append(roomDiv);
-                        var btndesign = '<div class="justify-content-center form-group col-md-12"><button class="proceed-button btn btn-primary btn-sm" onclick="ProceedNext()">Proceed</button></div>';
-                        $("#bookingInfo").append(btndesign);
+                        $("#bookingInfo_" + roomId).append(roomDiv);
+                        var btndesign = '<div class="justify-content-center form-group col-md-12"><button class="proceed-button btn btn-primary btn-sm" onclick="ProceedNext(roomId)">Proceed</button></div>';
+                        $("#bookingInfo_" + roomId).append(btndesign);
                     }
 
                 }
             }
         }
-         else {
+        else {
             // Display a message when no rooms are selected
             var norecorddesign = '<h4 class="no-room-selected">No Room Selected</h4>';
-            $("#bookingInfo").append(norecorddesign);
+            $("#bookingInfo_" + roomId).append(norecorddesign);
         }
     }
 
