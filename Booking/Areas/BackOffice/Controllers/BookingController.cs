@@ -79,7 +79,7 @@ namespace Booking.Areas.BackOffice.Controllers
                     // Get the base directory for the domain
                     string baseDirectory = domain.BaseDirectory;
 
-                    formattedHtmlContent = string.Format(mailDetails[i].Content,$"{baseDirectory}/attachments/logo/logopng.png", bookingDetailsDTO.roomConfirmationDetailsDTO[0].OrderId, Booking, $"{baseDirectory}/feedback/BookingId={EncryptionHelper.Encrypt(bookingDetailsDTO.roomConfirmationDetailsDTO[0].OrderId)}");
+                    formattedHtmlContent = string.Format(mailDetails[i].Content,$"{baseDirectory}/attachments/logo/logopng.png", bookingDetailsDTO.roomConfirmationDetailsDTO[0].OrderId, Booking, $"{baseDirectory}/feedback/BookingId={bookingStatusDTO.BookingId}");
                     Email = bookingDetailsDTO.roomConfirmationDetailsDTO[0].EmailId;
                 }
                 else if (mailDetails[i].MailType == 5)
