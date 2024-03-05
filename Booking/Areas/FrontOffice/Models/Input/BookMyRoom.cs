@@ -10,12 +10,11 @@ namespace Booking.Areas.FrontOffice.Models.Input
     }
     public class Feedback
     {
-        public long? FeedbackID { get; set; }
-        public int BookingID { get; set; }
+        public required string BookId  { get; set; }
+        public long? BookingID { get; set; }
         public int ApplicationRating { get; set; }
         public int HotelRating { get; set; }
         public string? Comment { get; set; }
-        public DateTime? FeedbackDate { get; set; }
     }
 
 

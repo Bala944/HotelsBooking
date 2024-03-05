@@ -499,31 +499,38 @@ namespace Booking.Areas.FrontOffice.Controllers
 
 
         [Route("/feedback")]
-        public async Task<IActionResult> FeedBack(string BookingId)
+        public  IActionResult FeedBack(string BookingId)
         {
-            long Booking =0;
+         
 
             try
             {
-                if (BookingId == null)
-                {
-                    BookingId = EncryptionHelper.Decrypt(BookingId);
-                    long.TryParse(BookingId, out Booking);
-
-                }
+               ViewBag.BookId = BookingId;
             }
             catch (Exception ex)
             {
                 new ErrorLog().WriteLog(ex);
             }
 
-            return View(Booking);
+            return View();
         }
 
         [Route("/save-feedback")]
+        [HttpPost]
         public async Task<IActionResult> SaveFeedback([FromBody] Feedback feedback)
         {
             int result = 0;
+            if(!string.IsNullOrEmpty(feedback.BookId))
+            {
+                feedback.BookingID = Convert.ToInt64(EncryptionHelper.Decrypt(feedback.BookId));
+
+            }
+            else
+            {
+                feedback.BookingID = 1;
+
+            }
+
             try
             {
                 result = await _bookMyRoomRepository.SaveFeedback(feedback);
@@ -532,7 +539,7 @@ namespace Booking.Areas.FrontOffice.Controllers
             {
                 new ErrorLog().WriteLog(ex);
             }
-            return View(result);
+            return Ok(result);
         }
     }
 }

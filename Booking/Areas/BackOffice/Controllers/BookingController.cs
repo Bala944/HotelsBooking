@@ -74,7 +74,12 @@ namespace Booking.Areas.BackOffice.Controllers
                 string Email = null;
                 if (mailDetails[i].MailType == 3)
                 {
-                    formattedHtmlContent = string.Format(mailDetails[i].Content,"", bookingDetailsDTO.roomConfirmationDetailsDTO[0].OrderId, Booking);
+                    // Get the current application domain
+                    AppDomain domain = AppDomain.CurrentDomain;
+                    // Get the base directory for the domain
+                    string baseDirectory = domain.BaseDirectory;
+
+                    formattedHtmlContent = string.Format(mailDetails[i].Content,$"{baseDirectory}/attachments/logo/logopng.png", bookingDetailsDTO.roomConfirmationDetailsDTO[0].OrderId, Booking, $"{baseDirectory}/feedback/BookingId={EncryptionHelper.Encrypt(bookingDetailsDTO.roomConfirmationDetailsDTO[0].OrderId)}");
                     Email = bookingDetailsDTO.roomConfirmationDetailsDTO[0].EmailId;
                 }
                 else if (mailDetails[i].MailType == 5)
