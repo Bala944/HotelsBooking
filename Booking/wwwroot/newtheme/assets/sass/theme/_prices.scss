@@ -1,0 +1,138 @@
+/*  Prices */
+.lh-prices {
+    background-color: $white;
+    box-shadow: $box-shadow;
+    border-radius: $border-radius;
+    padding-bottom: 24px;
+    &:hover {
+        .prices-image {
+            filter: grayscale(0) contrast(100%);
+        }
+    }
+    .prices-image {
+        @include ease3;
+        width: 100%;
+        border-top-left-radius: $border-radius;
+        border-top-right-radius: $border-radius;
+        filter: grayscale(1) contrast(90%);
+    }
+    .prices-image.active {
+        filter: grayscale(0) contrast(100%);
+    }
+
+    .lh-prices-out {
+        padding: 0 24px;
+
+        .price-buttons {
+            display: flex;
+        }
+
+        .lh-prices-in {
+            border-bottom: 1px solid $border-color;
+
+            h4.lh-price-dollar {
+                padding: 15px 0;
+                font-size: 60px;
+                color: $primary;
+                line-height: 40px;
+
+                span {
+                    font-size: 35px;
+                    vertical-align: 18px;
+                }
+
+                code {
+                    font-size: 16px;
+                    color: $white_300;
+                    line-height: 1.2;
+                    font-weight: 300;
+                    letter-spacing: 0.01rem;
+                }
+            }
+
+            h4.lh-prices-heading {
+                font-size: 22px;
+                color: $black;
+                line-height: 1.2;
+                padding-bottom: 20px;
+                margin: 0;
+            }
+        }
+
+        .lh-prices-viwe {
+            padding-top: 20px;
+
+            ul {
+                list-style-type: none;
+                padding: 0;
+
+                li {
+                    padding: 8px 0;
+                    display: flex;
+                    justify-content: space-between;
+                    i {
+                        display: flex;
+                        justify-content: flex-end;
+                        font-size: 16px;
+
+                        &::before {
+                            rotate: -35deg;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Responsive */
+@media screen and (max-width: 1199px) {
+    .lh-branches {
+        .cols {
+            h4 {
+                font-size: 18px;
+            }
+        }
+    }
+
+    .lh-prices {
+        .lh-prices-out {
+            .lh-prices-in {
+                h4.lh-prices-heading {
+                    font-size: 18px;
+                    padding-bottom: 15px;
+                }
+
+                h4.lh-price-dollar {
+                    font-size: 50px;
+
+                    span {
+                        font-size: 20px;
+                        vertical-align: 20px;
+                    }
+
+                    code {
+                        font-size: 14px;
+                    }
+                }
+            }
+
+            .lh-prices-viwe {
+                padding-top: 15px;
+
+                ul {
+                    li {
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .lh-prices {
+        max-width: 450px;
+        margin: auto;
+    }
+}

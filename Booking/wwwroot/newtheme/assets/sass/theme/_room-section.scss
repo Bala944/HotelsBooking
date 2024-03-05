@@ -1,0 +1,491 @@
+/* Room */
+.lh-room {
+    button {
+        margin-bottom: 0px;
+        padding: 0 12px;
+        font-family: $title-font;
+        font-size: 20px;
+        color: $black;
+        line-height: 28px;
+        text-align: center;
+        img {
+            width: 100%;
+            border-radius: $border-radius;
+            margin-bottom: 18px;
+        }
+        &:hover {
+            color: $black;
+        }
+    }
+}
+
+.nav-tabs.rooms {
+    .nav-link {
+        width: 25%;
+        border: none;
+        img {
+            @include ease3;
+            width: 100%;
+            margin-bottom: 15px;
+            filter: grayscale(100%) contrast(90%);
+            &:hover {
+                filter: grayscale(0%) contrast(100%);
+            }
+        }
+    }
+    .nav-link.active {
+        position: relative;
+        img {
+            margin-bottom: 15px;
+            position: relative;
+            background-blend-mode: overlay;
+            background-color: rgba(0, 0, 0, 0.8);
+            filter: grayscale(0%) contrast(100%);
+            &:after {
+                content: "\f560";
+                width: 30px;
+                height: 30px;
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                background-blend-mode: overlay;
+                background-color: rgba(0, 0, 0, 0.8);
+            }
+        }
+        &:after {
+            content: "\f560";
+            width: 30px;
+            height: 30px;
+            font-family: "Font Awesome 6 Free";
+            position: absolute;
+            top: 5px;
+            right: 17px;
+            color: $primary;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid $primary;
+            font-weight: bold;
+        }
+        &:hover {
+            &:after {
+                -webkit-animation-name: wobble;
+                animation-name: wobble;
+                -webkit-animation-duration: 0.8s;
+                -webkit-animation-iteration-count: 0.8s;
+                -webkit-animation-timing-function: linear;
+                -webkit-transform-origin: 50% 100%;
+            }
+        }
+    }
+}
+@keyframes zoom-in-zoom-out {
+    0% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(1.1, 1.1);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+@-webkit-keyframes wobble {
+    0% {
+        -webkit-transform: none;
+        transform: none;
+    }
+
+    15% {
+        -webkit-transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);
+        transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);
+    }
+
+    30% {
+        -webkit-transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);
+        transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);
+    }
+
+    45% {
+        -webkit-transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);
+        transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);
+    }
+
+    60% {
+        -webkit-transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);
+        transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);
+    }
+
+    75% {
+        -webkit-transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);
+        transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);
+    }
+
+    100% {
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@keyframes wobble {
+    0% {
+        -webkit-transform: none;
+        transform: none;
+    }
+
+    15% {
+        -webkit-transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);
+        transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);
+    }
+
+    30% {
+        -webkit-transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);
+        transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);
+    }
+
+    45% {
+        -webkit-transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);
+        transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);
+    }
+
+    60% {
+        -webkit-transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);
+        transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);
+    }
+
+    75% {
+        -webkit-transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);
+        transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);
+    }
+
+    100% {
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+.section-room {
+    position: relative;
+    &::before {
+        content: "";
+        background: url("../img/theme/1.png") no-repeat;
+        background-size: 100%;
+        width: 150px;
+        height: 150px;
+        position: absolute;
+        right: 180px;
+        top: 100px;
+        z-index: -1;
+    }
+    &::after {
+        content: "";
+        background: url("../img/theme/2.png") no-repeat;
+        background-size: 100%;
+        width: 500px;
+        height: 700px;
+        position: absolute;
+        left: -180px;
+        top: 110px;
+        z-index: -1;
+    }
+    nav {
+        overflow: hidden;
+    }
+}
+
+.section-room {
+    .nav-tabs {
+        margin: 0 -12px;
+        border: none;
+    }
+    .tab-content {
+        border: 1px solid $border-color;
+        border-radius: $border-radius;
+        background: $white;
+        position: relative;
+        padding: 0;
+        margin-top: 25px;
+        overflow: hidden;
+        &::after {
+            content: "";
+            background: url("../img/theme/3.png") no-repeat;
+            background-size: 100%;
+            width: 145px;
+            height: 120px;
+            position: absolute;
+            right: 0;
+            bottom: -100px;
+            opacity: 0.8;
+            z-index: -1;
+        }
+        &:hover {
+            .room-img {
+                a.link {
+                    @include ease3;
+                    bottom: -100px;
+                    right: -100px;
+                    i {
+                        @include ease3;
+                        bottom: 125px;
+                        right: 125px;
+                    }
+                }
+            }
+        }
+    }
+}
+.room-img {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    .room-image {
+        height: 100%;
+        width: 100%;
+        border-top-right-radius: 15px;
+        border-bottom-right-radius: 15px;
+    }
+    a.link {
+        width: 200px;
+        height: 200px;
+        position: absolute;
+        bottom: -200px;
+        right: -200px;
+        background-color: rgba(0, 0, 0, 0.8);
+        border-radius: 50%;
+        i {
+            position: absolute;
+            bottom: 100px;
+            right: 100px;
+            color: #fff;
+            font-size: 25px;
+        }
+    }
+}
+
+.lh-room-contain {
+    position: relative;
+    padding: 24px 12px;
+    .lh-contain-heading {
+        padding-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        h4 {
+            font-size: 22px;
+            line-height: 1.2;
+            color: $black;
+            text-align: left;
+        }
+    }
+    .lh-room-size {
+        flex-wrap: wrap;
+        p {
+            padding-bottom: 15px;
+            font-size: 14px;
+            color: $text-777;
+            line-height: 1.2;
+            span {
+                padding: 0 15px;
+            }
+        }
+    }
+    .lh-room-price {
+        h4 {
+            font-family: $text-font;
+            font-size: 22px;
+            color: $primary;
+            font-weight: bold;
+            span {
+                margin-left: 5px;
+                font-size: 14px;
+                font-weight: 400;
+                color: $text-777;
+            }
+        }
+    }
+    .lh-main-features {
+        border-top: 1px solid $border-color;
+        padding-top: 30px;
+        margin-top: 30px;
+        .lh-room-features {
+            display: flex;
+            .lh-cols-room {
+                &:last-child {
+                    padding-left: 25px;
+                }
+                ul {
+                    padding-left: 1rem;
+                    margin-bottom: 0;
+                    li {
+                        font-size: 15px;
+                        color: $text-777;
+                        line-height: 1.2;
+                        &:not(:last-child) {
+                            padding-bottom: 15px;
+                        }
+                        &::marker {
+                            color: $primary;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Responsive */
+@media screen and (max-width: 1550px) {
+    .section-room {
+        &::before {
+            width: 130px;
+            height: 130px;
+            right: 50px;
+            top: 100px;
+        }
+        &:after {
+            width: 400px;
+            height: 692px;
+            left: -180px;
+            top: 115px;
+        }
+    }
+}
+
+@media screen and (max-width: 1399px) {
+    .section-room {
+        &::before {
+            width: 115px;
+            height: 115px;
+            right: 0;
+            top: 0;
+        }
+        &::after {
+            width: 370px;
+            height: 700px;
+        }
+    }
+    .tab-content {
+        &::after {
+            width: 100px;
+            height: 85px;
+        }
+    }
+}
+
+@media screen and (max-width: 1199px) {
+    .section-room {
+        &::after {
+            width: 300px;
+            height: 400px;
+        }
+    }
+    .lh-room-contain {
+        .lh-contain-heading {
+            h4 {
+                font-size: 18px;
+            }
+        }
+    }
+    .room-img {
+        padding: 0 24px 24px 24px;
+        .room-image {
+            border-radius: 15px !important;
+        }
+    }
+    .tab-content {
+        &:after {
+            bottom: -70px;
+        }
+    }
+    .section-room {
+        .tab-content {
+            &:after {
+                bottom: -70px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .tab-content {
+        margin-top: 0px;
+    }
+    .section-room {
+        &::before {
+            width: 115px;
+            height: 115px;
+        }
+        &::after {
+            width: 300px;
+            top: 54px;
+        }
+    }
+    .lh-room {
+        button {
+            font-size: 18px;
+        }
+    }
+    .nav-tabs.rooms {
+        .nav-link {
+            width: 50%;
+            margin-bottom: 24px;
+        }
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .section-room {
+        &::after {
+            width: 300px;
+            height: 300px;
+            left: -150px;
+            top: 60px;
+        }
+    }
+    .lh-room {
+        button {
+            font-size: 16px;
+        }
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .section-room {
+        &::before {
+            width: 80px;
+        }
+        &::after {
+            width: 220px;
+            top: 50px;
+        }
+    }
+    .lh-room-contain {
+        .lh-contain-heading {
+            flex-direction: column;
+            .lh-room-price {
+                margin-top: 15px;
+            }
+        }
+    }
+    .lh-room-contain {
+        .lh-main-features {
+            .lh-room-features {
+                flex-direction: column;
+                .lh-cols-room {
+                    &:last-child {
+                        padding-top: 15px;
+                        padding-left: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 360px) {
+    .nav-tabs.rooms {
+        .nav-link {
+            width: 100%;
+        }
+    }
+}

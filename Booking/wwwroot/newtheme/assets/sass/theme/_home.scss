@@ -1,0 +1,314 @@
+/* Home-page */
+
+.hero-image {
+    background-image: url("../images/slider/banner.jpg");
+    width: 100%;
+    height: calc(100vh - 100px);
+    background-size: cover;
+    background-position: bottom;
+    margin: 0;
+    background-blend-mode: overlay;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.section-hero {
+    padding-bottom: 50px;
+}
+
+.hero-section {
+    position: relative;
+}
+.particles-bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.3;
+}
+.lh-hero-contain {
+    max-width: 830px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    text-align: center;
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    h4 {
+        max-width: 250px;
+        margin: auto;
+        position: relative;
+        color: $white;
+        font-family: $text-font;
+        font-size: 16px;
+        font-weight: 300;
+        &::after {
+            content: "";
+            width: 50px;
+            border: 1px solid $primary;
+            position: absolute;
+            right: -60px;
+            top: 9px;
+            z-index: -1;
+        }
+        &::before {
+            content: "";
+            border: 1px solid $primary;
+            width: 50px;
+            position: absolute;
+            left: -60px;
+            top: 9px;
+            z-index: -1;
+        }
+    }
+    h1 {
+        margin: 30px 0;
+        font-size: 48px;
+        font-weight: 700;
+        word-spacing: 15px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        span {
+            color: $primary;
+            position: relative;
+            &::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 10px;
+                display: block;
+                width: 100%;
+                height: 3px;
+                background: $primary;
+            }
+        }
+    }
+}
+
+.search-box {
+    position: relative;
+    .custom-select {
+        .custom-select {
+            border-bottom: 1px solid $white_200;
+            &:after {
+                right: 15px;
+                font-size: 18px;
+            }
+        }
+    }
+    h4.heading {
+        padding-bottom: 5px;
+        font-size: 16px;
+        color: $black;
+    }
+    .lh-book-form-control {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: 1px solid $white_200;
+        outline: none;
+        text-align: left;
+        background-color: $white;
+        width: 100%;
+        padding-bottom: 5px;
+    }
+    i.ri-calendar-2-line {
+        position: absolute;
+        right: 0;
+        bottom: 2px;
+        font-size: 18px;
+        color: #7b7b7b !important;
+        cursor: pointer;
+    }
+    .search-box-icons {
+        i {
+            position: absolute;
+            right: 5px;
+            bottom: 5px;
+            font-size: 16px;
+            color: $black;
+            cursor: pointer;
+        }
+    }
+    .form-select {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        outline: none;
+        text-align: left;
+        background-color: $white;
+        font-size: 14px;
+        width: 100%;
+        border-bottom: 1px solid $white_200;
+        border-radius: 0px;
+        padding: 2px 1px 3px 0px;
+    }
+}
+
+.section-search-control {
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    width: 100%;
+}
+
+.search-control-boxing {
+    padding: 12px;
+    background-color: $white;
+    box-shadow: $box-shadow;
+    border-radius: $border-radius;
+    display: flex;
+    justify-content: space-between;
+    .lh-col {
+        width: 100%;
+        padding: 12px;
+    }
+    .lh-col-check {
+        padding: 12px;
+        display: flex;
+    }
+}
+
+.search-control-button {
+    min-width: 117px;
+    display: flex;
+    align-items: center;
+}
+
+/* Responsive */
+@media screen and (max-width: 1550px) {
+    .lh-hero-contain {
+        h1 {
+            font-size: 46px;
+        }
+    }
+}
+
+@media screen and (max-width: 1399px) {
+    .lh-hero-contain {
+        h1 {
+            font-size: 42px;
+            span {
+                &::after {
+                    bottom: 5px;
+                }
+            }
+        }
+        button {
+            margin-top: 50px;
+        }
+    }
+}
+
+@media screen and (max-width: 1199px) {
+    .lh-hero-contain {
+        h1 {
+            font-size: 38px;
+        }
+    }
+    .search-control-button {
+        .lh-buttons {
+            padding: 5px 14px;
+        }
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .lh-hero-contain {
+        h1 {
+            font-size: 35px;
+        }
+    }
+    .lh-hero-contain {
+        top: 53%;
+        button {
+            margin-top: 20px;
+        }
+    }
+    .section-hero {
+        padding-bottom: 70px;
+    }
+    .section-search-control {
+        position: relative;
+        flex-wrap: wrap;
+        .search-control-boxing {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    }
+    .room-image {
+        border-top-right-radius: 0 !important;
+        border-bottom-left-radius: 15px;
+    }
+    .lh-room {
+        .lh-room-contain {
+            h4 {
+                font-size: 16px !important;
+                line-height: 0 !important;
+            }
+        }
+    }
+    .search-box {
+        h4.heading {
+            font-size: 14px;
+        }
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .lh-hero-contain {
+        h1 {
+            font-size: 30px;
+            line-height: 42px;
+            word-spacing: 5px;
+        }
+    }
+    .hero-image {
+        height: 80vh;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .lh-hero-contain {
+        width: 100%;
+        h1 {
+            font-size: 24px;
+            letter-spacing: 1px;
+            line-height: 36px;
+        }
+    }
+    .hero-image {
+        height: 580px;
+    }
+}
+@media screen and (max-width: 480px) {
+    .hero-image {
+        height: 500px;
+    }
+    .lh-hero-contain {
+        h4 {
+            &:before,
+            &:after {
+                display: none;
+            }
+        }
+    }
+}
+@media screen and (max-width: 360px) {
+    .lh-hero-contain {
+        h1 {
+            font-size: 22px;
+            line-height: 32px;
+        }
+    }
+    .banner {
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+    }
+}

@@ -71,7 +71,11 @@ namespace Booking.Controllers
             }
             
         }
-
+        [Route("~/home-new")]
+        public IActionResult HomeNew()
+        {
+            return View();
+        }
 
     }
 }

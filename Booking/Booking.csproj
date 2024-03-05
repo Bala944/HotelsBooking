@@ -8,6 +8,10 @@
 
   <ItemGroup>
     <Folder Include="Areas\FrontOffice\Views\Shared\" />
+    <Folder Include="wwwroot\newtheme\assets\css\" />
+    <Folder Include="wwwroot\newtheme\assets\plugins\magnific-popup\css\" />
+    <Folder Include="wwwroot\newtheme\assets\plugins\particles\css\" />
+    <Folder Include="wwwroot\newtheme\assets\sass\" />
   </ItemGroup>
 
   <ItemGroup>

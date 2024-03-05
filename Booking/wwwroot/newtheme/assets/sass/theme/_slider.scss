@@ -1,0 +1,58 @@
+// Banner
+.banner-overlay {
+    width: 100%;
+    height: 400px;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+.banner-image {
+    width: 100%;
+    height: 400px;
+    margin: 0;
+    background-image: url("../images/slider/banner.jpg");
+    background-size: cover;
+    background-position: bottom;
+
+    .banner-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        z-index: 2;
+    }
+}
+
+.lh-banner-contain {
+    margin-top: 65px;
+
+    h2 {
+        margin-bottom: 12px;
+        font-size: 40px;
+    }
+
+    .lh-breadcrumb {
+        h5 {
+            font-family: "Roboto";
+            font-size: 16px;
+
+            span {
+                a {
+                    text-decoration: none;
+                    color: #fff;
+                }
+
+                &.lh-inner-breadcrumb {
+                    a {
+                        text-decoration: none;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.rs-pb-one {
+    padding-bottom: 24px;
+}
