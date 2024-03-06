@@ -1,6 +1,8 @@
-﻿  @{    
+﻿@using System.Globalization;
+@model RoomandEventDetailsDTO
+@{
     ViewData["Title"] = "View More Rooms";
-    }
+}
 <!-- Banner -->
 <section class="section-banner ">
     <div class="row banner-image">
@@ -38,8 +40,7 @@
                                 </h4>
                                 <div class="calendar" id="date_1">
                                     <i class="ri-calendar-2-line"></i>
-                                    @* <input type="text" placeholder="Arrival Date" class="lh-book-form-control"> *@
-                                    <input id="CheckInDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
+                                    <input asp-for="roomFilterDTO.CheckInDate" id="CheckInDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
                                 </div>
                             </div>
                         </div>
@@ -50,8 +51,7 @@
                                 </h4>
                                 <div class="calendar" id="date_2">
                                     <i class="ri-calendar-2-line"></i>
-                                    @* <input type="text" placeholder="Leave Date" class="lh-book-form-control"> *@
-                                    <input id="CheckOutDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
+                                    <input asp-for="roomFilterDTO.CheckOutDate" id="CheckOutDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
                                 </div>
                             </div>
                         </div>
@@ -61,12 +61,12 @@
                                     Adults
                                 </h4>
                                 <div class="custom-select">
-                                    <select>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
+                                    <select asp-for="roomFilterDTO.Adults">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
                                     </select>
                                 </div>
                             </div>
@@ -77,13 +77,13 @@
                                     Children
                                 </h4>
                                 <div class="custom-select">
-                                    <select>
+                                    <select asp-for="roomFilterDTO.Children">
                                         <option>(Select)</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
                                     </select>
                                 </div>
                             </div>
@@ -94,10 +94,10 @@
                                     Room Type
                                 </h4>
                                 <div class="custom-select">
-                                    <select>
+                                    <select asp-for="roomFilterDTO.RoomType">
                                         <option value="-1">All</option>
-                                        <option value="1">AC</option>
-                                        <option value="2">NON-AC</option>
+                                        <option value="0">AC</option>
+                                        <option value="1">NON-AC</option>
 
                                     </select>
                                 </div>
@@ -118,109 +118,46 @@
             <h2>Choose Your Luxurious <span>Room</span></h2>
         </div>
         <div class="row mtb-m-12">
-            <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="1500">
-                <div class="rooms-card">
-                   
-                    <img src="~/newtheme/assets/images/rooms/6.jpg" alt="room">
-                    <div class="details">
-                        <h3>Junior Rooms</h3>
-                        <span>$400 / Night</span>
-                        <ul>
-                            <li><i class="ri-group-line"></i>2 Persons</li>
-                            <li><i class="ri-hotel-bed-line"></i>1 Double Bed</li>
-                            <li><i class="ri-restaurant-2-line"></i>Breakfast</li>
-                            <li><i class="mdi mdi-pool"></i>Swimming Pool</li>
-                            <li><i class="ri-wifi-line"></i>Free Wifi</li>
-                        </ul>
-                        <a href="#" class="lh-buttons-2">View More <i class="ri-arrow-right-line"></i></a>
+            @if (Model != null && Model.RoomDetails != null && Model.RoomDetails.Count > 0)
+            {
+                @foreach (var item in Model.RoomDetails)
+                {
+
+                    string image = string.Empty;
+                    double DiscountAmount = 0;
+                    @if (item != null && item.Images != null && item.Images != "")
+                    {
+                        string[] ImageData = item.Images.Split('$');
+                        if (ImageData.Length > 0)
+                        {
+
+                            image = ImageData[0];
+
+                        }
+                    }
+
+                    <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="1500">
+                        <div class="rooms-card">
+
+                            src="@(string.IsNullOrEmpty(image) ? "/assets/images/rooms/room1.jpg" : "/Attachments/RoomImages/" + image)"
+                           
+                            <div class="details">
+                                <h3>@item.RoomNumber</h3>
+                                <span>₹@item?.Rate / Night</span>
+                                <ul>
+                                    <li><i class="ri-group-line"></i>@(item?.MaxOccupancy > 0 ? item.MaxOccupancy + " adults" : "")   @(item?.MaxChild > 0 ? item.MaxChild + " child" : "")</li>
+                                    <li><i class="ri-hotel-bed-line"></i>@item.BedType</li>
+                                    <li><i class="ri-restaurant-2-line"></i>@item.RoomType</li>
+                                    <li><i class="mdi mdi-pool"></i>@item.CancelationCharge</li>
+                                    <li><i class="ri-wifi-line"></i>@item.Payment</li>
+                                </ul>
+                                <a href="#" class="lh-buttons-2">View More <i class="ri-arrow-right-line"></i></a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="1500">
-                <div class="rooms-card">
-                    <img src="~/newtheme/assets/images/rooms/7.jpg" alt="room">
-                    <div class="details">
-                        <h3>Family Rooms</h3>
-                        <span>$600 / Night</span>
-                        <ul>
-                            <li><i class="ri-group-line"></i>2 Persons</li>
-                            <li><i class="ri-hotel-bed-line"></i>1 Double Bed</li>
-                            <li><i class="ri-restaurant-2-line"></i>Breakfast</li>
-                            <li><i class="mdi mdi-pool"></i>Swimming Pool</li>
-                            <li><i class="ri-wifi-line"></i>Free Wifi</li>
-                        </ul>
-                        <a href="#" class="lh-buttons-2">View More <i class="ri-arrow-right-line"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="1500">
-                <div class="rooms-card">
-                    <img src="~/newtheme/assets/images/rooms/8.jpg" alt="room">
-                    <div class="details">
-                        <h3>Deluxe Rooms</h3>
-                        <span>$800 / Night</span>
-                        <ul>
-                            <li><i class="ri-group-line"></i>2 Persons</li>
-                            <li><i class="ri-hotel-bed-line"></i>1 Double Bed</li>
-                            <li><i class="ri-restaurant-2-line"></i>Breakfast</li>
-                            <li><i class="mdi mdi-pool"></i>Swimming Pool</li>
-                            <li><i class="ri-wifi-line"></i>Free Wifi</li>
-                        </ul>
-                        <a href="#" class="lh-buttons-2">View More <i class="ri-arrow-right-line"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="1500">
-                <div class="rooms-card">
-                    <img src="~/newtheme/assets/images/rooms/9.jpg" alt="room">
-                    <div class="details">
-                        <h3>Premium Rooms</h3>
-                        <span>$1000 / Night</span>
-                        <ul>
-                            <li><i class="ri-group-line"></i>2 Persons</li>
-                            <li><i class="ri-hotel-bed-line"></i>1 Double Bed</li>
-                            <li><i class="ri-restaurant-2-line"></i>Breakfast</li>
-                            <li><i class="mdi mdi-pool"></i>Swimming Pool</li>
-                            <li><i class="ri-wifi-line"></i>Free Wifi</li>
-                        </ul>
-                        <a href="#" class="lh-buttons-2">View More <i class="ri-arrow-right-line"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="1500">
-                <div class="rooms-card">
-                    <img src="~/newtheme/assets/images/rooms/10.jpg" alt="room">
-                    <div class="details">
-                        <h3>VIP Rooms</h3>
-                        <span>$1200 / Night</span>
-                        <ul>
-                            <li><i class="ri-group-line"></i>2 Persons</li>
-                            <li><i class="ri-hotel-bed-line"></i>1 Double Bed</li>
-                            <li><i class="ri-restaurant-2-line"></i>Breakfast</li>
-                            <li><i class="mdi mdi-pool"></i>Swimming Pool</li>
-                            <li><i class="ri-wifi-line"></i>Free Wifi</li>
-                        </ul>
-                        <a href="#" class="lh-buttons-2">View More <i class="ri-arrow-right-line"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="1500">
-                <div class="rooms-card">
-                    <img src="~/newtheme/assets/images/rooms/11.jpg" alt="room">
-                    <div class="details">
-                        <h3>VVIP Rooms</h3>
-                        <span>$1600 / Night</span>
-                        <ul>
-                            <li><i class="ri-group-line"></i>2 Persons</li>
-                            <li><i class="ri-hotel-bed-line"></i>1 Double Bed</li>
-                            <li><i class="ri-restaurant-2-line"></i>Breakfast</li>
-                            <li><i class="mdi mdi-pool"></i>Swimming Pool</li>
-                            <li><i class="ri-wifi-line"></i>Free Wifi</li>
-                        </ul>
-                        <a href="#" class="lh-buttons-2">View More <i class="ri-arrow-right-line"></i></a>
-                    </div>
-                </div>
-            </div>
+                }
+            }
+            
         </div>
     </div>
 </section>
