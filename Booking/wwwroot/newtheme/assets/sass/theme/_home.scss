@@ -27,7 +27,7 @@
     opacity: 0.3;
 }
 .lh-hero-contain {
-    max-width: 830px;
+    max-width: 990px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -85,6 +85,33 @@
                 height: 3px;
                 background: $primary;
             }
+        }
+    }
+    h6 {
+        max-width: 100%;
+        margin: auto;
+        position: relative;
+        color: $white;
+        font-family: $text-font;
+        font-size: 16px;
+        font-weight: 300;
+        &::after {
+            content: "";
+            width: 50px;
+            border: 1px solid $primary;
+            position: absolute;
+            right: -60px;
+            top: 9px;
+            z-index: -1;
+        }
+        &::before {
+            content: "";
+            border: 1px solid $primary;
+            width: 50px;
+            position: absolute;
+            left: -60px;
+            top: 9px;
+            z-index: -1;
         }
     }
 }
