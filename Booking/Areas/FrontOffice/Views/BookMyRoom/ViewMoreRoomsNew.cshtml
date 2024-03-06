@@ -137,10 +137,10 @@
                     }
 
                     <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="1500">
-                        <div class="rooms-card">
+                        <div class="rooms-card" data-label="-10%">
+                            <img src="@(string.IsNullOrEmpty(image) ? "/assets/images/rooms/room1.jpg" : "/Attachments/RoomImages/" + image)" alt="room" height="400">
+                            
 
-                            src="@(string.IsNullOrEmpty(image) ? "/assets/images/rooms/room1.jpg" : "/Attachments/RoomImages/" + image)"
-                           
                             <div class="details">
                                 <h3>@item.RoomNumber</h3>
                                 <span>₹@item?.Rate / Night</span>
@@ -157,7 +157,54 @@
                     </div>
                 }
             }
-            
+
         </div>
     </div>
 </section>
+
+<partial name="_DatepickerPartial" />
+
+<script>
+    // Initialize the CheckInDate datepicker
+    $('#CheckInDate').datepicker({
+        orientation: "left",
+        autoclose: true,
+        format: 'dd/mm/yyyy',
+        startDate: new Date(),
+        todayBtn: false,
+        todayHighlight: true,
+    }).datepicker("setDate", "0").on('changeDate', function (ev) {
+        // When the CheckInDate changes, update the start date of CheckOutDate
+        var selectedDate = new Date(ev.date);
+        var selectedCheckOutDate = $('#CheckOutDate').datepicker('getDate');
+        var selectedDate = new Date(ev.date);
+        selectedDate.setDate(selectedDate.getDate() + 1); // Add one day
+
+        // Check if the selected CheckOutDate is lower than CheckInDate
+        if (selectedCheckOutDate < selectedDate) {
+            // If it's lower, set CheckOutDate to CheckInDate
+            $('#CheckOutDate').datepicker('setDate', selectedDate);
+        }
+        $('#CheckOutDate').datepicker('setStartDate', selectedDate);
+
+    });
+    // Calculate tomorrow's date
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    $('#CheckOutDate').datepicker({
+        orientation: "left",
+        autoclose: true,
+        format: 'dd/mm/yyyy',
+        todayBtn: false,
+        todayHighlight: true,
+        startDate: tomorrow,
+    }).datepicker("setDate", tomorrow);
+
+    if (@Model?.roomFilterDTO?.CheckInDate != "") {
+        $('#CheckInDate').datepicker('setDate', '@Model?.roomFilterDTO?.CheckInDate').trigger('change');
+    }
+    if (@Model?.roomFilterDTO?.CheckOutDate!= "") {
+        $('#CheckOutDate').datepicker('setDate', '@(Model?.roomFilterDTO?.CheckOutDate)');
+    }
+
+</script>

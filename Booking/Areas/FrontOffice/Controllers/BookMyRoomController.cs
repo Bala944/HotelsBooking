@@ -70,9 +70,65 @@ namespace Booking.Areas.FrontOffice.Controllers
             return View(bookMyRoomResultDTO);
         }
         [Route("/view-more-rooms-new")]
-        public IActionResult ViewMoreRoomsNew()
+        public async Task<IActionResult> ViewMoreRoomsNew(RoomFilterDTO roomFilterDTO)
         {
-            return View();
+            BookMyRoomResultDTO bookMyRoomResultDTO = new BookMyRoomResultDTO();
+            BookingQueryDTO bookingQueryDTO1 = new BookingQueryDTO();
+            RoomandEventDetailsDTO roomandeventdetails = new RoomandEventDetailsDTO();
+
+            if (!string.IsNullOrEmpty(roomFilterDTO.Params))
+            {
+
+                try
+                {
+                    string decryptedData = EncryptionHelper.Decrypt(roomFilterDTO.Params);
+                    bookingQueryDTO1 = JsonConvert.DeserializeObject<BookingQueryDTO>(decryptedData);
+
+                    roomFilterDTO.CheckInDate = bookingQueryDTO1.CheckInDate;
+                    roomFilterDTO.CheckOutDate = bookingQueryDTO1.CheckOutDate;
+                    roomFilterDTO.Adults = bookingQueryDTO1.Adults;
+                    roomFilterDTO.Children = bookingQueryDTO1.Children;
+                    roomFilterDTO.RoomType = bookingQueryDTO1.RoomType;
+
+                }
+                catch (JsonException ex)
+                {
+                    Console.WriteLine("Error parsing JSON: " + ex.Message);
+                }
+            }
+
+            if (string.IsNullOrEmpty(roomFilterDTO.CheckInDate))
+                roomFilterDTO.CheckInDate = DateTime.Now.ToString("dd/MM/yyyy");
+            if (string.IsNullOrEmpty(roomFilterDTO.CheckOutDate))
+                roomFilterDTO.CheckOutDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
+            if (roomFilterDTO.CheckInDate != null && roomFilterDTO.CheckOutDate != null)
+            {
+
+                roomandeventdetails = await _bookMyRoomRepository.GetRoomsanEvents(roomFilterDTO);
+
+
+                if (roomandeventdetails != null)
+                {
+                    roomandeventdetails.RoomDetails = roomandeventdetails.RoomDetails;
+                    roomandeventdetails.events = roomandeventdetails.events;
+                }
+
+                roomandeventdetails.roomFilterDTO = roomFilterDTO;
+
+                BookingQueryDTO bookingQueryDTO = new BookingQueryDTO();
+                bookingQueryDTO.CheckInDate = roomandeventdetails.roomFilterDTO.CheckInDate;
+                bookingQueryDTO.CheckOutDate = roomandeventdetails.roomFilterDTO.CheckOutDate;
+                bookingQueryDTO.Adults = roomandeventdetails.roomFilterDTO.Adults;
+                bookingQueryDTO.Children = roomandeventdetails.roomFilterDTO.Children;
+                bookingQueryDTO.Rooms = roomandeventdetails.roomFilterDTO.Rooms;
+                bookingQueryDTO.RoomType = roomandeventdetails.roomFilterDTO.RoomType;
+                string json = JsonConvert.SerializeObject(bookingQueryDTO);
+                string paramsEncrypted = EncryptionHelper.Encrypt(json);
+
+                roomandeventdetails.roomFilterDTO.Params = paramsEncrypted;
+                ViewBag.FParams = paramsEncrypted;
+            }
+            return View(roomandeventdetails);
         }
         [Route("/view-rooms-details")]
         public IActionResult ViewRoomDetails()
