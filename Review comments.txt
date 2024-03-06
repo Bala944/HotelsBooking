@@ -1,0 +1,76 @@
+ 1. Logo need to be changed
+ 2. home page image has to be changed - Yellagiri hills (https://www.sonomacanopytours.com/) 
+ 3. Responsive design to be considered
+ 4. Addons to be added in the same room booking page (Events)
+ 
+ booking page after search
+ 
+ 1. description also need to shoow in list itself
+ 2. proceed button need to specifi room - because they won't book multiple property at the same time
+ 3. multiple images to be slide view
+ 
+ 
+ Mailing:
+ 
+ 1. Confirmation mail should be sent to customer(all booking details) - Booking email and Payment Confimation
+ 2. notification to admin(all booking details)
+ 3. notification to villa owner(only basic details) after payment confimation
+  
+ 
+ 
+ Admin:
+ 
+ Room Add:
+  Address need to be added
+  Villa owner maild to be added
+  
+  Room Type=> Property Type
+  
+  Support Data:
+  
+  Bed Type :
+  Double bed, King Bed, Queen Bed, Extra bed, extra cot
+  
+  Property Type:
+  Villa, Cottage, Home Stay, Tent House, Rooms, Hut house
+  
+  Cancelation Charges:  
+  1 day before free
+  
+ 
+ Booking screen scorling need to added and it has to be maintained in Admin side
+ Event management: - 
+	 Type of events
+	 Description
+	 Images
+	 No of seats(Adults/childs)
+	 Sold seats
+	 Remaining seats
+	 
+	 
+	 
+	  
+	 
+	 
+Rooms add page
+		50% payment neede => Partial Payment Needed,
+		
+		
+		
+Review section to be added
+ Site and Property aspects
+ Feed back
+ 
+ Read review provison - need to add new page
+ 
+ 
+ 
+ View Booking page:
+ 
+  Total Quatity=> Booked room
+  Total cost also need to included
+  
+  Total Rooms and Total payment
+ 
+ 
+	 
