@@ -37,7 +37,8 @@ namespace Booking.Controllers
 		public async Task<IActionResult> Homepage()
 		{
             await HttpContext.SignOutAsync();
-            return RedirectToAction("Homepage","BookMyRoom",new {Area="FrontOffice"});
+            //return RedirectToAction("Homepage","BookMyRoom",new {Area="FrontOffice"});
+            return RedirectToAction("HomeNew", "BookMyRoom",new {Area="FrontOffice"});
 		}
 
 
