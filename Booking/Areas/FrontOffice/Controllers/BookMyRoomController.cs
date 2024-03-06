@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Razorpay.Api;
+using System.Data;
 using System.Security.Cryptography.Xml;
 
 namespace Booking.Areas.FrontOffice.Controllers
@@ -249,7 +250,7 @@ namespace Booking.Areas.FrontOffice.Controllers
                 bookingSelectedDTO.Count = (long)finalBookingDetails.finalBookingDetails[0].Count;
                 bookingSelectedDTO.StartDate = bookingQueryDTO.CheckInDate;
                 bookingSelectedDTO.EndDate = bookingQueryDTO.CheckOutDate;
-                bookingSelectedDTO.EventIds = "1";
+                bookingSelectedDTO.EventIds = finalBookingDetails.Events;
 
 
                 finalConfirmationData = await _bookMyRoomRepository.GetRoomConfirmationDetails(bookingSelectedDTO);
@@ -404,14 +405,16 @@ namespace Booking.Areas.FrontOffice.Controllers
                                     Booking += "</table>";
                                     string formattedHtmlContent = string.Empty;
                                     string Email = null;
+                                    var image = "<img src=\"  \\\\aaralogo.png\" width=\"100\" />";
                                     if (mailDetails[i].MailType == 1)
                                     {
-                                         formattedHtmlContent = string.Format(mailDetails[i].Content, result, Booking);
+                                         formattedHtmlContent = string.Format(mailDetails[i].Content, image,DateTime.Now, result, Booking,string.Concat(customerAndBookingDetails.FirstName, customerAndBookingDetails.LastName,"<br/>", customerAndBookingDetails.MobileNumber));
                                          Email = customerAndBookingDetails.EmailAddress;
                                     }
                                     else
                                     {
-                                         formattedHtmlContent = string.Format(mailDetails[i].Content, result, Booking);
+                                        formattedHtmlContent = string.Format(mailDetails[i].Content, image, DateTime.Now, result, Booking, string.Concat(customerAndBookingDetails.FirstName, customerAndBookingDetails.LastName, "<br/>", customerAndBookingDetails.MobileNumber));
+
                                     }
 
                                     mailingService.SendEmail(mailDetails[i].Subject, formattedHtmlContent, Email);
@@ -527,7 +530,7 @@ namespace Booking.Areas.FrontOffice.Controllers
             try
             {
                 long.TryParse(EventId, out Event);
-                Event = 1;
+             
 
                 eventDTO = await _bookMyRoomRepository.GetEventDetailsById(Event);
             }
@@ -540,25 +543,47 @@ namespace Booking.Areas.FrontOffice.Controllers
 
 
         [Route("/feedback")]
-        public async Task<IActionResult> FeedBack(string BookingId)
+        public  IActionResult FeedBack(string BookingId)
         {
-            long Booking =0;
+         
 
             try
             {
-                if (BookingId == null)
-                {
-                    BookingId = EncryptionHelper.Decrypt(BookingId);
-                    long.TryParse(BookingId, out Booking);
-
-                }
+               ViewBag.BookId = BookingId;
             }
             catch (Exception ex)
             {
                 new ErrorLog().WriteLog(ex);
             }
 
-            return View(Booking);
+            return View();
+        }
+
+        [Route("/save-feedback")]
+        [HttpPost]
+        public async Task<IActionResult> SaveFeedback([FromBody] Feedback feedback)
+        {
+            int result = 0;
+            if(!string.IsNullOrEmpty(feedback.BookId))
+            {
+                feedback.BookingID = Convert.ToInt64(EncryptionHelper.Decrypt(feedback.BookId));
+
+            }
+            else
+            {
+                feedback.BookingID = 1;
+
+            }
+
+            try
+            {
+                result = await _bookMyRoomRepository.SaveFeedback(feedback);
+            }
+            catch (Exception ex)
+            {
+                new ErrorLog().WriteLog(ex);
+            }
+            return Ok(result);
         }
     }
 }

@@ -8,6 +8,16 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public List<Event> events {  get; set; }
         public RoomFilterDTO roomFilterDTO { get; set; }
     }
+    public class Feedback
+    {
+        public required string BookId  { get; set; }
+        public long? BookingID { get; set; }
+        public int ApplicationRating { get; set; }
+        public int HotelRating { get; set; }
+        public string? Comment { get; set; }
+    }
+
+
 
     public class Event
     {
@@ -107,6 +117,7 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public class FinalBookingDetailsDTO
     {
         public required List<FinalBookingDetails> finalBookingDetails { get; set; }
+        public  string Events { get; set; }
         public  string FilterParams { get; set; }
     }
 
@@ -124,6 +135,7 @@ namespace Booking.Areas.FrontOffice.Models.Input
         public string? Name { get; set; }
 
     }
+   
 
     public class FinalConfirmationData
     {
@@ -142,6 +154,7 @@ namespace Booking.Areas.FrontOffice.Models.Input
 		public decimal? DiscountAmount { get; set; }
 		public string? EmailId { get; set; }
 		public string? OwnerEmailId { get; set; }
+		public string? Phone { get; set; }
 		public string? OrderId { get; set; }
 
 	}
