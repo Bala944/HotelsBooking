@@ -22,7 +22,14 @@
         z-index: 2;
     }
 }
-
+.slider-text-shadow {
+    background-color: rgba(255 255 255 / 0.8);
+    font-size: 2rem !important;
+    color: #000 !important;
+    font-weight: bold !important;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+}
 .lh-banner-contain {
     margin-top: 65px;
 
