@@ -1,0 +1,314 @@
+/* Room-details */
+.lh-room-details {
+    .slider-for {
+        margin-bottom: 24px;
+    }
+    .slick-slider {
+        overflow: hidden;
+    }
+    .slider-nav {
+        margin-bottom: 24px;
+        .slick-list {
+            margin: 0 -12px;
+            width: calc(100% + 24px);
+        }
+        .slick-slide {
+            padding: 0 12px;
+        }
+    }
+    .lh-room-details-image {
+        img {
+            width: 100%;
+            border-radius: $border-radius;
+        }
+    }
+    .lh-room-details-inner {
+        img {
+            width: 100%;
+            border-radius: $border-radius;
+        }
+    }
+    .lh-room-details-contain {
+        padding-top: 0;
+        .lh-room-details-contain-heading {
+            font-size: 30px;
+            color: $black;
+            padding: 10px 0;
+        }
+        p {
+            padding-top: 10px;
+        }
+    }
+
+    .lh-room-inner-heading {
+        font-size: 18px;
+        color: $black;
+        border-bottom: 1px solid $border-color;
+        padding-bottom: 10px;
+    }
+
+    .lh-room-details-amenities {
+        padding-top: 24px;
+        .lh-cols-room {
+            padding-top: 15px;
+            ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+                li {
+                    display: flex;
+                    &:not(:last-child) {
+                        padding-bottom: 10px;
+                    }
+                    code {
+                        font-size: 17px;
+                        color: $primary;
+                        padding-right: 5px;
+                    }
+                }
+            }
+        }
+    }
+
+    .lh-room-details-rules {
+        padding-top: 24px;
+        .lh-cols-room {
+            padding-top: 15px;
+            ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+                li {
+                    display: flex;
+                    &:not(:last-child) {
+                        padding-bottom: 12px;
+                    }
+                    code {
+                        font-size: 17px;
+                        color: $primary;
+                        padding-right: 5px;
+                    }
+                }
+            }
+        }
+    }
+
+    .lh-room-details-review {
+        padding-top: 24px;
+        p {
+            padding-bottom: 20px;
+        }
+        .lh-room-review-form {
+            &:not(:last-child) {
+                padding-bottom: 15px;
+            }
+            label {
+                font-family: $title-font;
+                font-size: 16px;
+                color: $black;
+                padding-bottom: 10px;
+            }
+            .review-form-control {
+                outline: none;
+                height: 50px;
+                width: 100%;
+                border-radius: $border-radius;
+                background-color: $gray_500;
+                border: 1px solid $border-color;
+                padding-left: 20px;
+                margin: 0;
+            }
+            textarea {
+                height: 120px !important;
+            }
+            .lh-review-form-rating {
+                i {
+                    font-size: 16px;
+                    color: $primary;
+                }
+            }
+        }
+        .lh-room-review-buttons {
+            padding: 12px 0 0 0;
+        }
+    }
+
+    .lh-room-location {
+        margin-bottom: -10px;
+        padding-top: 20px;
+        iframe {
+            width: 100%;
+            height: 400px;
+            border-radius: $border-radius;
+            margin-top: 20px;
+        }
+    }
+}
+
+.lh-main-room {
+    width: 100%;
+}
+
+.lh-side-room {
+    background: $gray_500;
+    border-radius: $border-radius;
+    position: sticky;
+    top: 80px;
+    .lh-room-inner-heading {
+        padding: 20px;
+        font-size: 18px;
+        color: $black;
+        border-bottom: 1px solid $border-color;
+    }
+    .ex-service {
+        .form-check {
+            line-height: 21px;
+            &:last-child {
+                label {
+                    padding: 0;
+                }
+            }
+        }
+    }
+
+    .lh-side-reservation {
+        padding: 0 24px 24px 24px;
+
+        .lh-side-reservation-from {
+            position: relative;
+            &:not(:last-child) {
+                padding-top: 24px;
+            }
+            label {
+                padding-bottom: 10px;
+                line-height: 18px;
+                color: $text-777;
+                cursor: pointer;
+            }
+            .reservation-form-control,
+            .number-input {
+                border: none;
+                outline: none;
+                height: 50px;
+                width: 100%;
+                border-radius: $border-radius;
+                background-color: $white;
+                padding: 0 12px;
+                margin: 0;
+                ul {
+                    min-width: 100px;
+                    margin-top: 10px;
+                    left: -12px;
+                    right: -12px;
+                }
+            }
+            i.ri-calendar-line {
+                color: $primary;
+                position: absolute;
+                cursor: pointer;
+                font-size: 18px;
+                right: 0px;
+                padding: 12px;
+            }
+            h4 {
+                color: $black;
+                font-size: 18px;
+                padding-bottom: 15px;
+                line-height: 16px;
+            }
+            .form-check {
+                input {
+                    box-shadow: none;
+                    cursor: pointer;
+                    &:checked {
+                        background-color: $primary;
+                        border-color: $primary;
+                    }
+                }
+            }
+            .lh-side-reservation-from-buttons {
+                padding: 24px 0 0 0;
+                button {
+                    padding: 5px 15px;
+                }
+            }
+        }
+    }
+}
+
+/* Responsive */
+@media screen and (max-width: 991px) {
+    .lh-side-room {
+        margin-top: 50px;
+    }
+    .room-image {
+        border-top-right-radius: 0 !important;
+        border-bottom-left-radius: 15px;
+    }
+
+    .lh-room-details {
+        .lh-room-details-inner {
+            padding-bottom: 0;
+        }
+        .lh-room-details-contain {
+            .lh-room-details-contain-heading {
+                font-size: 28px;
+            }
+        }
+    }
+
+    .lh-room {
+        .lh-room-contain {
+            h4 {
+                font-size: 16px !important;
+                line-height: 0 !important;
+            }
+        }
+    }
+
+    .room-details-rs {
+        &:not(:last-child) {
+            padding-bottom: 15px;
+        }
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .lh-room {
+        .lh-room-contain {
+            h4 {
+                font-size: 12px !important;
+                line-height: 0 !important;
+            }
+        }
+    }
+    .lh-side-room {
+        .lh-room-inner-heading {
+            font-size: 17px;
+        }
+        .lh-side-reservation {
+            .lh-side-reservation-from {
+                h4 {
+                    font-size: 17px;
+                }
+            }
+        }
+    }
+    .lh-room-details {
+        .lh-room-details-contain {
+            .lh-room-details-contain-heading {
+                font-size: 26px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .lh-room-details {
+        .lh-room-details-contain {
+            .lh-room-details-contain-heading {
+                font-size: 24px;
+            }
+        }
+    }
+}
