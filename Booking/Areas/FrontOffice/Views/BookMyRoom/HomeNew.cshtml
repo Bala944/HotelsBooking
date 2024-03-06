@@ -130,248 +130,108 @@
         </div>
         <nav>
             <div class="nav nav-tabs rooms lh-room" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-Deluxe-tab" data-bs-toggle="tab"
-                        data-bs-target="#nav-Deluxe" type="button" role="tab" aria-controls="nav-Deluxe"
-                        aria-selected="true">
-                    <img src="~/newtheme/assets/images/rooms/1.jpg" alt="1">
-                    Deluxe Room
-                </button>
-                <button class="nav-link" id="nav-Single-tab" data-bs-toggle="tab" data-bs-target="#nav-Single"
-                        type="button" role="tab" aria-controls="nav-Single" aria-selected="false">
-                    <img src="~/newtheme/assets/images/rooms/2.jpg" alt="2">
-                    Single Room
-                </button>
-                <button class="nav-link" id="nav-Super-tab" data-bs-toggle="tab" data-bs-target="#nav-Super"
-                        type="button" role="tab" aria-controls="nav-Super" aria-selected="false">
-                    <img src="~/newtheme/assets/images/rooms/3.jpg" alt="3">
-                    Super Room
-                </button>
-                <button class="nav-link" id="nav-Presidential-tab" data-bs-toggle="tab"
-                        data-bs-target="#nav-Presidential" type="button" role="tab" aria-controls="nav-Presidential"
-                        aria-selected="false">
-                    <img src="~/newtheme/assets/images/rooms/4.jpg" alt="4">
-                    Presidential Room
-                </button>
+
+                @if (Model != null && Model.listRoomsDetailsDTO != null && Model.listRoomsDetailsDTO.Count > 0)
+                {
+                    for (int i = 0; i < Model.listRoomsDetailsDTO.Count; i++)
+                    {
+                        var item = Model.listRoomsDetailsDTO[i];
+                        string image = string.Empty;
+                        if (item != null && !string.IsNullOrEmpty(item.Images))
+                        {
+                            string[] ImageData = item.Images.Split('$');
+                            if (ImageData.Length > 0)
+                            {
+                                image = ImageData[0];
+                            }
+                        }
+
+                        <button class="nav-link @(i == 0 ? "active" : "")" id="@("nav-tab" + EncryptionHelper.Encrypt(item?.RoomId.ToString()))" data-bs-toggle="tab"
+                                data-bs-target="@("#nav-" + EncryptionHelper.Encrypt(item?.RoomId.ToString()))" type="button" role="tab" aria-controls="@("nav-"+EncryptionHelper.Encrypt(item?.RoomId.ToString()))"
+                                aria-selected="@(i == 0 ? "true" : "false")">
+                            <img src="@(string.IsNullOrEmpty(image) ? "/assets/images/rooms/room1.jpg" : "/Attachments/RoomImages/" + image)" alt="@(i+1)" width="80" height="100">
+                            @* <img src="~/newtheme/assets/images/rooms/2.jpg" alt="2"> *@
+                            @item.RoomNumber
+                        </button>
+                    }
+
+                }
+
+
+
+
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade active show" id="nav-Deluxe" role="tabpanel" aria-labelledby="nav-Deluxe-tab">
-                <div class="container">
-                    <div class="row p-0 lh-d-block">
-                        <div class="col-xl-6 col-lg-12">
-                            <div class="lh-room-contain">
-                                <div class="lh-contain-heading">
-                                    <h4>Deluxe Room</h4>
-                                    <div class="lh-room-price">
-                                        <h4>$30 /<span>Per night</span></h4>
-                                    </div>
-                                </div>
-                                <div class="lh-room-size d-flex">
-                                    <p>1100 sq.ft <span>|</span></p>
-                                    <p>1 king Bed <span>|</span></p>
-                                    <p>Up to 4 Guest</p>
-                                </div>
-                                <p>
-                                    This is the dolor sit amet consectetur adipisicing elit. Culpa necessitatibus
-                                    consequatur nostrum iure? Similique voluptatibus totam nobis exercitationem
-                                    perferendis id, cupiditate at et praesentium quas? Quae amet, magni suscipit
-                                    sequi.
-                                </p>
-                                <div class="lh-main-features">
-                                    <div class="lh-contain-heading">
-                                        <h4>Room Features</h4>
-                                    </div>
-                                    <div class="lh-room-features">
-                                        <div class="lh-cols-room">
-                                            <ul>
-                                                <li>42 Inch flat screen TV</li>
-                                                <li>In-room Safe</li>
-                                                <li>Mini-refrigerator</li>
-                                            </ul>
-                                        </div>
-                                        <div class="lh-cols-room">
-                                            <ul>
-                                                <li>Mini-refrigerator</li>
-                                                <li>Breakfast</li>
-                                                <li>complimeatary bottled water</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-12 p-0">
-                            <div class="room-img">
+            @foreach (var item in Model.listRoomsDetailsDTO)
+            {
 
-                                <img src="~/newtheme/assets/images/rooms/room-1.jpg" alt="room-img" class="room-image">
-                                <a href="room-details.html" class="link"><i class="fas fa-arrow-up"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="nav-Single" role="tabpanel" aria-labelledby="nav-Single-tab">
-                <div class="container">
-                    <div class="row p-0 lh-d-block">
-                        <div class="col-xl-6 col-lg-12">
-                            <div class="lh-room-contain">
-                                <div class="lh-contain-heading">
-                                    <h4>Single Room</h4>
-                                    <div class="lh-room-price">
-                                        <h4>$40 /<span>Per night</span></h4>
-                                    </div>
-                                </div>
-                                <div class="lh-room-size d-flex">
-                                    <p>1200 sq.ft <span>|</span></p>
-                                    <p>1 king Bed <span>|</span></p>
-                                    <p>Up to 6 Guest</p>
-                                </div>
-                                <p>
-                                    This is the dolor sit amet consectetur adipisicing elit. Culpa necessitatibus
-                                    consequatur nostrum iure? Similique voluptatibus totam nobis exercitationem
-                                    perferendis id, cupiditate at et praesentium quas? Quae amet, magni suscipit
-                                    sequi.
-                                </p>
-                                <div class="lh-main-features">
+                string image = string.Empty;
+                @if (item != null && item.Images != null && item.Images != "")
+                {
+                    string[] ImageData = item.Images.Split('$');
+                    if (ImageData.Length > 0)
+                    {
+
+                        image = ImageData[0];
+
+                    }
+                }
+
+                <div class="tab-pane fade @(item == Model.listRoomsDetailsDTO.First() ? "show active" : "")" id="@("nav-" + EncryptionHelper.Encrypt(item?.RoomId.ToString()))" role="tabpanel" aria-labelledby="@("nav-tab" + EncryptionHelper.Encrypt(item?.RoomId.ToString()))">
+                    <div class="container">
+                        <div class="row p-0 lh-d-block">
+                            <div class="col-xl-6 col-lg-12">
+                                <div class="lh-room-contain">
                                     <div class="lh-contain-heading">
-                                        <h4>Room Features</h4>
-                                    </div>
-                                    <div class="lh-room-features">
-                                        <div class="lh-cols-room">
-                                            <ul>
-                                                <li>42 Inch flat screen TV</li>
-                                                <li>In-room Safe</li>
-                                                <li>Mini-refrigerator</li>
-                                            </ul>
-                                        </div>
-                                        <div class="lh-cols-room">
-                                            <ul>
-                                                <li>Mini-refrigerator</li>
-                                                <li>Breakfast</li>
-                                                <li>complimeatary bottled water</li>
-                                            </ul>
+                                        <h4>@item.RoomType</h4>
+                                        <div class="lh-room-price">
+                                            <h4>₹@item.Rate /<span>Per night</span></h4>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-12 p-0">
-                            <div class="room-img">
-                                <img src="~/newtheme/assets/images/rooms/room-2.jpg" alt="room-img" class="room-image">
-                                <a href="room-details.html" class="link"><i class="fas fa-arrow-up"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="nav-Super" role="tabpanel" aria-labelledby="nav-Super-tab">
-                <div class="container">
-                    <div class="row p-0 lh-d-block">
-                        <div class="col-xl-6 col-lg-12">
-                            <div class="lh-room-contain">
-                                <div class="lh-contain-heading">
-                                    <h4>Super Room</h4>
-                                    <div class="lh-room-price">
-                                        <h4>$50 /<span>Per night</span></h4>
+                                    <div class="lh-room-size d-flex">
+                                        @* <p>1100 sq.ft <span>|</span></p> *@
+                                        <p>@item.BedType<span>|</span></p>
+                                        <p>@(item?.MaxOccupancy > 0 ? item.MaxOccupancy + " adults" : "")   @(item?.MaxChild > 0 ? item.MaxChild + " child" : "")</p>
                                     </div>
-                                </div>
-                                <div class="lh-room-size d-flex">
-                                    <p>1350 sq.ft <span>|</span></p>
-                                    <p>2 king Bed <span>|</span></p>
-                                    <p>Up to 8 Guest</p>
-                                </div>
-                                <p>
-                                    This is the dolor sit amet consectetur adipisicing elit. Culpa necessitatibus
-                                    consequatur nostrum iure? Similique voluptatibus totam nobis exercitationem
-                                    perferendis id, cupiditate at et praesentium quas? Quae amet, magni suscipit
-                                    sequi.
-                                </p>
-                                <div class="lh-main-features">
-                                    <div class="lh-contain-heading">
-                                        <h4>Room Features</h4>
-                                    </div>
-                                    <div class="lh-room-features">
-                                        <div class="lh-cols-room">
-                                            <ul>
-                                                <li>42 Inch flat screen TV</li>
-                                                <li>In-room Safe</li>
-                                                <li>Mini-refrigerator</li>
-                                            </ul>
+                                    <p>
+                                        @Html.Raw(item.Description)
+                                    </p>
+                                    <div class="lh-main-features">
+                                        <div class="lh-contain-heading">
+                                            <h4>Room Features</h4>
                                         </div>
-                                        <div class="lh-cols-room">
-                                            <ul>
-                                                <li>Mini-refrigerator</li>
-                                                <li>Breakfast</li>
-                                                <li>complimeatary bottled water</li>
-                                            </ul>
+                                        <div class="lh-room-features">
+                                            <div class="lh-cols-room">
+                                                <ul>
+                                                    <li>42 Inch flat screen TV</li>
+                                                    <li>In-room Safe</li>
+                                                    <li>Mini-refrigerator</li>
+                                                </ul>
+                                            </div>
+                                            <div class="lh-cols-room">
+                                                <ul>
+                                                    <li>Mini-refrigerator</li>
+                                                    <li>Breakfast</li>
+                                                    <li>complimeatary bottled water</li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-12 p-0">
-                            <div class="room-img">
-                                <img src="~/newtheme/assets/images/rooms/room-3.jpg" alt="room-img" class="room-image">
-                                <a href="room-details.html" class="link"><i class="fas fa-arrow-up"></i></a>
+                            <div class="col-xl-6 col-lg-12 p-0">
+                                <div class="room-img">
+                                    @* <img src="~/newtheme/assets/images/rooms/room-1.jpg" alt="room-img" class="room-image"> *@
+                                      @* <img src="~/assets/images/rooms/room1.jpg" alt="room-img" class="room-image"> *@
+                                    <img src="@(string.IsNullOrEmpty(image) ? "/assets/images/rooms/room1.jpg" : "/Attachments/RoomImages/" + image)" alt="room-img" class="room-image" width="500" height="80">
+                                    <a href="room-details.html" class="link"><i class="fas fa-arrow-up"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="nav-Presidential" role="tabpanel" aria-labelledby="nav-Presidential-tab">
-                <div class="container">
-                    <div class="row p-0 lh-d-block">
-                        <div class="col-xl-6 col-lg-12">
-                            <div class="lh-room-contain">
-                                <div class="lh-contain-heading">
-                                    <h4>Presidential Room</h4>
-                                    <div class="lh-room-price">
-                                        <h4>$100 /<span>Per night</span></h4>
-                                    </div>
-                                </div>
-                                <div class="lh-room-size d-flex">
-                                    <p>1500 sq.ft <span>|</span></p>
-                                    <p>2 king Bed <span>|</span></p>
-                                    <p>Up to 8 Guest</p>
-                                </div>
-                                <p>
-                                    This is the dolor sit amet consectetur adipisicing elit. Culpa necessitatibus
-                                    consequatur nostrum iure? Similique voluptatibus totam nobis exercitationem
-                                    perferendis id, cupiditate at et praesentium quas? Quae amet, magni suscipit
-                                    sequi.
-                                </p>
-                                <div class="lh-main-features">
-                                    <div class="lh-contain-heading">
-                                        <h4>Room Features</h4>
-                                    </div>
-                                    <div class="lh-room-features">
-                                        <div class="lh-cols-room">
-                                            <ul>
-                                                <li>42 Inch flat screen TV</li>
-                                                <li>In-room Safe</li>
-                                                <li>Mini-refrigerator</li>
-                                            </ul>
-                                        </div>
-                                        <div class="lh-cols-room">
-                                            <ul>
-                                                <li>Mini-refrigerator</li>
-                                                <li>Breakfast</li>
-                                                <li>complimeatary bottled water</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-12 p-0">
-                            <div class="room-img">
-                                <img src="~/newtheme/assets/images/rooms/room-4.jpg" alt="room-img" class="room-image">
-                                <a href="room-details.html" class="link"><i class="fas fa-arrow-up"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </section>
