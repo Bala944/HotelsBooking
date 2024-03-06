@@ -1,14 +1,14 @@
 /* Home-page */
 
 .hero-image {
-    background-image: url("../images/slider/banner.jpg");
+    background-image: url("../images/slider/slider.jpg");
     width: 100%;
     height: calc(100vh - 100px);
     background-size: cover;
     background-position: bottom;
     margin: 0;
     background-blend-mode: overlay;
-    background-color: rgba(0, 0, 0, 0.8);
+    //background-color: rgba(0, 0, 0, 0.8);
 }
 
 .section-hero {

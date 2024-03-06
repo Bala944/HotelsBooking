@@ -1,0 +1,350 @@
+//BEGIN: Form Control Styles
+$control-height: 2.375rem;
+$control-border-color: #b2b1b1;
+$control-border-highlight: #998fed;
+.btn,
+.sw .toolbar > .sw-btn {
+  padding: 0.225rem 0.75rem;
+  border-radius: 10rem !important;
+}
+.required-star {
+  color: $color-red;
+  margin-left: 0.3rem;
+}
+.form-group {
+  margin-bottom: 1rem;
+  label {
+    font-weight: 600;
+    .required-star {
+      color: $color-red;
+      margin-left: 0.3rem;
+    }
+  }
+  .form-control {
+    box-shadow: none;
+    border-color: $control-border-color;
+    font-size: 0.8rem;
+    height: $control-height;
+    &:focus {
+      border-color: $control-border-highlight;
+    }
+    &.txtctrl-success {
+      border-color: $color-green;
+    }
+  }
+  textarea.form-control {
+    height: auto;
+  }
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+}
+.star-indicates {
+  text-align: right;
+  span {
+    color: $color-red;
+  }
+}
+
+.form-check-input:focus {
+  box-shadow: none;
+}
+.form-check {
+  margin-top: 0.5rem;
+
+  label {
+    font-weight: 400;
+  }
+  .form-check-input {
+    border-color: $control-border-color;
+    &:checked {
+      background-color: $color-theme;
+    }
+  }
+}
+table {
+  tr {
+    td {
+      input.form-control,
+      .select2-container .select2-selection--single {
+        max-height: 24px;
+        font-size: 0.875rem;
+        &:focus {
+          box-shadow: none !important;
+        }
+      }
+      .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 1.5rem !important;
+      }
+      .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 1.375rem !important;
+      }
+      .form-check {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+//BEGIN: Datepicker Styles
+.datepicker {
+  box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+  z-index: 1060 !important;
+}
+.datepicker-dropdown {
+  min-width: 15rem;
+}
+.datepicker td,
+.datepicker th {
+  font-size: 0.8rem;
+  width: 30px !important;
+  height: 30px !important;
+}
+.datepicker table tr td.active.active {
+  background: $color-theme !important;
+}
+.datepicker-months,
+.datepicker-days,
+.datepicker-years {
+  min-width: 15rem;
+  max-width: 100%;
+  table {
+    width: 98%;
+  }
+}
+.datepicker table tr td span.active.active {
+  background: $color-theme !important;
+}
+.datepicker-decades,
+.datepicker-centuries {
+  table {
+    width: 100%;
+  }
+}
+//END: Date picker Styles
+//BEGIN: Select2 Styles
+.select2-container .select2-selection--single {
+  height: $control-height !important;
+  border-color: $control-border-color !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  line-height: $control-height !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: $control-height !important;
+}
+.select2-container--default .select2-results__option[aria-selected="true"] {
+  background-color: $color-theme !important;
+  color: $color-white !important;
+}
+.select2:focus,
+.selection:focus,
+.select2-selection:focus,
+.select2-container--default .select2-search--dropdown .select2-search__field:focus {
+  outline: none;
+  border-color: $control-border-highlight;
+}
+.select2-container--focus {
+  .select2-selection--single {
+    border-color: $control-border-highlight;
+  }
+}
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+  border-color: $control-border-highlight !important;
+}
+.select2-container .select2-selection--multiple {
+  min-height: $control-height !important;
+}
+.select2-container--default .select2-selection--multiple {
+  border-color: $control-border-color !important;
+}
+.select2-search__field {
+  width: 100% !important;
+}
+.select2-container--open {
+  z-index: 1056;
+}
+.select2-container .select2-selection--multiple::after {
+  content: ""; /* Font Awesome icon for shopping-cart (unicode: f07a) */
+  border-color: #888 transparent transparent transparent;
+  border-style: solid;
+  border-width: 5px 4px 0 4px;
+  // content: "\f141";
+  // font-family: "Font Awesome 6 free";
+  height: 0;
+  right: 10px;
+  //margin-left: -4px;
+  //margin-top: -17px;
+  position: absolute;
+  top: 50%;
+  width: 0;
+  font-weight: 900;
+  font-size: 1.5rem;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__clear {
+  margin-top: 6px;
+  margin-right: 14px;
+}
+.select2-container--default .select2-search--inline .select2-search__field {
+  min-height: 26px;
+}
+//END: Select2 Styles
+
+//BEGIN: Image upload
+.image-container {
+  width: 100%;
+  height: 13rem;
+  border: 1px solid $color-light-grey;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  i {
+    font-size: 7rem;
+    color: $color-black;
+  }
+}
+.image-signature-container {
+  width: 100%;
+  height: 4rem;
+  border: 1px solid $color-light-grey;
+  padding: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  i {
+    font-size: 2rem;
+    color: $color-black;
+  }
+  img {
+    display: block;
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+  }
+}
+.image-container img {
+  display: block;
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+}
+figcaption {
+  margin: 20px 0 30px 0;
+  text-align: center;
+  color: #2a292a;
+}
+input[type="file"] {
+  display: none;
+}
+.img-upload-preview {
+  text-align: center;
+  .file-btn {
+    position: relative;
+    background-color: $color-theme;
+    color: #ffffff;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    margin: auto;
+    cursor: pointer;
+    &:hover,
+    &:focus {
+      opacity: 0.8;
+      outline: none;
+    }
+  }
+}
+//END: Image Upload
+
+//BEGIN: Sweetalert
+.swal2-actions {
+  gap: 0.5rem;
+}
+//END: Sweetalert
+.btn {
+  font-size: 1rem;
+}
+.jquery-msgbox-buttons button {
+  &:focus {
+    background: #e5f1fb;
+    border-color: #0078d7;
+  }
+}
+//BEGIN: Date Time Picker Style
+.datetimepicker.dropdown-menu {
+  width: 15rem;
+  th,
+  td {
+    width: 2.1rem;
+    font-size: 0.8rem;
+  }
+  table {
+    tr {
+      td {
+        &.active.active {
+          background: $color-theme !important;
+        }
+      }
+    }
+  }
+}
+//END: Date Time Picker Style
+//END: Form Control Styles
+@media (min-width: 320px) and (max-width: 575px) {
+  .btn {
+    font-size: 0.8rem;
+  }
+}
+
+.form-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  label:not(.form-check-label) {
+    font-weight: 400;
+  }
+  input {
+    width: auto;
+  }
+  .select2-container {
+    width: auto !important;
+    min-width: 50%;
+  }
+}
+
+/* Custom file input style */
+.custom-file-input {
+  display: none;
+}
+
+.custom-file-label {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#image-container {
+  margin-top: 20px;
+}
+
+.uploaded-image {
+  max-width: 100px;
+  margin-right: 10px;
+}
+.select2-container .select2-selection--multiple .select2-selection__rendered {
+  max-height: 150px; /* Adjust the height as needed */
+  overflow-y: auto !important; /* Add vertical scrollbar if needed */
+}
+.select2-container--default.select2-container--disabled .select2-selection--single {
+  cursor: not-allowed !important;
+  background-color: #e9ecef !important;
+}

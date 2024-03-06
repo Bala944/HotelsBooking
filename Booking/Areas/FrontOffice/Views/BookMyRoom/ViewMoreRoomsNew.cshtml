@@ -1,0 +1,226 @@
+﻿  @{    
+    ViewData["Title"] = "View More Rooms";
+    }
+<!-- Banner -->
+<section class="section-banner ">
+    <div class="row banner-image">
+        <div class="banner-overlay"></div>
+        <div class="banner-section">
+            <div class="lh-banner-contain">
+                <h2>Room</h2>
+                <div class="lh-breadcrumb">
+                    <h5>
+                        <span class="lh-inner-breadcrumb">
+                            <a href="index.html">Home</a>
+                        </span>
+                        <span> / </span>
+                        <span>
+                            <a href="javascript:void(0)">Room</a>
+                        </span>
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Rooms -->
+<section class="section-rooms bg-gray padding-b-100 padding-t-50">
+    <div class="container">
+        <section class="section-search-control sub-page-search">
+            <div class="container">
+                <form id="frmRoomFilter" asp-area="FrontOffice" asp-controller="BookMyRoom" asp-action="ViewMoreRoomsNew">
+                    <div class="search-control-boxing">
+                        <div class="lh-col">
+                            <div class="search-box">
+                                <h4 class="heading">
+                                    Check in
+                                </h4>
+                                <div class="calendar" id="date_1">
+                                    <i class="ri-calendar-2-line"></i>
+                                    @* <input type="text" placeholder="Arrival Date" class="lh-book-form-control"> *@
+                                    <input id="CheckInDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lh-col">
+                            <div class="search-box">
+                                <h4 class="heading">
+                                    Check Out
+                                </h4>
+                                <div class="calendar" id="date_2">
+                                    <i class="ri-calendar-2-line"></i>
+                                    @* <input type="text" placeholder="Leave Date" class="lh-book-form-control"> *@
+                                    <input id="CheckOutDate" type="text" class="form-control date-picker" placeholder="dd/mm/yyyy" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lh-col">
+                            <div class="search-box">
+                                <h4 class="heading">
+                                    Adults
+                                </h4>
+                                <div class="custom-select">
+                                    <select>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lh-col">
+                            <div class="search-box">
+                                <h4 class="heading">
+                                    Children
+                                </h4>
+                                <div class="custom-select">
+                                    <select>
+                                        <option>(Select)</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lh-col">
+                            <div class="search-box">
+                                <h4 class="heading">
+                                    Room Type
+                                </h4>
+                                <div class="custom-select">
+                                    <select>
+                                        <option value="-1">All</option>
+                                        <option value="1">AC</option>
+                                        <option value="2">NON-AC</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lh-col-check">
+                            <div class="search-control-button">
+                                <a class="lh-buttons result-placeholder" onclick="$('#frmRoomFilter').submit();">
+                                    Check Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+        <div class="banner" data-aos="fade-up" data-aos-duration="2000">
+            <h2>Choose Your Luxurious <span>Room</span></h2>
+        </div>
+        <div class="row mtb-m-12">
+            <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="1500">
+                <div class="rooms-card">
+                   
+                    <img src="~/newtheme/assets/images/rooms/6.jpg" alt="room">
+                    <div class="details">
+                        <h3>Junior Rooms</h3>
+                        <span>$400 / Night</span>
+                        <ul>
+                            <li><i class="ri-group-line"></i>2 Persons</li>
+                            <li><i class="ri-hotel-bed-line"></i>1 Double Bed</li>
+                            <li><i class="ri-restaurant-2-line"></i>Breakfast</li>
+                            <li><i class="mdi mdi-pool"></i>Swimming Pool</li>
+                            <li><i class="ri-wifi-line"></i>Free Wifi</li>
+                        </ul>
+                        <a href="#" class="lh-buttons-2">View More <i class="ri-arrow-right-line"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="1500">
+                <div class="rooms-card">
+                    <img src="~/newtheme/assets/images/rooms/7.jpg" alt="room">
+                    <div class="details">
+                        <h3>Family Rooms</h3>
+                        <span>$600 / Night</span>
+                        <ul>
+                            <li><i class="ri-group-line"></i>2 Persons</li>
+                            <li><i class="ri-hotel-bed-line"></i>1 Double Bed</li>
+                            <li><i class="ri-restaurant-2-line"></i>Breakfast</li>
+                            <li><i class="mdi mdi-pool"></i>Swimming Pool</li>
+                            <li><i class="ri-wifi-line"></i>Free Wifi</li>
+                        </ul>
+                        <a href="#" class="lh-buttons-2">View More <i class="ri-arrow-right-line"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="1500">
+                <div class="rooms-card">
+                    <img src="~/newtheme/assets/images/rooms/8.jpg" alt="room">
+                    <div class="details">
+                        <h3>Deluxe Rooms</h3>
+                        <span>$800 / Night</span>
+                        <ul>
+                            <li><i class="ri-group-line"></i>2 Persons</li>
+                            <li><i class="ri-hotel-bed-line"></i>1 Double Bed</li>
+                            <li><i class="ri-restaurant-2-line"></i>Breakfast</li>
+                            <li><i class="mdi mdi-pool"></i>Swimming Pool</li>
+                            <li><i class="ri-wifi-line"></i>Free Wifi</li>
+                        </ul>
+                        <a href="#" class="lh-buttons-2">View More <i class="ri-arrow-right-line"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="1500">
+                <div class="rooms-card">
+                    <img src="~/newtheme/assets/images/rooms/9.jpg" alt="room">
+                    <div class="details">
+                        <h3>Premium Rooms</h3>
+                        <span>$1000 / Night</span>
+                        <ul>
+                            <li><i class="ri-group-line"></i>2 Persons</li>
+                            <li><i class="ri-hotel-bed-line"></i>1 Double Bed</li>
+                            <li><i class="ri-restaurant-2-line"></i>Breakfast</li>
+                            <li><i class="mdi mdi-pool"></i>Swimming Pool</li>
+                            <li><i class="ri-wifi-line"></i>Free Wifi</li>
+                        </ul>
+                        <a href="#" class="lh-buttons-2">View More <i class="ri-arrow-right-line"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="1500">
+                <div class="rooms-card">
+                    <img src="~/newtheme/assets/images/rooms/10.jpg" alt="room">
+                    <div class="details">
+                        <h3>VIP Rooms</h3>
+                        <span>$1200 / Night</span>
+                        <ul>
+                            <li><i class="ri-group-line"></i>2 Persons</li>
+                            <li><i class="ri-hotel-bed-line"></i>1 Double Bed</li>
+                            <li><i class="ri-restaurant-2-line"></i>Breakfast</li>
+                            <li><i class="mdi mdi-pool"></i>Swimming Pool</li>
+                            <li><i class="ri-wifi-line"></i>Free Wifi</li>
+                        </ul>
+                        <a href="#" class="lh-buttons-2">View More <i class="ri-arrow-right-line"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="1500">
+                <div class="rooms-card">
+                    <img src="~/newtheme/assets/images/rooms/11.jpg" alt="room">
+                    <div class="details">
+                        <h3>VVIP Rooms</h3>
+                        <span>$1600 / Night</span>
+                        <ul>
+                            <li><i class="ri-group-line"></i>2 Persons</li>
+                            <li><i class="ri-hotel-bed-line"></i>1 Double Bed</li>
+                            <li><i class="ri-restaurant-2-line"></i>Breakfast</li>
+                            <li><i class="mdi mdi-pool"></i>Swimming Pool</li>
+                            <li><i class="ri-wifi-line"></i>Free Wifi</li>
+                        </ul>
+                        <a href="#" class="lh-buttons-2">View More <i class="ri-arrow-right-line"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

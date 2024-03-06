@@ -69,13 +69,17 @@ namespace Booking.Areas.FrontOffice.Controllers
 
             return View(bookMyRoomResultDTO);
         }
-
-        /// <summary>
-        /// Step 1 - View the Home Page With Date Filter 
-        /// </summary>
-        /// <param name="roomFilterDTO"></param>
-        /// <returns></returns>
-        [Route("/home-page")]
+        [Route("/view-more-rooms-new")]
+        public IActionResult ViewMoreRoomsNew()
+        {
+            return View();
+        }
+            /// <summary>
+            /// Step 1 - View the Home Page With Date Filter 
+            /// </summary>
+            /// <param name="roomFilterDTO"></param>
+            /// <returns></returns>
+            [Route("/home-page")]
         public IActionResult Homepage(RoomFilterDTO roomFilterDTO)
         {
             BookMyRoomResultDTO bookMyRoomResultDTO = new BookMyRoomResultDTO();

@@ -1,7 +1,8 @@
 //BEGIN: Aara Hotels ==============================
 @import "theme/variable", "theme/mixins", "theme/fonts", "theme/common", "theme/header", "theme/menu", "theme/slider",
     "theme/footer", "theme/home", "theme/room-section", "theme/amenties", "theme/prices";
+
+@import "custom/form-control", "custom/form-controls";
+
+@import "theme/room2";
 //END: Aara Hotest =================================
-a {
-    text-decoration: none;
-}
